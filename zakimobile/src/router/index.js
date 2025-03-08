@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
+import HomePage from '../views/HomePage.vue'
 
 const routes = [
   {
@@ -8,13 +9,13 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import('../views/HomePage.vue') // Importation dynamique correcte
+    component: HomePage
   }
-];
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
-});
+})
 
-export default router;
+export default router
