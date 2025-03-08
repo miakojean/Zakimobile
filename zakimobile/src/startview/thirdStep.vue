@@ -2,7 +2,7 @@
    <ion-page>
     <div class="main__container">
         <div class="main__picture">
-
+<img src="../assets/zaki assets/Agreement-bro.svg" alt="partenaire">
         </div>
         <div class="main__text">
             <h2>Commencer</h2>
