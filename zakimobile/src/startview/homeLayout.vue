@@ -6,7 +6,9 @@
             </div>
 
             <div class="main__text">
-                <mainButton/>
+
+                <h2>Bienvenu chez Zaki</h2>
+                <p>Faites vos courses depuis chez vous</p>
                 <secondButton/>
             </div>
         </div>
