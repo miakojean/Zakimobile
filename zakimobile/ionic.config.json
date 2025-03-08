@@ -1,0 +1,7 @@
+{
+  "name": "zakimobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
