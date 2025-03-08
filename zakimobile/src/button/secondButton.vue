@@ -14,12 +14,12 @@ export default defineComponent({
 <style scoped>
     ion-button {
         width: 90%;
-      --background: #058C42;
+      --background: #f3f3f3;
       --background-hover: #058C42;
       --background-activated: #058C42;
       --background-focused: #058C42;
   
-      --color: white;
+      --color: #058C42;
       font-size: 1rem;
       font-weight: 600;
   
