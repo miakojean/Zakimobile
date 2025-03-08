@@ -2,6 +2,7 @@
     <ion-page>
         <div class="main__container">
             <div class="main__picture">
+            <img src="../assets/zaki assets/healthy food-amico.svg" alt="fruit">
 
 
             </div>
