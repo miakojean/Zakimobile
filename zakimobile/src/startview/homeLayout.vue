@@ -11,6 +11,8 @@
                 <p>Faites vos courses depuis chez vous</p>
                 <secondButton/>
             </div>
+
+            <stepper/>
         </div>
   </ionPage>
 </template>
@@ -20,13 +22,16 @@ import { IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import mainButton from '../button/mainButton.vue';
 import SecondButton from '../button/secondButton.vue';
+import Stepper from '../components/tools/stepper.vue';
+import stepper from '../components/tools/stepper.vue';
 
 export default defineComponent({
 
     components: {
         IonPage,
         mainButton,
-        SecondButton
+        SecondButton,
+        Stepper
     }
 
 })

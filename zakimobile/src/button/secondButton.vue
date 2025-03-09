@@ -11,12 +11,20 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
     components: { IonButton },
+
+    props:{
+        label:{
+            type: String,
+            required: true,
+            default: 'suivant'
+        }
+    }
 });
 </script>
   
 <style scoped>
     ion-button {
-        width: 100%;
+        width: 90%;
         display: flex;
         justify-content: center;
         align-items: center;
