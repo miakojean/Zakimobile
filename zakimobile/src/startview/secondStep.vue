@@ -22,7 +22,6 @@ import secondButton from '../button/secondButton.vue';
 import { IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import Stepper from '../components/tools/stepper.vue';
-import stepper from '../components/tools/stepper.vue';
 export default defineComponent({
     components: {IonPage, secondButton, Stepper},
 
@@ -31,7 +30,6 @@ export default defineComponent({
 
 <style>
     .main__container{
-        border: 1px solid gray;
         display: flex;
         flex-direction: column;
         justify-content: center;
