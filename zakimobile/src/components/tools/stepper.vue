@@ -1,38 +1,42 @@
 <template>
   <div class="container">
-    <span :class="{ active: activeIndex === 0 }" @click="navigateTo(0, '/home')"></span>
-    <span :class="{ active: activeIndex === 1 }" @click="navigateTo(1, '/secondStep')"></span>
-    <span :class="{ active: activeIndex === 2 }" @click="navigateTo(2, '/thirdStep')"></span>
+    <span :class="{ active: localActiveIndex === 0 }" @click="navigateTo(0, '/home')"></span>
+    <span :class="{ active: localActiveIndex === 1 }" @click="navigateTo(1, '/secondStep')"></span>
+    <span :class="{ active: localActiveIndex === 2 }" @click="navigateTo(2, '/thirdStep')"></span>
   </div>
 </template>
 
 <script>
-import { watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
 export default {
-props: {
-  activeIndex: Number // L'état actif vient du parent
-},
-setup(props, { emit }) {
-  const router = useRouter();
-  const route = useRoute();
+    props: {
+        activeIndex: Number // L'index du parent
+    },
+    setup(props, { emit }) {
+        const router = useRouter();
+        const route = useRoute();
+        const localActiveIndex = ref(props.activeIndex); // Copier la valeur de la prop
 
-  // Mettre à jour `activeIndex` en fonction de la route actuelle
-  watch(route, () => {
-    if (route.path === '/home') emit('update:activeIndex', 0);
-    else if (route.path === '/secondStep') emit('update:activeIndex', 1);
-    else if (route.path === '/thirdStep') emit('update:activeIndex', 2);
-  });
+        // Observer la route pour mettre à jour localActiveIndex
+        watch(route, () => {
+            if (route.path === '/home') localActiveIndex.value = 0;
+            else if (route.path === '/secondStep') localActiveIndex.value = 1;
+            else if (route.path === '/thirdStep') localActiveIndex.value = 2;
+            emit('update:activeIndex', localActiveIndex.value);
+        });
 
-  const navigateTo = (index, path) => {
-    emit('update:activeIndex', index);
-    router.push(path);
-  };
+        const navigateTo = (index, path) => {
+            localActiveIndex.value = index;
+            emit('update:activeIndex', index);
+            router.push(path);
+        };
 
-  return { navigateTo };
-}
+        return { navigateTo, localActiveIndex };
+    }
 };
+
 </script>
 
 <style>

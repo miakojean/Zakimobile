@@ -26,7 +26,7 @@ export default defineComponent({
     setup(){
         const router = useRouter();
         const route = useRoute();
-        const activeIndex = ref(0);
+        const activeIndex = ref(2);
         // Mettre à jour l'index du step en fonction de la route actuelle
         const updateStep = (index) => {
             activeIndex.value = index;

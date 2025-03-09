@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
+import { myCustomTransition } from '../router/animation.js';
 
 const routes = [
   {
@@ -8,19 +9,19 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import('../startview/homeLayout.vue') // ✅ Correct
+    component: () => import('../startview/homeLayout.vue')
   },
   {
     path: '/secondStep',
     name: 'SecondStep',
-    component: () => import('../startview/secondStep.vue') // ✅ Correct,
+    component: () => import('../startview/secondStep.vue'),
+    meta: { transition: 'slide-left' } // Optionnel
   },
   {
     path: '/thirdStep',
     name: 'ThirdStep',
-    component: () => import('../startview/thirdStep.vue') // ✅ Correct,
+    component: () => import('../startview/thirdStep.vue')
   }
-   
 ];
 
 const router = createRouter({
@@ -28,5 +29,10 @@ const router = createRouter({
   routes
 });
 
-export default router;
+// ✅ Appliquer la transition personnalisée
+router.beforeEach((to, from, next) => {
+  to.meta.transition = myCustomTransition;
+  next();
+});
 
+export default router;

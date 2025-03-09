@@ -8,21 +8,24 @@
             <div class="main__text">
 
                 <h2>Bienvenu chez Zaki</h2>
-                <p>Faites vos courses depuis chez vous</p>
+                <p>Faites vos courses tranquillement depuis chez vous</p>
                 
             </div>
             <secondButton
                 label="suivant"
-                @click="() =>router.push('/secondstep')"
+                @click="goToNextStep"
             />
-            <stepper :activeIndex="activeIndex" @update:activeIndex="updateStep"/>
+            <stepper 
+                :activeIndex="activeIndex" 
+                @update:activeIndex="updateStep"
+            />
         </div>
   </ionPage>
 </template>
 
 <script>
 import { ref } from 'vue';
-import { IonPage } from '@ionic/vue';
+import { IonPage, createAnimation } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import mainButton from '../button/mainButton.vue';
 import SecondButton from '../button/secondButton.vue';
@@ -48,12 +51,16 @@ export default defineComponent({
             activeIndex.value = index;
         };
         const goToNextStep = () => {
-            if (activeIndex.value === 0) router.push('/secondStep');
-            else if (activeIndex.value === 1) router.push('/thirdStep');
+            const routes = ['/home', '/secondStep', '/thirdStep'];
+            if (activeIndex.value < routes.length - 1) {
+                activeIndex.value += 1;
+                router.push(routes[activeIndex.value]);
+            }
         };
 
+
         return {
-            router,activeIndex, updateStep, goToNextStep
+            router, route, activeIndex, updateStep, goToNextStep
         }
     }
 

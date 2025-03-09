@@ -10,10 +10,13 @@
             </div>
            
             <secondButton
-                    label="suivant"
-                    @click="() =>router.push('/thirdstep')"
-                />
-        <stepper :activeIndex="activeIndex" @update:activeIndex="updateStep"/>
+                label="suivant"
+                @click="goToNextStep"
+            />
+            <stepper 
+                :activeIndex="activeIndex" 
+                @update:activeIndex="updateStep"
+            />
         </div>
     </ion-page>
   
@@ -29,21 +32,26 @@ import { useRouter, useRoute } from 'vue-router';
 export default defineComponent({
     components: {IonPage, secondButton, Stepper},
 
-    setup(){
+    setup () {
+
         const router = useRouter();
         const route = useRoute();
-        const activeIndex = ref(0);
+        const activeIndex = ref(1);
         // Mettre à jour l'index du step en fonction de la route actuelle
         const updateStep = (index) => {
             activeIndex.value = index;
         };
         const goToNextStep = () => {
-            if (activeIndex.value === 0) router.push('/secondStep');
-            else if (activeIndex.value === 1) router.push('/thirdStep');
+            const routes = ['/home', '/secondStep', '/thirdStep'];
+            if (activeIndex.value < routes.length - 1) {
+                activeIndex.value += 1;
+                router.push(routes[activeIndex.value]);
+            }
         };
 
-        return{
-            router, activeIndex, updateStep, goToNextStep
+
+        return {
+            router, route, activeIndex, updateStep, goToNextStep
         }
     }
 
