@@ -11,6 +11,7 @@
                 <p>Faites vos courses depuis chez vous</p>
                 <secondButton
                 label="suivant"
+                @click="() =>router.push('/secondstep')"
                 />
             </div>
 
@@ -25,7 +26,7 @@ import { defineComponent } from 'vue';
 import mainButton from '../button/mainButton.vue';
 import SecondButton from '../button/secondButton.vue';
 import Stepper from '../components/tools/stepper.vue';
-import stepper from '../components/tools/stepper.vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
 
@@ -34,6 +35,15 @@ export default defineComponent({
         mainButton,
         SecondButton,
         Stepper
+    },
+
+    setup () {
+
+        const router = useRouter();
+
+        return {
+            router
+        }
     }
 
 })
