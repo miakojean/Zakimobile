@@ -7,8 +7,11 @@
             <div class="main__text">
                 <h2>Commandez!!</h2>
                 <p>Découvrez vos ingrédients favoris sur notre application</p>
-                <secondButton/>
+                <secondButton
+                    label="suivant"
+                />
             </div>
+            <stepper/>
         </div>
     </ion-page>
   
@@ -18,8 +21,10 @@
 import secondButton from '../button/secondButton.vue';
 import { IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import Stepper from '../components/tools/stepper.vue';
+import stepper from '../components/tools/stepper.vue';
 export default defineComponent({
-    components: {IonPage, secondButton},
+    components: {IonPage, secondButton, Stepper},
 
 })
 </script>

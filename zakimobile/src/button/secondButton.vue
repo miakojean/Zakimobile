@@ -1,6 +1,6 @@
 <template>
     <ion-button>
-        Commencer 
+        {{label}} 
         <i class="ri-arrow-right-line"></i>
     </ion-button>
 </template>
