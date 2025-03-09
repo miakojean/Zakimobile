@@ -7,10 +7,12 @@
             <div class="main__text">
                 <h2>Commandez!!</h2>
                 <p>Découvrez vos ingrédients favoris sur notre application</p>
-                <secondButton
-                    label="suivant"
-                />
             </div>
+           
+            <secondButton
+                    label="suivant"
+                    @click="() =>router.push('/thirdstep')"
+                />
             <stepper/>
         </div>
     </ion-page>
@@ -22,30 +24,23 @@ import secondButton from '../button/secondButton.vue';
 import { IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import Stepper from '../components/tools/stepper.vue';
-import stepper from '../components/tools/stepper.vue';
+import { useRouter } from 'vue-router';
 export default defineComponent({
     components: {IonPage, secondButton, Stepper},
+
+    setup(){
+        const router = useRouter();
+        return{
+            router
+        }
+    }
+
 
 })
 </script>
 
 <style>
-    .main__container{
-        border: 1px solid gray;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        gap: 1rem;
-    }
-
-    img{
-        background-size: cover ;
-        width: 300px;
-        height: 300px;
-    }
-
+    
     .main__text{
         display: flex;
         flex-direction: column;
