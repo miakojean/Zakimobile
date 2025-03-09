@@ -1,45 +1,46 @@
 <template>
   <div class="container">
-    <span :class="{ active: localActiveIndex === 0 }" @click="navigateTo(0, '/home')"></span>
-    <span :class="{ active: localActiveIndex === 1 }" @click="navigateTo(1, '/secondStep')"></span>
-    <span :class="{ active: localActiveIndex === 2 }" @click="navigateTo(2, '/thirdStep')"></span>
+    <span
+      :class="{ active: activeIndex === 0 }"
+      @click="handleClick(0)"
+    ></span>
+    <span
+      :class="{ active: activeIndex === 1 }"
+      @click="handleClick(1)"
+    ></span>
+    <span
+      :class="{ active: activeIndex === 2 }"
+      @click="handleClick(2)"
+    ></span>
   </div>
 </template>
 
 <script>
-import { ref, watch } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { defineComponent } from 'vue';
 
-export default {
-    props: {
-        activeIndex: Number // L'index du parent
+export default defineComponent({
+  props: {
+    activeIndex: {
+      type: Number,
+      required: true,
     },
-    setup(props, { emit }) {
-        const router = useRouter();
-        const route = useRoute();
-        const localActiveIndex = ref(props.activeIndex); // Copier la valeur de la prop
+  },
 
-        // Observer la route pour mettre à jour localActiveIndex
-        watch(route, () => {
-            if (route.path === '/home') localActiveIndex.value = 0;
-            else if (route.path === '/secondStep') localActiveIndex.value = 1;
-            else if (route.path === '/thirdStep') localActiveIndex.value = 2;
-            emit('update:activeIndex', localActiveIndex.value);
-        });
+  emits: ['click'],
 
-        const navigateTo = (index, path) => {
-            localActiveIndex.value = index;
-            emit('update:activeIndex', index);
-            router.push(path);
-        };
+  setup(props, { emit }) {
+    const handleClick = (index) => {
+      emit('click', index); // Emit the clicked index to the parent
+    };
 
-        return { navigateTo, localActiveIndex };
-    }
-};
-
+    return {
+      handleClick,
+    };
+  },
+});
 </script>
 
-<style>
+<style scoped>
 .container {
   display: flex;
   justify-content: center;
@@ -58,5 +59,6 @@ export default {
 
 .container span.active {
   width: 30px;
+  transition: width 0.3s ease-in-out;
 }
 </style>
