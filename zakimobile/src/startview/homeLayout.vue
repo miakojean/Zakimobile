@@ -9,12 +9,12 @@
 
                 <h2>Bienvenu chez Zaki</h2>
                 <p>Faites vos courses depuis chez vous</p>
-                <secondButton
+                
+            </div>
+            <secondButton
                 label="suivant"
                 @click="() =>router.push('/secondstep')"
-                />
-            </div>
-
+            />
             <stepper/>
         </div>
   </ionPage>
