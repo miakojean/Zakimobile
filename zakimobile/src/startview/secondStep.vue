@@ -13,25 +13,37 @@
                     label="suivant"
                     @click="() =>router.push('/thirdstep')"
                 />
-            <stepper/>
+        <stepper :activeIndex="activeIndex" @update:activeIndex="updateStep"/>
         </div>
     </ion-page>
   
 </template>
 
 <script>
+import { ref } from 'vue';
 import secondButton from '../button/secondButton.vue';
 import { IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import Stepper from '../components/tools/stepper.vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 export default defineComponent({
     components: {IonPage, secondButton, Stepper},
 
     setup(){
         const router = useRouter();
+        const route = useRoute();
+        const activeIndex = ref(0);
+        // Mettre à jour l'index du step en fonction de la route actuelle
+        const updateStep = (index) => {
+            activeIndex.value = index;
+        };
+        const goToNextStep = () => {
+            if (activeIndex.value === 0) router.push('/secondStep');
+            else if (activeIndex.value === 1) router.push('/thirdStep');
+        };
+
         return{
-            router
+            router, activeIndex, updateStep, goToNextStep
         }
     }
 
