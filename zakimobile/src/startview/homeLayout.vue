@@ -35,7 +35,6 @@ export default defineComponent({
 <style>
 
     .main__container{
-        border: 1px solid gray;
         height: 100%;
         display: flex;
         flex-direction: column;

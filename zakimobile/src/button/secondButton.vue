@@ -1,5 +1,8 @@
 <template>
-    <ion-button>Commencer</ion-button>
+    <ion-button>
+        Commencer 
+        <i class="ri-arrow-right-line"></i>
+    </ion-button>
 </template>
   
 <script>
@@ -13,20 +16,24 @@ export default defineComponent({
   
 <style scoped>
     ion-button {
-        width: 90%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
       --background: #f3f3f3;
-      --background-hover: #058C42;
-      --background-activated: #058C42;
-      --background-focused: #058C42;
+      --background-hover: #f3f3f3;
+      --background-activated: #f3f3f3;
+      --background-focused: #f3f3f3;
   
       --color: #058C42;
       font-size: 1rem;
       font-weight: 600;
   
       --border-radius: 16px;
-      --border-color: none;
-      --border-style: none;
-      --border-width: none;
+      --border-color: #058C42;
+      --border-style: solid;
+      --border-width: 1px;
   
       --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
   
@@ -34,5 +41,8 @@ export default defineComponent({
   
       --padding-top: 10px;
       --padding-bottom: 10px;
+
+      text-transform: none;
+
     }
 </style>

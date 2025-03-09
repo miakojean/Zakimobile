@@ -4,8 +4,32 @@
     font-family: 'inter';
 }
 
+:root{
+    --primary-color: #058C42;
+}
+
 img{
     background-size: cover ;
     width: 300px;
     height: 300px;
+}
+
+.main__container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+h2{
+    font-size: 2rem;
+    font-weight: 700;
+    color: gray;
+}
+
+p{
+    font-size: 1rem;
+    font-weight: 600;
+    color: gray;
 }

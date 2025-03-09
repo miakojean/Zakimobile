@@ -34,5 +34,7 @@ export default defineComponent({
   
       --padding-top: 10px;
       --padding-bottom: 10px;
+
+      text-transform: none;
     }
 </style>
