@@ -11,9 +11,14 @@ const routes = [
     component: () => import('../startview/Startview.vue')
   },
   {
-    path:'/lookat',
-    name: "starting",
-    component: () => import('../startview/Startview.vue')
+    path:'/aboutaccount', /* sign in or sign up */
+    name: "aboutaccount",
+    component: () => import('../startview/Aboutaccount.vue')
+  },
+  {
+    path: '/signin',
+    name: 'signin',
+    component: () => import('../views/Loginpage.vue')
   }
 ];
 
