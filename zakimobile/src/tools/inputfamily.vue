@@ -34,7 +34,7 @@
   ion-input.custom {
     width: 90%;
     --background: #f3f3f3;
-    --color: #0f0f0f;
+    --color: #333;
     --placeholder-color: #7a7a7a;
     --placeholder-opacity: 0.8;
   

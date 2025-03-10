@@ -17,14 +17,19 @@
 
             <inputfamily
                 type = "text"
+                placeholder = "nom d'utilisateur"
+                v-model="username"
             />
             <inputfamily
                 placeholder = "mot de passe"
                 type = "password"
+                v-model="password"
             />
     
             <!-- Bouton pour avancer dans les étapes -->
-            <mainButton label = "connexion"/>
+            <mainButton label = "connexion"
+                @click="verification"    
+            />
 
             <div class="divider-container">
                 <div class="divider"></div>
@@ -42,7 +47,7 @@
   
 <script>
   import { IonPage } from '@ionic/vue';
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import secondButton2 from '../button/secondButton2.vue';
   import mainButton from '../button/mainButton.vue'
   import stepper from '../components/tools/stepper.vue';
@@ -60,11 +65,32 @@
     },
   
     setup() {
-      
+
+        const user = ref({})
+        const username = ref('')
+        const password = ref('')
+
+        const verification = () => {
+            if (!username.value && !password.value) {
+
+                console.log("utilisateur et mot de passe non fournit");
+            }
+            else if (!username.value || !password.value) {
+                console.log("Remplisser tous les champs")
+            }
+            else {
+                user.value = {
+                    monNom: username.value,
+                    motdePasse: password.value,
+                },
+                console.log(user)
+            }
+        }
   
-      return {
-        
-      };
+        return {
+            username, password,
+            verification
+        };
     },
   });
 </script>
