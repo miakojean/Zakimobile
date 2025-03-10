@@ -37,7 +37,7 @@
                 <div class="divider"></div>
             </div>
 
-            <p>Pas de compte? Je crée mon compte <span>ici</span></p>
+            <p @click = "router.push('/signup')">Pas de compte? Je crée mon compte <span>ici</span></p>
             
         </div>
 
@@ -53,6 +53,7 @@
   import stepper from '../components/tools/stepper.vue';
   import FooterLayout from '../components/tools/footerLayout.vue';
   import inputfamily from '../tools/inputfamily.vue';
+  import { useRouter } from 'vue-router';
   
   export default defineComponent({
     components: {
@@ -69,6 +70,8 @@
         const user = ref({})
         const username = ref('')
         const password = ref('')
+
+        const router = useRouter()
 
         const verification = () => {
             if (!username.value && !password.value) {
@@ -89,7 +92,7 @@
   
         return {
             username, password,
-            verification
+            verification, router
         };
     },
   });
