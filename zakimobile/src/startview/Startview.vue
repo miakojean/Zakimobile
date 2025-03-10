@@ -27,7 +27,7 @@
             <!-- Transition for text -->
 
             <div class="main__text" v-if="activeIndex === 0" key="text-0">
-                <h2>Bienvenue chez Zaki</h2>
+                <h2>Bienvenue chez <span class="logo">Zaki</span></h2>
                 <p>Faites vos courses tranquillement depuis chez vous</p>
             </div>
             <div class="main__text" v-else-if="activeIndex === 1" key="text-1">
@@ -41,7 +41,8 @@
 
     
             <!-- Bouton pour avancer dans les étapes -->
-            <secondButton label="Suivant" @next-step="handleNextStep" />
+            <secondButton label="Suivant" @next-step="handleNextStep" v-if = "activeIndex <= 1" />
+            <mainButton v-else />
 
 
     
@@ -51,7 +52,7 @@
             
         </div>
 
-        <footer />
+        <FooterLayout/>
     </ionPage>
 </template>
   
@@ -60,15 +61,17 @@
   import { IonPage } from '@ionic/vue';
   import { defineComponent } from 'vue';
   import secondButton from '../button/secondButton.vue';
+  import mainButton from '../button/mainButton.vue'
   import stepper from '../components/tools/stepper.vue';
-  import footer from '../components/tools/footer.vue';
+  import FooterLayout from '../components/tools/footerLayout.vue';
   
   export default defineComponent({
     components: {
       IonPage,
       secondButton,
+      mainButton,
       stepper,
-      footer,
+      FooterLayout,
     },
   
     setup() {
