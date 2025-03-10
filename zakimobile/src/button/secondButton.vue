@@ -57,7 +57,7 @@ export default defineComponent({
   
       --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
   
-      --ripple-color: #058C42;
+      --ripple-color: #f3f3f3;
   
       --padding-top: 10px;
       --padding-bottom: 10px;
