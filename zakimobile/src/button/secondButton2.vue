@@ -1,7 +1,6 @@
 <template>
     <ion-button  @click="emitNextStep">
         {{label}} 
-        <i class="ri-arrow-right-line"></i>
     </ion-button>
 </template>
   

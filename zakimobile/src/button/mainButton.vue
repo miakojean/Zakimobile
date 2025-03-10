@@ -1,5 +1,5 @@
 <template>
-    <ion-button>Commencer</ion-button>
+    <ion-button>{{ label }}</ion-button>
 </template>
   
 <script>
@@ -8,6 +8,14 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
     components: { IonButton },
+
+    props: {
+        label: {
+            type: String,
+            required: true,
+            default: "commencer"
+        }
+    }
 });
 </script>
   
