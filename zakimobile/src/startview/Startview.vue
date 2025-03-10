@@ -1,73 +1,77 @@
 <template>
     <ionPage>
+      <IonContent>
         <div class="main__container">
-            <!-- Transition for images -->
+          <!-- Transition for images -->
 
-            <img
-                v-if="activeIndex === 0"
-                src="../assets/zaki assets/fruit shop-rafiki.svg"
-                alt=""
-                key="img-0"
-            />  
+          <img
+            v-if="activeIndex === 0"
+            src="../assets/zaki assets/fruit shop-rafiki.svg"
+            alt=""
+            key="img-0"
+          />  
 
-            <img
-                v-if="activeIndex === 1"
-                src="../assets/zaki assets/healthy food-amico.svg"
-                alt="fruit"
-                key="img-1"
-            />
+          <img
+            v-if="activeIndex === 1"
+            src="../assets/zaki assets/healthy food-amico.svg"
+            alt="fruit"
+            key="img-1"
+          />
 
-            <img
-                v-if="activeIndex === 2"
-                src="../assets/zaki assets/Agreement-bro.svg"
-                alt="partenaire"
-                key="img-2"
-            />
-    
-            <!-- Transition for text -->
+          <img
+            v-if="activeIndex === 2"
+            src="../assets/zaki assets/Agreement-bro.svg"
+            alt="partenaire"
+            key="img-2"
+          />
+  
+          <!-- Transition for text -->
 
-            <div class="main__text" v-if="activeIndex === 0" key="text-0">
-                <h2>Bienvenue chez <span class="logo">Zaki</span></h2>
-                <p>Faites vos courses tranquillement depuis chez vous</p>
-            </div>
-            <div class="main__text" v-else-if="activeIndex === 1" key="text-1">
-                <h2>Commandez!!</h2>
-                <p>Découvrez vos ingrédients favoris sur notre application</p>
-            </div>
-            <div class="main__text" v-else-if="activeIndex === 2" key="text-2">
-                <h2>Commencer</h2>
-                <p>Facilitez vous la vie en nous confiant vos courses</p>
-            </div>
+          <div class="main__text" v-if="activeIndex === 0" key="text-0">
+            <h2>Bienvenue chez <span class="logo">Zaki</span></h2>
+            <p>Faites vos courses tranquillement depuis chez vous</p>
+          </div>
+          <div class="main__text" v-else-if="activeIndex === 1" key="text-1">
+            <h2>Commandez!!</h2>
+            <p>Découvrez vos ingrédients favoris sur notre application</p>
+          </div>
+          <div class="main__text" v-else-if="activeIndex === 2" key="text-2">
+            <h2>Commencer</h2>
+            <p>Facilitez vous la vie en nous confiant vos courses</p>
+          </div>
 
-    
-            <!-- Bouton pour avancer dans les étapes -->
-            <secondButton label="Suivant" @next-step="handleNextStep" v-if = "activeIndex <= 1" />
-            <mainButton v-else />
+  
+          <!-- Bouton pour avancer dans les étapes -->
+          <secondButton label="Suivant" @next-step="handleNextStep" v-if = "activeIndex <= 1" />
+          <mainButton 
+            v-else @click="() => {router.push('/signin')}"
+            label = "commencer"
+          />
+          <!-- Stepper reçoit activeIndex en prop pour suivre l'état -->
+          <stepper :activeIndex="activeIndex" @click="handleEvent" />
 
-
-    
-            <!-- Stepper reçoit activeIndex en prop pour suivre l'état -->
-            <stepper :activeIndex="activeIndex" @click="handleEvent" />
-
-            
+          
         </div>
 
-        <FooterLayout/>
+        
+      </IonContent>
+      <FooterLayout/>
     </ionPage>
 </template>
   
 <script>
-  import { ref } from 'vue';
-  import { IonPage } from '@ionic/vue';
-  import { defineComponent } from 'vue';
+  import { IonContent, IonPage } from '@ionic/vue';
+  import { defineComponent, ref } from 'vue';
   import secondButton from '../button/secondButton.vue';
   import mainButton from '../button/mainButton.vue'
   import stepper from '../components/tools/stepper.vue';
   import FooterLayout from '../components/tools/footerLayout.vue';
+  import { useRouter} from 'vue-router';
   
   export default defineComponent({
     components: {
       IonPage,
+      IonContent,
       secondButton,
       mainButton,
       stepper,
@@ -75,6 +79,7 @@
     },
   
     setup() {
+      const router = useRouter();
       const activeIndex = ref(0);
       const message = ref('');
   
@@ -96,22 +101,16 @@
         handleEvent,
         message,
         handleNextStep,
+        router,
       };
     },
   });
 </script>
   
 <style scoped>
-  .main__container {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    flex: 1;
-  }
   
   .main__text {
-    widows: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
