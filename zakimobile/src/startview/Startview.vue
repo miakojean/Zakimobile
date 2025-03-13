@@ -2,40 +2,36 @@
     <ionPage>
       <IonContent>
         <div class="main__container">
-          <!-- Transition for images -->
 
           <img
             v-if="activeIndex === 0"
             src="../assets/zaki assets/fruit shop-rafiki.svg"
             alt=""
-            key="img-0"
           />  
 
           <img
             v-if="activeIndex === 1"
             src="../assets/zaki assets/healthy food-amico.svg"
             alt="fruit"
-            key="img-1"
           />
 
           <img
             v-if="activeIndex === 2"
             src="../assets/zaki assets/Agreement-bro.svg"
             alt="partenaire"
-            key="img-2"
           />
   
           <!-- Transition for text -->
 
-          <div class="main__text" v-if="activeIndex === 0" key="text-0">
+          <div class="main__text" v-if="activeIndex === 0">
             <h2>Bienvenue chez <span class="logo">Zaki</span></h2>
             <p>Faites vos courses tranquillement depuis chez vous</p>
           </div>
-          <div class="main__text" v-else-if="activeIndex === 1" key="text-1">
+          <div class="main__text" v-else-if="activeIndex === 1">
             <h2>Commandez!!</h2>
             <p>Découvrez vos ingrédients favoris sur notre application</p>
           </div>
-          <div class="main__text" v-else-if="activeIndex === 2" key="text-2">
+          <div class="main__text" v-else-if="activeIndex === 2">
             <h2>Commencer</h2>
             <p>Facilitez vous la vie en nous confiant vos courses</p>
           </div>
@@ -86,7 +82,6 @@
       const handleEvent = (data) => {
         activeIndex.value = data; // Update activeIndex based on stepper click
         message.value = data; // Update message
-        console.log('Donnée reçue:', data);
       };
   
       const handleNextStep = () => {
@@ -125,15 +120,5 @@
   .main__text p {
     text-align: center;
   }
-  
-  /* Transition styles */
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.5s ease;
-  }
-  
-  .fade-enter-from,
-  .fade-leave-to {
-    opacity: 0;
-  }
+
 </style>
