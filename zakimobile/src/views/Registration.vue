@@ -6,25 +6,36 @@
                 <inputfamily
                     placeholder = "Nom de famille"
                     type="text"
+                    v-model="firstname"
                 />
                 <inputfamily
                     placeholder = "Prénoms"
                     type="text"
+                    v-model="lastname"
                 />
                 <inputfamily
                     placeholder = "username"
                     type="text"
+                    v-model="username"
                 />
                 <inputfamily
                     placeholder = "email"
                     type="email"
+                    v-model="email"
                 />
+
+                <p v-if="emailError" style="color: red">{{ emailError }}</p>
+
                 <inputfamily
                     placeholder = "Mot de passe"
                     type="password"
+                    v-model="password"
+
+                    
                 />
                 <mainButton
                     label = "inscription"
+                    @click="verification"
                 />
                 <div class="divider-container">
                     <div class="divider"></div>
@@ -41,11 +52,12 @@
 
 <script>
 import { IonContent, IonPage } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { defineComponent , ref } from 'vue';
 import inputfamily from '../tools/inputfamily.vue';
 import mainButton from '../button/mainButton.vue';
 import footerLayout from '../components/tools/footerLayout.vue';
 import { useRouter } from 'vue-router';
+import validator from 'validator';
 
 export default defineComponent({
     components:{
@@ -57,7 +69,29 @@ export default defineComponent({
     setup () {
         const router = useRouter()
 
-        return { router}
+        // About the registration
+        const firstname = ref('')
+        const lastname = ref('')
+        const username = ref('')
+        const email = ref('')
+        const password = ref('')
+
+        const user = ref({})
+
+        const verification = () => {
+            if (!validator.isEmail(email.value)) {
+                emailError.value = 'Adresse e-mail invalide.';
+            } else {
+                emailError.value = ''; // Efface l'erreur si l'e-mail est valide
+                // Continuez avec d'autres validations ou la logique de soumission
+                console.log('Email valide');
+            }
+        };
+        
+        return { router , firstname, 
+            lastname, username, 
+            email, password, verification
+        }
     }
 
 
