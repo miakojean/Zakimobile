@@ -57,7 +57,6 @@ import inputfamily from '../tools/inputfamily.vue';
 import mainButton from '../button/mainButton.vue';
 import footerLayout from '../components/tools/footerLayout.vue';
 import { useRouter } from 'vue-router';
-import validator from 'validator';
 
 export default defineComponent({
     components:{
