@@ -1,7 +1,7 @@
 <template>
     <ionPage>
       <ionContent>
-        <div class="main__container">
+        <div class="main__container profile__container">
           <div class="main__header">
             <i class="ri-arrow-left-line"></i>
             <div class="done">
@@ -23,7 +23,7 @@
               <p>Miako </p>
             </div>
             <div class="input__group">
-              <label for="name">Nom</label>
+              <label for="name">Prenoms</label>
               <p>Jean Yves Arnold</p>
             </div>
             <div class="input__group">
@@ -67,16 +67,15 @@ export default defineComponent ({
 </script>
   
 <style scooped>
-
-*{
-  font-family: 'poppins' sans-serif;
-}
-
 .center__flex{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.profile__container{
+  gap: 0.5rem;
 }
 
 i{
@@ -141,7 +140,7 @@ p{
   display: flex;
   justify-content: left;
   align-items: center;
-  gap: 3rem;
+  gap: 1rem;
 }
 
 .male{
