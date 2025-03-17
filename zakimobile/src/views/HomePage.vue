@@ -6,8 +6,14 @@
 </template>
 
 <script>
+import ref from 'vue'
 export default {
 
+  setup(){
+    const layout = ref(1)
+
+    return {layout}
+  }
 }
 </script>
 

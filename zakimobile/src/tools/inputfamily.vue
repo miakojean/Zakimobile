@@ -5,6 +5,7 @@
       class="custom"
       :maxlength="20"
       :type = "type"
+      :clear-input="true"
     ></ion-input>
 </template>
   
