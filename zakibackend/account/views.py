@@ -2,10 +2,11 @@ from django.shortcuts import HttpResponse, render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializer import UserCreateSerializer, UserSerializer
+from .serializer import UserCreateSerializer, UserSerializer, ProfileSerializer
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
+from .models import Profile
 
 
 # Create your views here.
@@ -52,7 +53,16 @@ class UserProfileView(APIView):
     def get(self, request, *args, **kwargs):
         user = request.user
         user_serializer = UserSerializer(user)
-        return Response(user_serializer.data)
+
+        try:
+            profile = Profile.objects.get(user=user)
+            profile_serializer = ProfileSerializer(profile)
+        except Profile.DoesNotExist:
+            profile_serializer = None
+        return Response({
+            "user": user_serializer.data,  # Correction : afficher les données de l'utilisateur
+            "profile": profile_serializer.data if profile_serializer else None, # Correction : afficher les données du profil si elles existent
+        }, status=status.HTTP_200_OK)
 
 class UserLogoutView(APIView):
     permission_classes = [IsAuthenticated]  # Seuls les utilisateurs authentifiés peuvent se déconnecter
