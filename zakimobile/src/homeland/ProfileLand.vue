@@ -1,13 +1,15 @@
 <template>
     <ionPage>
+      <ionHeader>
+        <div class="main__header">
+          <i class="ri-arrow-left-line"></i>
+          <div class="done">
+            <i class="ri-check-fill"></i>
+          </div>
+        </div>
+      </ionHeader>
       <ionContent>
         <div class="main__container profile__container">
-          <div class="main__header">
-            <i class="ri-arrow-left-line"></i>
-            <div class="done">
-              <i class="ri-check-fill"></i>
-            </div>
-          </div>
           <div class="profile__pic">
             <h3>
               Mon compte
@@ -25,6 +27,10 @@
             <div class="input__group">
               <label for="name">Prenoms</label>
               <p>Jean Yves Arnold</p>
+            </div>
+            <div class="input__group">
+              <label for="Username">Username</label>
+              <p>The farmer</p>
             </div>
             <div class="input__group">
               <label for="email">Email</label>
@@ -54,14 +60,13 @@
   </template>
   
 <script>
-import {IonPage, IonContent} from '@ionic/vue'
+import {IonPage, IonContent, IonHeader} from '@ionic/vue'
 import { defineComponent } from 'vue';
 
 export default defineComponent ({
     components:{
-      IonPage, IonContent
+      IonPage, IonContent, IonHeader
     }
-
     
 })
 </script>
@@ -90,6 +95,7 @@ p{
   display:flex;
   justify-content: space-between;
   width: 100%;
+  padding: 1rem;
 }
 
 .main__header .done{
