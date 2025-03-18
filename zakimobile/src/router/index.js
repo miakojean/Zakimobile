@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
+import Articledetail from '../homeland/articledetail.vue';
 
 const routes = [
   {
