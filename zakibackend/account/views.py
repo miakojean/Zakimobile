@@ -2,7 +2,7 @@ from django.shortcuts import HttpResponse, render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializer import UserCreateSerializer
+from .serializer import UserCreateSerializer, UserSerializer
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
@@ -45,7 +45,15 @@ class UserLoginView(APIView):
             })
         else:
             return Response({'error': 'Identifiants invalides'}, status=status.HTTP_401_UNAUTHORIZED)
-        
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        user_serializer = UserSerializer(user)
+        return Response(user_serializer.data)
+
 class UserLogoutView(APIView):
     permission_classes = [IsAuthenticated]  # Seuls les utilisateurs authentifiés peuvent se déconnecter
 
