@@ -18,6 +18,16 @@ Content-Type: application/json
     "password": "P@$$wOrd123" 
 }
 
+GET http://127.0.0.1:8000/account/profile/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMjYwNzg3LCJpYXQiOjE3NDIyNTcxODcsImp0aSI6ImJjMTM5NTYzZDI2NDQwMzdhNTdkZTU3ZmQxMTMwNTlmIiwidXNlcl9pZCI6MX0.ImOXLXRGKybCiFBWPiyUdgxnrDzPt7MZAbpsyAPibJY
+
+{
+    "username": "johndoe",  
+    "password": "P@$$wOrd123" 
+}
+
+
 POST http://127.0.0.1:8000/account/logout/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMDU2NTQxLCJpYXQiOjE3NDIwNTI5NDEsImp0aSI6IjdhZTQ1NmZlMjM3YzQ4MTE5YmZlNzZjMDQ1ZmMxODBmIiwidXNlcl9pZCI6MX0.spkV8XM1Rcdk2y6Zef7Eob1tFfx2U5hTdrOpUcDYZjs
