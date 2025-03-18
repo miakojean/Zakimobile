@@ -29,6 +29,11 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: () => import('../homeland/ProfileLand.vue')
+  },
+  {
+    path:'/article',
+    name:'article',
+    component: () => import('../homeland/HomeLand.vue')
   }
 ];
 
