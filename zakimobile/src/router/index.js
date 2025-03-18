@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
+import Articledetail from '../homeland/articledetail.vue';
 
 const routes = [
   {
@@ -29,6 +30,11 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: () => import('../homeland/ProfileLand.vue')
+  },
+  {
+    path: '/article-detail',
+    name: 'Articledetail',
+    component: () => import('../homeland/articledetail.vue')
   }
 ];
 
