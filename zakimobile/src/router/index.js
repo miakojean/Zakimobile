@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import Articledetail from '../homeland/articledetail.vue';
 
 const routes = [
   {
@@ -34,7 +33,7 @@ const routes = [
   {
     path:'/article',
     name:'article',
-    component: () => import('../homeland/HomeLand.vue')
+    component: () => import('../homeland/articlesDetails.vue')
   }
 ];
 

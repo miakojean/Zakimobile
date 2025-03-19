@@ -1,17 +1,6 @@
 <template>
   <ionPage>
-    <ionHeader>
-      <div class="header__container">
-        <div class="name">
-          <span>Hello</span>
-          <p>John Doe</p>
-        </div>
-        <div class="item__notifs">
-          <i class="ri-shopping-cart-2-line"></i>
-          <div class="cart"><p>1</p></div>
-        </div>
-      </div>
-    </ionHeader>
+    <headerLayout2/>
     <ionContent>
       <div class="main__container articles__details">
         <div class="article__pictures">
@@ -35,14 +24,15 @@
           <span>$6.00</span>
         </div>
         <div class="delivery__info">
-          
+          <i class="ri-truck-line"></i>
+          <p> Livré en moins d'une heure</p>
         </div>
         <div class="add__cart">
           <mainButton
             label = "Commander"
-            @click="voirlechiffre"
           />
-          <i class="ri-heart-line" :class="{ loved: isLoved }" @click="toggleLoved"></i>
+          <i class="ri-heart-line" v-if="isLoved === false" @click="iLike"></i>
+          <i class="ri-heart-fill" v-if="isLoved === true" @click="iLike"></i>
         </div>
       </div>
     </ionContent>
@@ -53,11 +43,12 @@
 import {IonPage, IonContent} from '@ionic/vue'
 import { defineComponent, ref } from 'vue';
 import MainButton from '../button/mainButton.vue';
+import headerLayout2 from '../components/tools/headerLayout2.vue';
 
 export default defineComponent ({
   components:{
     IonPage, IonContent,
-    MainButton
+    MainButton, headerLayout2
   },
   setup() {
     const amount = ref(1)
@@ -75,11 +66,14 @@ export default defineComponent ({
     };
 
     const isLoved = ref(false); // Initialement, le cœur n'est pas aimé
-
-    // Fonction pour basculer l'état "aimé"
-    const toggleLoved = () => {
-      isLoved.value = !isLoved.value;
+    const iLike = () => {
+      isLoved.value = !isLoved.value; // Toggle the value
     };
+
+    const price = ref(null)
+    const calculate = (amount, price) => {
+      total = amount.value * price.value
+    }
 
 
     return {
@@ -87,7 +81,9 @@ export default defineComponent ({
       increment,
       decrement,
       isLoved,
-      toggleLoved
+      iLike,
+      price,
+      calculate
     }
   } 
 })
@@ -169,6 +165,20 @@ export default defineComponent ({
   color: #058C42;
 }
 
+.delivery__info{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #ebebeb;
+  border-radius: 1rem;
+}
+
+.delivery__info i{
+  font-size: 2rem;
+  color: #6b6b6b;
+}
+
 .add__cart{
   width: 100%;
   display: flex;
@@ -179,10 +189,13 @@ export default defineComponent ({
 
 .add__cart i {
   font-size: 2rem;
-  color: #b8b8b8;
 }
 
-.loved{
-  color: #b41f1f;
+.ri-heart-line{
+  color: #adadad;
+}
+
+.ri-heart-fill {
+  color: #ff3a3a;
 }
 </style>
