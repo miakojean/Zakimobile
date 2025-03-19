@@ -31,6 +31,11 @@ const routes = [
     component: () => import('../homeland/ProfileLand.vue')
   },
   {
+    path: '/HomePage',
+    name: 'homepage',
+    component: () => import('../homeland/homepage.vue')
+  },
+  {
     path:'/article',
     name:'article',
     component: () => import('../homeland/articlesDetails.vue')

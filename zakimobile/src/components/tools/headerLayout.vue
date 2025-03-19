@@ -7,7 +7,7 @@
             </div>
             <div class="item__notifs">
                 <i class="ri-shopping-cart-2-line"></i>
-                <div class="cart"><p>1</p></div>
+                <div class="cart"><p>0</p></div>
             </div>
         </div>
     </ionHeader>
