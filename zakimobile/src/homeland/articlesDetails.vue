@@ -1,38 +1,36 @@
 <template>
   <ionPage>
-    <headerLayout2/>
+    <headerLayout2 />
     <ionContent>
       <div class="main__container articles__details">
         <div class="article__pictures">
-          <img class="product__pictures" src="../assets/Articles/bananedouce.jpg" alt="">
+          <img
+            class="product__pictures"
+            :src="articleDetails ? articleDetails.image : ''"
+            :alt="articleDetails ? articleDetails.name : ''"
+          />
         </div>
         <div class="title">
-          <h3>Banane douce</h3>
+          <h3>{{ articleDetails ? articleDetails.name : 'Loading...' }}</h3>
           <p>Fruits</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            Laboriosam nostrum natus magni itaque voluptates velit 
-            molestiae eius, temporibus exercitationem corporis libero,
-            magnam sequi ipsa odio!
-          </p>
+          <p> {{ articleDetails ? articleDetails.description : '' }} </p>
         </div>
         <div class="weight__price">
           <div class="up__down">
-            <i class="ri-indeterminate-circle-line" @click="decrement" ></i>
-            <p> {{ amount }}  kg</p>
+            <i class="ri-indeterminate-circle-line" @click="decrement"></i>
+            <p> {{ amount }} kg</p>
             <i class="ri-add-circle-line" @click="increment"></i>
           </div>
           <span>$6.00</span>
         </div>
         <div class="delivery__info">
           <i class="ri-truck-line"></i>
-          <p> Livré en moins d'une heure</p>
+          <p>Livré en moins d'une heure</p>
         </div>
         <div class="add__cart">
-          <mainButton
-            label = "Commander"
-          />
-          <i class="ri-heart-line" v-if="isLoved === false" @click="iLike"></i>
-          <i class="ri-heart-fill" v-if="isLoved === true" @click="iLike"></i>
+          <mainButton label="Commander" />
+          <i class="ri-heart-line" v-if="!isLoved" @click="iLike"></i>
+          <i class="ri-heart-fill" v-if="isLoved" @click="iLike"></i>
         </div>
       </div>
     </ionContent>
@@ -40,54 +38,66 @@
 </template>
 
 <script>
-import {IonPage, IonContent} from '@ionic/vue'
-import { defineComponent, ref } from 'vue';
+import { IonPage, IonContent } from '@ionic/vue';
+import { defineComponent, ref, onMounted, computed } from 'vue';
+import { useRoute } from 'vue-router'; // Import useRoute
 import MainButton from '../button/mainButton.vue';
 import headerLayout2 from '../components/tools/headerLayout2.vue';
+import Fruits from '../data/Articles';
 
-export default defineComponent ({
-  components:{
-    IonPage, IonContent,
-    MainButton, headerLayout2
+export default defineComponent({
+  components: {
+    IonPage,
+    IonContent,
+    MainButton,
+    headerLayout2,
   },
   setup() {
-    const amount = ref(1)
-    const increment = () => {
-      if (amount.value >= 1) {
-        return amount.value ++
-      }
-    };
-    const decrement = () => {
-      if (amount.value > 1) {
-        return amount.value --
-      } else if (amount.value = 1) {
-        return amount.value = 1
-      } else return amount.value = 1
-    };
+    const route = useRoute(); // Use useRoute to get the route object
+    const amount = ref(1);
+    const isLoved = ref(false);
     const articleSlug = ref(route.params.slug);
     const articleDetails = ref(null);
-    const isLoved = ref(false); // Initialement, le cœur n'est pas aimé
-    const iLike = () => {
-      isLoved.value = !isLoved.value; // Toggle the value
+
+    const increment = () => {
+      amount.value++;
     };
 
-    const price = ref(null)
-    const calculate = (amount, price) => {
-      total = amount.value * price.value
-    }
+    const decrement = () => {
+      if (amount.value > 1) {
+        amount.value--;
+      }
+    };
 
+    const iLike = () => {
+      isLoved.value = !isLoved.value;
+    };
+
+    // Find the article based on the slug
+    onMounted(() => {
+      articleDetails.value = Fruits.find(
+        (article) => article.name.toLowerCase().replace(/\s+/g, '-') === articleSlug.value
+      );
+    });
+
+    const price = ref(6); // Example price
+    const total = computed(() => {
+      return amount.value * price.value;
+    });
 
     return {
-      amount, articleSlug,
-      increment, articleDetails,
+      amount,
+      articleSlug,
+      increment,
+      articleDetails,
       decrement,
       isLoved,
       iLike,
       price,
-      calculate
-    }
-  } 
-})
+      total,
+    };
+  },
+});
 </script>
 
 <style scoped>
