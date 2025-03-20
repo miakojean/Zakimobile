@@ -4,7 +4,7 @@
     <ionContent>
       <div class="main__container articles__details">
         <div class="article__pictures">
-          <img class="product__pictures" src="../data/Articles/bananedouce.jpg" alt="">
+          <img class="product__pictures" src="../assets/Articles/bananedouce.jpg" alt="">
         </div>
         <div class="title">
           <h3>Banane douce</h3>

@@ -5,7 +5,11 @@
       <resarchBox/>
       <suggestionLists/>
       <div class="articles__container">
-        <div class="about__articles"  v-for="(fruit, index) in fruits" :key="index">
+        <div class="about__articles"  
+          v-for="(fruit, index) in fruits" 
+          :key="index"
+          @click="() => {router.push('/article')}"
+          >
           <img class="articles__pictures" :src=" fruit.image " :alt="fruit.name">
           <div class="info">
             <p>{{ fruit.name }}</p>
@@ -26,12 +30,13 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue'; // Import defineComponent
 import { IonPage, IonContent, IonIcon } from '@ionic/vue';
-import { addCircleOutline } from 'ionicons/icons';
+import { addCircleOutline, push } from 'ionicons/icons';
 import HeaderLayout from '../components/tools/headerLayout.vue';
 import Fruits from '../data/Articles';
 import MainButton from '../button/mainButton.vue';
 import resarchBox from '../components/tools/resarchBox.vue';
 import suggestionLists from '../components/tools/suggestionLists.vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   components: {
@@ -51,6 +56,8 @@ export default defineComponent({
       console.log(fruits.value[0]); // Access the value of ref using .value
     };
 
+    const router = useRouter()
+
     // Use onMounted inside setup
     onMounted(() => {
       voirTableau();
@@ -59,6 +66,7 @@ export default defineComponent({
     return {
       fruits,
       voirTableau,
+      router,
     };
   },
 });
