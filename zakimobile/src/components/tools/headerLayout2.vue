@@ -2,7 +2,7 @@
     <ionHeader>
         <div class="header__container">
             <div class="name">
-              <i class="fa-solid fa-arrow-left-long"></i>
+              <i class="fa-solid fa-arrow-left-long" @click="()=>{router.push('/HomePage')}"></i>
             </div> 
             <div class="item__notifs">
                 <i class="ri-shopping-cart-2-line"></i>
@@ -15,10 +15,17 @@
 <script>
 import { IonHeader } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 export default defineComponent ({
 
     components: {
       IonHeader,
+    },
+    setup() {
+      const router = useRouter()
+      return {
+        router
+      }
     }
 
 })
