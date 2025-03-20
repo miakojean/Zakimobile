@@ -8,7 +8,7 @@
         <div class="about__articles"  
           v-for="(fruit, index) in fruits" 
           :key="index"
-          @click="() => {router.push('/article')}"
+          @click="goToArticleDetails(fruit.name.toLowerCase().replace(' ', '-'))"
           >
           <img class="articles__pictures" :src=" fruit.image " :alt="fruit.name">
           <div class="info">
@@ -56,6 +56,10 @@ export default defineComponent({
       console.log(fruits.value[0]); // Access the value of ref using .value
     };
 
+    const goToArticleDetails = (slug) => {
+      router.push({ name: 'articleDetails', params: { slug: slug } });
+    };
+
     const router = useRouter()
 
     // Use onMounted inside setup
@@ -67,6 +71,7 @@ export default defineComponent({
       fruits,
       voirTableau,
       router,
+      goToArticleDetails,
     };
   },
 });

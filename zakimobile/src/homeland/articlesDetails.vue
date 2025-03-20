@@ -64,7 +64,8 @@ export default defineComponent ({
         return amount.value = 1
       } else return amount.value = 1
     };
-
+    const articleSlug = ref(route.params.slug);
+    const articleDetails = ref(null);
     const isLoved = ref(false); // Initialement, le cœur n'est pas aimé
     const iLike = () => {
       isLoved.value = !isLoved.value; // Toggle the value
@@ -77,8 +78,8 @@ export default defineComponent ({
 
 
     return {
-      amount,
-      increment,
+      amount, articleSlug,
+      increment, articleDetails,
       decrement,
       isLoved,
       iLike,

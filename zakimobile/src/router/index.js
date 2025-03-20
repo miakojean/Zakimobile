@@ -39,6 +39,11 @@ const routes = [
     path:'/article',
     name:'article',
     component: () => import('../homeland/articlesDetails.vue')
+  },
+  {
+    path: '/article/:slug', // Le `:slug` indique un paramètre dynamique
+    name: 'articleDetails', // Un nom de route plus générique
+    component: () => import('../homeland/articlesDetails.vue')
   }
 ];
 
