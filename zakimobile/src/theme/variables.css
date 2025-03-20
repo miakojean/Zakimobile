@@ -20,12 +20,27 @@ img{
     height: 200px;
 }
 
+.articles__pictures{
+    background-size: cover ;
+    width: 100px;
+    height: 100px;
+}
+
 .main__container{
     padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 0.5rem;
+    height: 100%;
+}
+
+.articles__container {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: normal;
     gap: 0.5rem;
     height: 100%;
 }

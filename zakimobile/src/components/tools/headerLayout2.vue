@@ -3,7 +3,7 @@
         <div class="header__container">
             <div class="name">
               <i class="fa-solid fa-arrow-left-long"></i>
-            </div>
+            </div> 
             <div class="item__notifs">
                 <i class="ri-shopping-cart-2-line"></i>
                 <div class="cart"><p>0</p></div>
