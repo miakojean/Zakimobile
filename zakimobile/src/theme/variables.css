@@ -42,7 +42,6 @@ img{
     grid-template-columns: 1fr 1fr;
     justify-content: normal;
     gap: 0.5rem;
-    height: 100%;
 }
 
 h2{
