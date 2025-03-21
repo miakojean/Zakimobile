@@ -8,12 +8,14 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import('../startview/Startview.vue')
+    component: () => import('../startview/Startview.vue'),
+    meta: { noTransition: true }
   },
   {
     path:'/aboutaccount', /* sign in or sign up */
     name: "aboutaccount",
-    component: () => import('../startview/Aboutaccount.vue')
+    component: () => import('../startview/Aboutaccount.vue'),
+    meta: { noTransition: true }
   },
   {
     path: '/signin',

@@ -41,9 +41,9 @@
                     <div class="divider"></div>
                     <span class="divider-text">ou</span>
                     <div class="divider"></div>
-                </div>
+                </div> 
 
-                <p @click="() => {router.push('/signin')}" >Je me connecte <span>ici</span></p>
+                <p @click="() => router.push('/signin')" >Je me connecte <span>ici</span></p>
             </div>
         </IonContent>
         <footerLayout/>

@@ -46,14 +46,14 @@
 </template>
   
 <script>
-  import { IonPage } from '@ionic/vue';
-  import { defineComponent, ref } from 'vue';
-  import secondButton2 from '../button/secondButton2.vue';
-  import mainButton from '../button/mainButton.vue'
-  import stepper from '../components/tools/stepper.vue';
-  import FooterLayout from '../components/tools/footerLayout.vue';
-  import inputfamily from '../tools/inputfamily.vue';
-  import { useRouter } from 'vue-router';
+import { IonPage } from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
+import secondButton2 from '../button/secondButton2.vue';
+import mainButton from '../button/mainButton.vue'
+import stepper from '../components/tools/stepper.vue';
+import FooterLayout from '../components/tools/footerLayout.vue';
+import inputfamily from '../tools/inputfamily.vue';
+import { useRouter } from 'vue-router';
   
   export default defineComponent({
     components: {
@@ -84,7 +84,7 @@
             else {
                 user.value = {
                     monNom: username.value,
-                    motdePasse: password.value,
+                    motdePasse: password.value, 
                 },
                 console.log(user)
             }
