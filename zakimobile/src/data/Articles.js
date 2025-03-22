@@ -39,6 +39,20 @@ const Fruits = [
         description: "",
         metrics: 'Kg',
         image: pommeImage
+    },
+    {
+        name: "Mangue",
+        prix: 300,
+        description: "",
+        metrics: 'Kg',
+        //image: mangueImage
+    },
+    {
+        name: "Raisin",
+        prix: 300,
+        description: "",
+        metrics: 'Kg',
+        //image: raisinImage
     }
 ]
 

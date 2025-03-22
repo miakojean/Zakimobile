@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Barre de recherche -->
     <ion-searchbar
       showCancelButton="focus"
       class="custom"
@@ -7,19 +8,25 @@
       @ionInput="handleInput"
       v-model="query"
     ></ion-searchbar>
-    <div class="result__box">
-      <ul v-for="(fruit, index) in fruits" 
-      :key="index">
-        <li>{{ fruit.name }}</li>
+
+    <!-- Résultats filtrés -->
+    <div v-if="query.trim().length > 0" class="result__box">
+      <ul v-if="filteredFruits.length > 0">
+        <li v-for="(fruit, index) in filteredFruits" :key="index">
+          {{ fruit.name }}
+        </li>
       </ul>
+      <p v-else>Aucun résultat trouvé</p>
     </div>
+
+    <!-- Bouton pour afficher la recherche -->
     <mainButton @click="() => { console.log(query) }"/>
   </div>
 </template>
 
 <script>
-import { IonButton, IonSearchbar } from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
+import { IonSearchbar } from '@ionic/vue';
+import { defineComponent, ref, computed } from 'vue';
 import Fruits from '../../data/Articles';
 import mainButton from '../../button/mainButton.vue';
 
@@ -27,43 +34,43 @@ export default defineComponent({
   components: { IonSearchbar, mainButton },
 
   setup() {
-    const fruits = ref(Fruits);
-    const query = ref('')
-    const results = ref([])
-    return { fruits };
+    const fruits = ref(Fruits);  // Liste complète des fruits
+    const query = ref('');  // Texte de recherche
+
+    // Fonction de filtrage en temps réel
+    const filteredFruits = computed(() => {
+      if (!query.value.trim()) return fruits.value;  // Si la recherche est vide, afficher tout
+      return fruits.value.filter(fruit =>
+        fruit.name.toLowerCase().includes(query.value.toLowerCase())
+      );
+    });
+
+    return { query, filteredFruits };
   },
 });
 </script>
-  
+
 <style scoped>
-  .modal-container {
-    position: fixed; /* Fixe la position pour couvrir toute la fenêtre */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Assure que la modale est au-dessus des autres éléments */
+  .result__box {
+    margin-top: 10px;
   }
-  
-  /* Scoped components require higher specificity to customize */
+
+  .result__box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .result__box li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+
   ion-searchbar.custom {
     --background: #f3f3f3;
     --color: #292929;
     --placeholder-color: #c9c9c9;
     --icon-color: #058C42;
     --clear-button-color: #058C42;
-    --box-shadow: none;
     --border-radius: 1rem;
-  }
-  
-  ion-searchbar.ios.custom {
-    --cancel-button-color: #058C42;
-  }
-  
-  ion-searchbar.md.custom {
-    --cancel-button-color: #058C42;
   }
 </style>
