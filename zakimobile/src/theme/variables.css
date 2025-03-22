@@ -65,3 +65,7 @@ p{
 .logo {
     color: #058C42;
 }
+
+li{
+    list-style: none;
+}
