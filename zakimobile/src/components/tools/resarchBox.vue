@@ -5,41 +5,32 @@
       class="custom"
       placeholder="Trouver mon produit"
       @ionInput="handleInput"
+      v-model="query"
     ></ion-searchbar>
-    <ion-list v-if="query">
-      <ion-item v-for="(fruit, index) in filteredFruits" :key="index">
-        <ion-label> {{ fruit.name }} </ion-label>
-      </ion-item>
-    </ion-list>
+    <div class="result__box">
+      <ul v-for="(fruit, index) in fruits" 
+      :key="index">
+        <li>{{ fruit.name }}</li>
+      </ul>
+    </div>
+    <mainButton @click="() => { console.log(query) }"/>
   </div>
 </template>
 
-  
 <script>
-import { IonItem, IonList, IonSearchbar } from '@ionic/vue';
-import { defineComponent, ref, computed } from 'vue';
+import { IonButton, IonSearchbar } from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
 import Fruits from '../../data/Articles';
+import mainButton from '../../button/mainButton.vue';
 
 export default defineComponent({
-  components: { IonSearchbar, IonList, IonItem },
+  components: { IonSearchbar, mainButton },
 
   setup() {
     const fruits = ref(Fruits);
-    const query = ref(''); // query est maintenant une string et non un boolean.
-    const filteredFruits = computed(() => {
-      if (!query.value) {
-        return []; // retourne un tableau vide si query est vide.
-      }
-      return fruits.value.filter((fruit) =>
-        fruit.name.toLowerCase().includes(query.value.toLowerCase())
-      );
-    });
-
-    const handleInput = (event) => {
-      query.value = event.detail.value;
-    };
-
-    return { filteredFruits, handleInput, query };
+    const query = ref('')
+    const results = ref([])
+    return { fruits };
   },
 });
 </script>

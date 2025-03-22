@@ -1,8 +1,8 @@
 <template>
   <IonPage>
     <headerLayout/>
+    <resarchBox/>
     <IonContent>
-      <resarchBox/>
       <suggestionLists/>
       <div class="articles__container">
         <div class="about__articles"  
