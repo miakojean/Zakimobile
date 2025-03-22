@@ -10,7 +10,7 @@ from .models import Profile
 
 
 # Create your views here.
-def index():
+def index(request):
     return HttpResponse('Bienvenu au pays mon fils')
 
 def is_logged(request):
