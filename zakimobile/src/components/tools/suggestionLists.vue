@@ -1,4 +1,5 @@
 <template>
+  <div class="suggestion">
     <ion-segment value="buttons" :scrollable="true">
       <ion-segment-button value="fruits">
         <ion-label>Fruits</ion-label>
@@ -16,6 +17,7 @@
         <ion-label>Légumineuses</ion-label>
       </ion-segment-button>
     </ion-segment>
+  </div>
 </template>
   
 <script>
@@ -29,23 +31,27 @@ export default defineComponent({
 
 <style scoped>
 *{
-    text-transform: none;
-    font-family: 'inter';
+  text-transform: none;
+}
+
+.suggestion{
+  padding: 1rem;
 }
 
 ion-segment {
-    overflow-x: auto; /* Ajoute une barre de défilement horizontale si le contenu dépasse */
-    white-space: nowrap; /* Empêche les boutons de passer à la ligne */
+  overflow-x: auto; /* Ajoute une barre de défilement horizontale si le contenu dépasse */
+  white-space: nowrap; /* Empêche les boutons de passer à la ligne */
+  width: 100%;
 }
 
 ion-segment::-webkit-scrollbar {
-    display: none; /* Masque la barre de défilement pour les navigateurs WebKit (Chrome, Safari) */
+  display: none; /* Masque la barre de défilement pour les navigateurs WebKit (Chrome, Safari) */
 }
 
 ion-segment-button {
-    --indicator-color: none;
-    --background-checked:  none;
-    --background-focused: #fafafa;
-    --color-checked: #058C42;
+  --indicator-color: none;
+  --background-checked:  none;
+  --background-focused: #fafafa;
+  --color-checked: #058C42;
 }
 </style>

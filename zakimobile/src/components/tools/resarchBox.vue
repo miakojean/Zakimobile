@@ -18,9 +18,6 @@
       </ul>
       <p v-else>Aucun résultat trouvé</p>
     </div>
-
-    <!-- Bouton pour afficher la recherche -->
-    <mainButton @click="() => { console.log(query) }"/>
   </div>
 </template>
 
