@@ -2,7 +2,7 @@ import bananeDouceImage from '../assets/Articles/bananedouce.jpg';
 import orangeImage from '../assets/Articles/orange.jpg';
 import ananasImage from '../assets/Articles/ananas.jpg';
 import fraiseImage from '../assets/Articles/fraise.jpg';
-import pommeImage from '../assets/Articles/pomme.jpg';
+import pommeImage from '../assets/Articles/pomme.png';
 
 const Fruits = [
     {

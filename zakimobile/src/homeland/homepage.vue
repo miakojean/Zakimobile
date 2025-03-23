@@ -6,7 +6,7 @@
       <suggestionLists/>
       <div class="articles__container">
         <div class="about__articles"  
-          v-for="(fruit, index) in fruits" 
+          v-for="(fruit, index) in fruits"  
           :key="index"
           @click="goToArticleDetails(fruit.name.toLowerCase().replace(' ', '-'))"
           >
