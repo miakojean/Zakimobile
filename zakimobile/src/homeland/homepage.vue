@@ -24,19 +24,21 @@
         </div>
       </div>
     </IonContent>
+    <navigationFooter/>
   </IonPage>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'; // Import defineComponent
-import { IonPage, IonContent, IonIcon } from '@ionic/vue';
-import { addCircleOutline, push } from 'ionicons/icons';
+import { defineComponent, ref} from 'vue'; // Import defineComponent
+import { IonPage, IonContent, IonIcon, } from '@ionic/vue';
+import { addCircleOutline} from 'ionicons/icons';
 import HeaderLayout from '../components/tools/headerLayout.vue';
 import Fruits from '../data/Articles';
 import MainButton from '../button/mainButton.vue';
 import resarchBox from '../components/tools/resarchBox.vue';
 import suggestionLists from '../components/tools/suggestionLists.vue';
 import { useRouter } from 'vue-router';
+import NavigationFooter from '../components/tools/navigationFooter.vue';
 
 export default defineComponent({
   components: {
@@ -47,14 +49,11 @@ export default defineComponent({
     MainButton,
     resarchBox,
     suggestionLists,
-    addCircleOutline
+    addCircleOutline,
+    NavigationFooter
   },
   setup() {
     const fruits = ref(Fruits); // Use ref to make it reactive
-
-    const voirTableau = () => {
-      console.log(fruits.value[0]); // Access the value of ref using .value
-    };
 
     const goToArticleDetails = (slug) => {
       router.push({ name: 'articleDetails', params: { slug: slug } });
@@ -63,13 +62,9 @@ export default defineComponent({
     const router = useRouter()
 
     // Use onMounted inside setup
-    onMounted(() => {
-      voirTableau();
-    });
 
     return {
       fruits,
-      voirTableau,
       router,
       goToArticleDetails,
     };
