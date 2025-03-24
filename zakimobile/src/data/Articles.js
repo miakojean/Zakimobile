@@ -53,6 +53,12 @@ const Fruits = [
         description: "",
         metrics: 'Kg',
         //image: raisinImage
+    },
+    {
+        name: "Citron",
+        prix: 300,
+        description: "",
+        metrics: 'Kg'
     }
 ]
 

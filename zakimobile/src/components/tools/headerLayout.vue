@@ -1,28 +1,47 @@
 <template>
-    <ionHeader>
-        <div class="header__container">
-            <div class="name">
-                <span>Hello</span>
-                <p>John Doe</p>
-            </div>
-            <div class="item__notifs">
-                <i class="ri-shopping-cart-2-line"></i>
-                <div class="cart"><p>0</p></div>
-            </div>
-        </div> 
-    </ionHeader>
+  <ionHeader>
+    <div class="header__container">
+      <div class="name">
+        <span>Hello</span>
+        <p>John Doe</p>
+      </div>
+      <div class="notifications__family">
+        <div class="items__notifs">
+          <ion-icon name="notifications-outline"></ion-icon>
+          <ion-badge color="danger">{{notif}}</ion-badge>
+        </div>
+        <div class="items__notifs">
+          <ion-icon name="cart-outline"></ion-icon>
+          <ion-badge color="danger">{{ articles }}</ion-badge>
+        </div>
+      </div>
+    </div>
+  </ionHeader>
 </template>
 
 <script>
-import { IonHeader } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { IonHeader, IonIcon } from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
+
 export default defineComponent ({
 
-    components: {
-        IonHeader,
+  props: {
+    notif: {
+      type: Number,
+      default: null
+    },
+    articles: {
+      type: Number,
+      default: 0,
     }
+  },
 
-})
+  components: {
+    IonHeader,
+    IonIcon
+  },
+  
+});
 </script>
 
 <style>
@@ -35,34 +54,54 @@ export default defineComponent ({
   height: auto;
 }
 
-.item__notifs{
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
+.name span {
+  font-family: 1.5rem;
+  font-weight: 400;
 }
 
-.item__notifs .cart{
-  position: absolute;
-  top: -10%;
-  left: 30%;
-  background: #ff5e5e;
+.name p {
+  font-family: 1.5rem;
+  font-weight: 600;
+  color: #058C42;
+}
+
+
+.notifications__family{
   display: flex;
-  justify-content: center;
+  gap: 1rem;
+}
+
+.item__notifs{
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 0.5rem;
-  height: 25px;
-  border-radius: 50%;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
 }
 
 .cart p{
   color: white;
 }
 
-.item__notifs i {
+.items__notifs i {
   font-size: 1.5rem;
   color: #058C42;
 }
 
+.items__notifs{
+  position: relative;
+}
+
+
+ion-icon {
+  font-size: 1.5rem; 
+  color: #058C42;
+}
+
+ion-badge {
+  position: absolute;
+  top: -70%;
+  left: -20%;
+}
 </style>
