@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "^6.0.2"
+  },
+  "dependencies": {
+    "axios": "^1.8.3"
+  }
+}
