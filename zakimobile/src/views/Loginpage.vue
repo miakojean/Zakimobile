@@ -28,7 +28,7 @@
     
             <!-- Bouton pour avancer dans les étapes -->
             <mainButton label = "connexion"
-                @click="verification"    
+                @click="login"    
             />
 
             <div class="divider-container">
@@ -46,6 +46,7 @@
 </template>
   
 <script>
+
 import { IonPage } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import secondButton2 from '../button/secondButton2.vue';
@@ -54,46 +55,49 @@ import stepper from '../components/tools/stepper.vue';
 import FooterLayout from '../components/tools/footerLayout.vue';
 import inputfamily from '../tools/inputfamily.vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
   
   export default defineComponent({
     components: {
       IonPage,
-      secondButton2,
       mainButton,
-      stepper,
       FooterLayout,
-      inputfamily
+      inputfamily,
     },
-  
+
     setup() {
+      const username = ref('');
+      const password = ref('');
+      const router = useRouter();
+      
+      // function to handle user login
+      const login = async () => {
+        try {
+          const response = await axios.post('http://127.0.0.1:8000/account/login/', {
+            username: username.value,
+            password: password.value,
+          });
+          const { access, refresh } = response.data;
+          localStorage.setItem('access_token', access);
+          localStorage.setItem('refresh_token', refresh);
+          console.log('Login successful!', access);
 
-        const user = ref({})
-        const username = ref('')
-        const password = ref('')
+          // Redirection seulement si la connexion est réussie
+          router.push('/profile');
+        } 
 
-        const router = useRouter()
-
-        const verification = () => {
-            if (!username.value && !password.value) {
-
-                console.log("utilisateur et mot de passe non fournit");
-            }
-            else if (!username.value || !password.value) {
-                console.log("Remplisser tous les champs")
-            }
-            else {
-                user.value = {
-                    monNom: username.value,
-                    motdePasse: password.value, 
-                },
-                console.log(user)
-            }
+        catch (error) {
+          console.error('Login failed:', error);
+          errorMessage.value = 'Login failed. Please check your credentials and try again.';
         }
-  
-        return {
-            username, password,
-            verification, router
-        };
+      };
+
+      return {
+        username,
+        password,
+        login,
+        router,
+      };
     },
   });
 </script>
