@@ -1,25 +1,23 @@
 <template>
-    <ionPage>
-        <div class="main__container">
+  <ionPage>
+    <div class="main__container">
 
-            <img
-                src="../assets/zaki assets/fruit shop-rafiki.svg"
-                alt=""
-            /> 
+      <img
+        src="../assets/zaki assets/fruit shop-rafiki.svg"
+        alt=""
+      /> 
 
-            <div class="main__text">
-                <h2><span class="logo">Zaki</span></h2>
-            </div>
+      <div class="main__text">
+        <h2><span class="logo">Zaki</span></h2>
+      </div>
 
-    
-            <!-- Bouton pour avancer dans les étapes -->
-            <secondButton2 label="connexion"/>
-            <mainButton label = "inscription"/>
-            
-        </div>
-
-        <FooterLayout/>
-    </ionPage>
+      <!-- Bouton pour avancer dans les étapes -->
+      <secondButton2 label="connexion"/>
+      <mainButton label = "inscription"/>
+      
+    </div>
+    <FooterLayout/>
+  </ionPage>
 </template>
   
 <script>

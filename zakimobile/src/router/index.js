@@ -8,12 +8,14 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import('../startview/Startview.vue')
+    component: () => import('../startview/Startview.vue'),
+    meta: { noTransition: true }
   },
   {
     path:'/aboutaccount', /* sign in or sign up */
     name: "aboutaccount",
-    component: () => import('../startview/Aboutaccount.vue')
+    component: () => import('../startview/Aboutaccount.vue'),
+    meta: { noTransition: true }
   },
   {
     path: '/signin',
@@ -29,6 +31,21 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: () => import('../homeland/ProfileLand.vue')
+  },
+  {
+    path: '/HomePage',
+    name: 'homepage',
+    component: () => import('../homeland/homepage.vue')
+  },
+  {
+    path:'/article',
+    name:'article',
+    component: () => import('../homeland/articlesDetails.vue')
+  },
+  {
+    path: '/article/:slug', // Le `:slug` indique un paramètre dynamique
+    name: 'articleDetails', // Un nom de route plus générique
+    component: () => import('../homeland/articlesDetails.vue')
   }
 ];
 

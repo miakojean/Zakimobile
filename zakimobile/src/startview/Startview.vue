@@ -40,7 +40,7 @@
           <!-- Bouton pour avancer dans les étapes -->
           <secondButton label="Suivant" @next-step="handleNextStep" v-if = "activeIndex <= 1" />
           <mainButton 
-            v-else @click="() => {router.push('/signin')}"
+            v-else @click="() => router.push('/signin')"
             label = "commencer"
           />
           <!-- Stepper reçoit activeIndex en prop pour suivre l'état -->
@@ -56,13 +56,13 @@
 </template>
   
 <script>
-  import { IonContent, IonPage } from '@ionic/vue';
-  import { defineComponent, ref } from 'vue';
-  import secondButton from '../button/secondButton.vue';
-  import mainButton from '../button/mainButton.vue'
-  import stepper from '../components/tools/stepper.vue';
-  import FooterLayout from '../components/tools/footerLayout.vue';
-  import { useRouter} from 'vue-router';
+import { IonContent, IonPage, useIonRouter } from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
+import secondButton from '../button/secondButton.vue';
+import mainButton from '../button/mainButton.vue'
+import stepper from '../components/tools/stepper.vue';
+import FooterLayout from '../components/tools/footerLayout.vue';
+import { useRouter} from 'vue-router';
   
   export default defineComponent({
     components: {
