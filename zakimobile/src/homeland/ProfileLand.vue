@@ -55,7 +55,7 @@
             <p>{{ profile.phone_number }}</p>
           </div>
         </div>
-        <div class="logout" @click="router.push('/connexion')">
+        <div class="logout" @click="router.push('/signin')">
           <i class="ri-logout-box-line" @click="voirInformation"></i>
           <p>Déconnexion</p>
         </div>

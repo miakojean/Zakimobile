@@ -4,31 +4,31 @@
             <!-- Transition for images -->
 
             <img
-                src="../assets/zaki assets/fruit shop-rafiki.svg"
-                alt=""
-                key="img-0"
+              src="../assets/zaki assets/fruit shop-rafiki.svg"
+              alt=""
+              key="img-0"
             /> 
     
             <!-- Transition for text -->
 
             <div class="main__text">
-                <h2><span class="logo">Zaki</span></h2>
+              <h2><span class="logo">Zaki</span></h2>
             </div>
 
             <inputfamily
-                type = "text"
-                placeholder = "nom d'utilisateur"
-                v-model="username"
+              type = "text"
+              placeholder = "nom d'utilisateur"
+              v-model="username"
             />
             <inputfamily
-                placeholder = "mot de passe"
-                type = "password"
-                v-model="password"
+              placeholder = "mot de passe"
+              type = "password"
+              v-model="password"
             />
     
             <!-- Bouton pour avancer dans les étapes -->
             <mainButton label = "connexion"
-                @click="login"    
+              @click="login"    
             />
 
             <div class="divider-container">
@@ -49,9 +49,7 @@
 
 import { IonPage } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
-import secondButton2 from '../button/secondButton2.vue';
 import mainButton from '../button/mainButton.vue'
-import stepper from '../components/tools/stepper.vue';
 import FooterLayout from '../components/tools/footerLayout.vue';
 import inputfamily from '../tools/inputfamily.vue';
 import { useRouter } from 'vue-router';
