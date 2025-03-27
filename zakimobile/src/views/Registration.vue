@@ -16,7 +16,18 @@
             <span class="divider-text">ou</span>
             <div class="divider"></div>
           </div>
+          <p @click="() => router.push('/signin')"> Je me connecte <span>ici</span></p>
+          <!-- Bouton pour déclencher une nouvelle modale -->
+          <mainButton label="Ouvrir Modale" @click="openNewModal" />
         </div>
+        <!-- Nouvelle modale -->
+        <ion-modal :is-open="newModal">
+        <ion-content class="ion-padding">
+            <h2>Nouvelle modale déclenchée</h2>
+            <p>Ceci est une autre modale pour test.</p>
+            <mainButton label="Fermer" @click="newModal = false" />
+        </ion-content>
+        </ion-modal>
       </IonContent>
       <FooterLayout />
     </IonPage>
@@ -33,13 +44,14 @@
   
   export default defineComponent({
     components: {
-      IonPage, IonContent,
+      IonPage, IonContent, IonModal,
       InputFamily, MainButton, FooterLayout,
       IonModal,
     },
   
     setup() {
         const router = useRouter();
+        const newModal = ref(false); // Nouvelle modale
         // Changed to match API field names
         const first_name = ref('');
         const last_name = ref('');
@@ -48,6 +60,10 @@
         const password = ref('');
         const password2 = ref('')
         const errorMessage = ref('');
+
+        const openNewModal = () => {
+            newModal.value = true;
+        };
   
         const signup = async () => {
             try {
@@ -70,8 +86,9 @@
             }
         };
         return { router, first_name, 
-            last_name, username, email, password, 
-            password2, signup, errorMessage,
+          last_name, username, email, password, 
+          password2, signup, errorMessage, newModal,
+          openNewModal
         };
     }
   });

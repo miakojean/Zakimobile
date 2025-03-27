@@ -15,7 +15,6 @@ from django.conf import settings
 from django.utils import timezone
 import datetime
 
-
 # Create your views here.
 def index(request):
     return HttpResponse('Bienvenu au pays mon fils')
@@ -34,10 +33,48 @@ class UserRegistrationView(APIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
+        
+        if not serializer.is_valid():
+            errors = serializer.errors
+            
+            # Check for specific field errors
+            if 'username' in errors:
+                return Response(
+                    {'error': 'Invalid username', 'details': errors['username']},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+                
+            if 'email' in errors:
+                return Response(
+                    {'error': 'Invalid email', 'details': errors['email']},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+                
+            if 'password' in errors:
+                return Response(
+                    {'error': 'Invalid password', 'details': errors['password']},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+                
+            # Generic validation error
+            return Response(
+                {'error': 'Validation failed', 'details': errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        try:
             user = serializer.save()
-            return Response({'message': 'Utilisateur créé avec succès'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'message': 'Utilisateur créé avec succès'}, 
+                status=status.HTTP_201_CREATED
+            )
+            
+        except Exception as e:
+            # Handle all other unexpected errors
+            return Response(
+                {'error': 'Server error', 'details': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class UserLoginView(APIView):
     def post(self, request):
