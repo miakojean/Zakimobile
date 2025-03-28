@@ -139,30 +139,26 @@ class PasswordResetRequestView(APIView):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            # Ne pas révéler si l'utilisateur existe ou non pour des raisons de sécurité
-            return Response({'message': 'Un lien de réinitialisation a été envoyé à votre adresse e-mail si un compte existe.'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Un email a été envoyé si le compte existe.'}, status=status.HTTP_200_OK)
 
-        # Supprimer les tokens de réinitialisation précédents pour cet utilisateur
+        # Supprimer les anciens tokens
         PasswordResetToken.objects.filter(user=user).delete()
 
         # Générer un nouveau token
         token = PasswordResetToken.objects.create(
             user=user,
-            expires_at=timezone.now() + datetime.timedelta(hours=1)  # Expiration dans 1 heure
+            expires_at=timezone.now() + datetime.timedelta(hours=1)  # Expire dans 1h
         )
 
-        # Créer le lien de réinitialisation
-        reset_link = request.build_absolute_uri(reverse('password_reset_confirm', args=[str(token.token)]))
-
-        # Envoyer l'e-mail
+        # Construire le message de l'email
         subject = 'Réinitialisation de votre mot de passe'
-        message = f'Cliquez sur le lien suivant pour réinitialiser votre mot de passe : {reset_link}'
-        from_email = settings.DEFAULT_FROM_EMAIL
+        message = f'Votre code de réinitialisation est : {token.token}\nCopiez ce code et utilisez-le pour réinitialiser votre mot de passe.'
+        from_email = settings.EMAIL_HOST_USER
         recipient_list = [email]
 
-        send_mail(subject, message, from_email, recipient_list, fail_silently=True)
+        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
 
-        return Response({'message': 'Un lien de réinitialisation a été envoyé à votre adresse e-mail si un compte existe.'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Un email avec le token a été envoyé.'}, status=status.HTTP_200_OK)
     
 class PasswordResetConfirmView(APIView):
     def post(self, request, token):

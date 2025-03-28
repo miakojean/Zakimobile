@@ -42,3 +42,10 @@ Content-Type: application/json
 {
     "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MjEzNTQwMCwiaWF0IjoxNzQyMDQ5MDAwLCJqdGkiOiI2ZDhmZDkzZjdjNWI0MmExYTFlYTM3NjMyMmY5YzlhYSIsInVzZXJfaWQiOjF9.etJt7ubSBQyc-xTAPQN6I6c74dzpJYNk70PdWSR367Q"
 }
+
+POST http://127.0.0.1:8000/account/password/reset/
+Content-Type: application/json
+
+{
+    "email": "sinistre12@gmail.com"
+}

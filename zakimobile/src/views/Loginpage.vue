@@ -20,6 +20,7 @@
       <mainButton label = "connexion"
         @click="login"    
       />
+      <p v-if="attempt === 1">Mot de passe <span>oublié?</span></p>
       <div class="divider-container">
         <div class="divider"></div>
         <span class="divider-text">ou</span>
@@ -75,7 +76,8 @@ import axios from 'axios';
       const password = ref('');
       const router = useRouter();
       const newModal = ref(false);
-      const errorMessage = ref('')
+      const errorMessage = ref('');
+      const attempt = ref(0)
       
       // function to handle user login
       const login = async () => {
@@ -102,12 +104,13 @@ import axios from 'axios';
           console.error('Login failed:', error.response?.data);
           newModal.value = true;
           errorMessage.value = error.response?.data.error;
+          attempt.value = 1
         }
       };
 
       return {
         username, password, login, router, newModal, errorMessage, alertCircleOutline,
-        closeCircleOutline
+        closeCircleOutline, attempt
       };
     },
   });
@@ -115,11 +118,7 @@ import axios from 'axios';
   
 <style scoped>
 .main__container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  flex: 1;
+  height: 100%; display: flex; flex-direction: column; gap: 1rem; flex: 1;
 }
 
 .main__text {
