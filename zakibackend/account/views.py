@@ -39,14 +39,20 @@ class UserRegistrationView(APIView):
             
             # Check for specific field errors
             if 'username' in errors:
-                return Response(
-                    {'error': 'Invalid username', 'details': errors['username']},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                if "This field may not be blank." in errors['username']:  # Vérifie si le champ est vide
+                    return Response(
+                        {'error': 'Username is required', 'details': errors['username'], 'french': 'Le nom d\'utilisateur est requis'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                elif "user with this username already exists." in errors['username']:  # Vérifie si le username existe déjà
+                    return Response(
+                        {'error': 'Username already taken', 'details': errors['username'], 'french': 'Ce nom d\'utilisateur est déjà pris'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
                 
             if 'email' in errors:
                 return Response(
-                    {'error': 'Invalid email', 'details': errors['email']},
+                    {'error': 'Invalid email', 'details': errors['email'], 'french': 'Adresse email invalide'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
                 
