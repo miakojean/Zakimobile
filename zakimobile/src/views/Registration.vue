@@ -56,6 +56,8 @@
   import FooterLayout from '../components/tools/footerLayout.vue';
   import { useRouter } from 'vue-router';
   import useSignup from '../logic js/registration';
+
+    
   
   export default defineComponent({
     components: {
@@ -77,6 +79,7 @@
       alertCircleOutline, closeCircleOutline, router
       };
   }
+
   });
 </script>
   

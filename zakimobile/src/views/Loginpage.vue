@@ -52,6 +52,7 @@
         </ion-modal>
     <FooterLayout/>
   </ionPage>
+
 </template>
   
 <script>
