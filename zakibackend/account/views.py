@@ -15,7 +15,6 @@ from django.conf import settings
 from django.utils import timezone
 import datetime
 
-
 # Create your views here.
 def index(request):
     return HttpResponse('Bienvenu au pays mon fils')
@@ -34,15 +33,63 @@ class UserRegistrationView(APIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
+        
+        if not serializer.is_valid():
+            errors = serializer.errors
+            
+            # Check for specific field errors
+            if 'username' in errors:
+                if "This field may not be blank." in errors['username']:  # Vérifie si le champ est vide
+                    return Response(
+                        {'error': 'Username is required', 'details': errors['username'], 'french': 'Le nom d\'utilisateur est requis'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                elif "user with this username already exists." in errors['username']:  # Vérifie si le username existe déjà
+                    return Response(
+                        {'error': 'Username already taken', 'details': errors['username'], 'french': 'Ce nom d\'utilisateur est déjà pris'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                
+            if 'email' in errors:
+                return Response(
+                    {'error': 'Invalid email', 'details': errors['email'], 'french': 'Adresse email invalide'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+                
+            if 'password' in errors:
+                return Response(
+                    {'error': 'Invalid password', 'details': errors['password']},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+                
+            # Generic validation error
+            return Response(
+                {'error': 'Validation failed', 'details': errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        try:
             user = serializer.save()
-            return Response({'message': 'Utilisateur créé avec succès'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'message': 'Utilisateur créé avec succès'}, 
+                status=status.HTTP_201_CREATED
+            )
+            
+        except Exception as e:
+            # Handle all other unexpected errors
+            return Response(
+                {'error': 'Server error', 'details': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class UserLoginView(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
+
+        if not username or not password:
+            return Response({'error': 'Veuillez fournir un nom d\'utilisateur et un mot de passe.'}, status=status.HTTP_400_BAD_REQUEST)
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -52,7 +99,7 @@ class UserLoginView(APIView):
                 'access': str(refresh.access_token),
             })
         else:
-            return Response({'error': 'Identifiants invalides'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Nom d\'utilisateur ou mot de passe incorrect.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
@@ -92,30 +139,26 @@ class PasswordResetRequestView(APIView):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            # Ne pas révéler si l'utilisateur existe ou non pour des raisons de sécurité
-            return Response({'message': 'Un lien de réinitialisation a été envoyé à votre adresse e-mail si un compte existe.'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Un email a été envoyé si le compte existe.'}, status=status.HTTP_200_OK)
 
-        # Supprimer les tokens de réinitialisation précédents pour cet utilisateur
+        # Supprimer les anciens tokens
         PasswordResetToken.objects.filter(user=user).delete()
 
         # Générer un nouveau token
         token = PasswordResetToken.objects.create(
             user=user,
-            expires_at=timezone.now() + datetime.timedelta(hours=1)  # Expiration dans 1 heure
+            expires_at=timezone.now() + datetime.timedelta(hours=1)  # Expire dans 1h
         )
 
-        # Créer le lien de réinitialisation
-        reset_link = request.build_absolute_uri(reverse('password_reset_confirm', args=[str(token.token)]))
-
-        # Envoyer l'e-mail
+        # Construire le message de l'email
         subject = 'Réinitialisation de votre mot de passe'
-        message = f'Cliquez sur le lien suivant pour réinitialiser votre mot de passe : {reset_link}'
-        from_email = settings.DEFAULT_FROM_EMAIL
+        message = f'Votre code de réinitialisation est : {token.token}\nCopiez ce code et utilisez-le pour réinitialiser votre mot de passe.'
+        from_email = settings.EMAIL_HOST_USER
         recipient_list = [email]
 
-        send_mail(subject, message, from_email, recipient_list, fail_silently=True)
+        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
 
-        return Response({'message': 'Un lien de réinitialisation a été envoyé à votre adresse e-mail si un compte existe.'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Un email avec le token a été envoyé.'}, status=status.HTTP_200_OK)
     
 class PasswordResetConfirmView(APIView):
     def post(self, request, token):
@@ -126,16 +169,22 @@ class PasswordResetConfirmView(APIView):
             return Response({'error': 'Veuillez fournir un nouveau mot de passe et le confirmer.'}, status=status.HTTP_400_BAD_REQUEST)
 
         if new_password != confirm_password:
-            return Response({'error': 'Les nouveaux mots de passe ne correspondent pas.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Les mots de passe ne correspondent pas.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             password_reset_token = PasswordResetToken.objects.get(token=token)
         except PasswordResetToken.DoesNotExist:
-            return Response({'error': 'Le lien de réinitialisation est invalide.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Token invalide ❌'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not password_reset_token.is_valid():
-            return Response({'error': 'Le lien de réinitialisation a expiré.'}, status=status.HTTP_400_BAD_REQUEST)
+        # Vérifier l'expiration
+        if password_reset_token.expires_at < timezone.now():
+            return Response({'error': 'Token expiré ❌'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Vérifier que le token correspond bien à un utilisateur valide
+        if not password_reset_token.user.is_active:
+            return Response({'error': 'Compte utilisateur inactif ou non valide ❌'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Tout est bon, on peut modifier le mot de passe
         user = password_reset_token.user
         user.set_password(new_password)
         user.save()
@@ -143,4 +192,4 @@ class PasswordResetConfirmView(APIView):
         # Supprimer le token après utilisation
         password_reset_token.delete()
 
-        return Response({'message': 'Votre mot de passe a été réinitialisé avec succès.'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Mot de passe réinitialisé avec succès ✅'}, status=status.HTTP_200_OK)
