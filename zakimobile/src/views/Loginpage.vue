@@ -20,7 +20,7 @@
       <mainButton label = "connexion"
         @click="login"    
       />
-      <p v-if="attempt === 1">Mot de passe <span>oublié?</span></p>
+      <p v-if="attempt >= 1">Mot de passe <span>oublié?</span></p>
       <div class="divider-container">
         <div class="divider"></div>
         <span class="divider-text">ou</span>
@@ -105,7 +105,7 @@ import axios from 'axios';
           console.error('Login failed:', error.response?.data);
           newModal.value = true;
           errorMessage.value = error.response?.data.error;
-          attempt.value = 1
+          attempt.value ++
         }
       };
 
