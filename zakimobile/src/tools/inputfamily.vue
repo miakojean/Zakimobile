@@ -3,7 +3,7 @@
       aria-label="Custom input"
       :placeholder="placeholder"
       class="custom"
-      :maxlength="20"
+      :maxlength="50"
       :type = "type"
       :clear-input="true"
     ></ion-input>
@@ -26,7 +26,7 @@
         type: String,
         required: true,
         default: "text"
-      }
+      },
     },
   });
 </script>

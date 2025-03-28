@@ -44,12 +44,13 @@ export default function useSignup() {
             router.push('/signin');
         } catch (error) {
             console.error('Registration error:', error.response?.data);
+            newModal.value = true;
             frenchMessage.value = error.response?.data || "Erreur inconnue";
+            errorMessage.value = frenchMessage;
         }
     };
 
     return {
         first_name, last_name, username, email, password, password2,
         errorMessage, frenchMessage, newModal, openNewModal, signup
-    };
-}
+    }};

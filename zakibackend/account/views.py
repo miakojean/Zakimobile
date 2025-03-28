@@ -86,6 +86,10 @@ class UserLoginView(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
+
+        if not username or not password:
+            return Response({'error': 'Veuillez fournir un nom d\'utilisateur et un mot de passe.'}, status=status.HTTP_400_BAD_REQUEST)
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -95,7 +99,7 @@ class UserLoginView(APIView):
                 'access': str(refresh.access_token),
             })
         else:
-            return Response({'error': 'Identifiants invalides'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Nom d\'utilisateur ou mot de passe incorrect.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
