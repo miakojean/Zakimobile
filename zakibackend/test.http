@@ -15,7 +15,7 @@ Content-Type: application/json
 
 {
     "username": "johndoe",  
-    "password": "P@$$wOrd123" 
+    "password": "Motdepasse123" 
 }
 
 GET http://127.0.0.1:8000/account/profile/
@@ -48,4 +48,12 @@ Content-Type: application/json
 
 {
     "email": "sinistre12@gmail.com"
+}
+
+POST http://127.0.0.1:8000/account/password/reset/confirm/5f6ddcca-c0b1-46ac-be26-7c21f107fa0d/
+Content-Type: application/json
+
+{
+  "new_password": "Motdepasse123",
+  "confirm_password": "Motdepasse123"
 }

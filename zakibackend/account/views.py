@@ -169,16 +169,22 @@ class PasswordResetConfirmView(APIView):
             return Response({'error': 'Veuillez fournir un nouveau mot de passe et le confirmer.'}, status=status.HTTP_400_BAD_REQUEST)
 
         if new_password != confirm_password:
-            return Response({'error': 'Les nouveaux mots de passe ne correspondent pas.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Les mots de passe ne correspondent pas.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             password_reset_token = PasswordResetToken.objects.get(token=token)
         except PasswordResetToken.DoesNotExist:
-            return Response({'error': 'Le lien de réinitialisation est invalide.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Token invalide ❌'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not password_reset_token.is_valid():
-            return Response({'error': 'Le lien de réinitialisation a expiré.'}, status=status.HTTP_400_BAD_REQUEST)
+        # Vérifier l'expiration
+        if password_reset_token.expires_at < timezone.now():
+            return Response({'error': 'Token expiré ❌'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Vérifier que le token correspond bien à un utilisateur valide
+        if not password_reset_token.user.is_active:
+            return Response({'error': 'Compte utilisateur inactif ou non valide ❌'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Tout est bon, on peut modifier le mot de passe
         user = password_reset_token.user
         user.set_password(new_password)
         user.save()
@@ -186,4 +192,4 @@ class PasswordResetConfirmView(APIView):
         # Supprimer le token après utilisation
         password_reset_token.delete()
 
-        return Response({'message': 'Votre mot de passe a été réinitialisé avec succès.'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Mot de passe réinitialisé avec succès ✅'}, status=status.HTTP_200_OK)
