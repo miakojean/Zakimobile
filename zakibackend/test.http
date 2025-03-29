@@ -50,10 +50,44 @@ Content-Type: application/json
     "email": "sinistre12@gmail.com"
 }
 
+POST http://localhost:8000/account/password/verify-token/
+Content-Type: application/json
+
+{
+  "email": "sinistre12@gmail.com",
+  "token": "f5231374-eb29-4e4c-8340-cc6ff42cce36"
+}
+
 POST http://127.0.0.1:8000/account/password/reset/confirm/5f6ddcca-c0b1-46ac-be26-7c21f107fa0d/
 Content-Type: application/json
 
 {
   "new_password": "Motdepasse123",
   "confirm_password": "Motdepasse123"
+}
+
+### Test 1 : Token valide
+POST http://localhost:8000/api/password/verify-token/
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "token": "123456"
+}
+
+### Test 2 : Token invalide
+POST http://localhost:8000/api/password/verify-token/
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "token": "mauvais_token"
+}
+
+### Test 3 : Email manquant (erreur 400)
+POST http://localhost:8000/api/password/verify-token/
+Content-Type: application/json
+
+{
+  "token": "123456"
 }

@@ -28,7 +28,7 @@ export default defineComponent({
   
 <style scoped>
 ion-button {
-    width: 15%;
+    width: 90%;
     height: 1rem;
     --background: #058C42;
     --background-hover: #058C42;
@@ -39,17 +39,16 @@ ion-button {
     font-size: 1rem;
     font-weight: 600;
 
-    --border-radius: 50%;
+    --border-radius: 1rem;
     --border-color: none;
     --border-style: none;
     --border-width: none;
 
     --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
 
-    --ripple-color: deeppink;
-
-    --padding-top: 16px;
-    --padding-bottom: 16px;
+    --ripple-color: none;
+    --padding-top: 1rem;
+    --padding-bottom: 1rem;
 
     text-transform: none;
     --transition: none;

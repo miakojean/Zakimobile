@@ -160,6 +160,28 @@ class PasswordResetRequestView(APIView):
 
         return Response({'message': 'Un email avec le token a été envoyé.'}, status=status.HTTP_200_OK)
     
+class VerifyPasswordResetTokenView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        token = request.data.get('token')
+
+        if not email or not token:
+            return Response({'error': 'L\'email et le token sont requis.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(email=email)
+            reset_token = PasswordResetToken.objects.get(
+                user=user,
+                token=token,
+                expires_at__gt=timezone.now()  # Vérifie que le token n'a pas expiré
+            )
+            return Response({'valid': True}, status=status.HTTP_200_OK)
+            
+        except User.DoesNotExist:
+            return Response({'valid': False}, status=status.HTTP_200_OK)
+        except PasswordResetToken.DoesNotExist:
+            return Response({'valid': False}, status=status.HTTP_200_OK)
+    
 class PasswordResetConfirmView(APIView):
     def post(self, request, token):
         new_password = request.data.get('new_password')

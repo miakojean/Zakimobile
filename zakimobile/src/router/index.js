@@ -23,14 +23,19 @@ const routes = [
     component: () => import('../views/Loginpage.vue')
   },
   {
-    path:'/resetpassword',
-    name:'resetpassword',
-    component: () => import('../homeland/PasswordReset.vue')
-  },
-  {
     path: '/signup',
     name: 'signup',
     component: ()=> import('../views/Registration.vue')
+  },
+  {
+    path:'/sendmail',
+    name:'sendmail',
+    component: () => import('../authentication/sendEmail.vue')
+  },
+  {
+    path:'/resetpassword',
+    name:'resetpassword',
+    component: () => import('../authentication/PasswordReset.vue')
   },
   {
     path: '/profile',
