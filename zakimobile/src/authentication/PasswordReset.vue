@@ -146,7 +146,7 @@
             return ;
           }
           try {
-            const response = await axios.post(`http://127.0.0.1:8000/account/password/reset/confirm/${token.value}`,{
+            const response = await axios.post(`http://127.0.0.1:8000/account/password/reset/confirm/${token.value}/`,{
               new_password: password.value,
               confirm_password: confirmPassword.value
             });
