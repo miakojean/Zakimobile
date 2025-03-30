@@ -22,7 +22,7 @@
         @click="login"
         :isloading = isLoading
       />
-      <p v-if="attempt >= 1">Mot de passe <span>oublié?</span></p>
+      <p v-if="attempt >= 1" @click="router.push('/sendmail')">Mot de passe <span>oublié?</span></p>
       <div class="divider-container">
         <div class="divider"></div>
         <span class="divider-text">ou</span>

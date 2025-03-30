@@ -10,7 +10,7 @@ env/
 .venv/
 venv/
 .env
-
+.iv_env
 # Logs
 *.log
 logs/
