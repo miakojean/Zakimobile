@@ -20,12 +20,22 @@ const routes = [
   {
     path: '/signin',
     name: 'signin',
-    component: () => import('../views/Loginpage.vue')
+    component: () => import('../authentication/Loginpage.vue')
   },
   {
     path: '/signup',
     name: 'signup',
-    component: ()=> import('../views/Registration.vue')
+    component: ()=> import('../authentication/Registration.vue')
+  },
+  {
+    path:'/sendmail',
+    name:'sendmail',
+    component: () => import('../authentication/sendEmail.vue')
+  },
+  {
+    path:'/resetpassword',
+    name:'resetpassword',
+    component: () => import('../authentication/PasswordReset.vue')
   },
   {
     path: '/profile',

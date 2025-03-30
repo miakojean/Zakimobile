@@ -9,7 +9,11 @@
           <InputFamily placeholder="Email" type="email" v-model="email" />
           <InputFamily placeholder="Mot de passe" type="password" v-model="password" />
           <InputFamily placeholder="Confirmer mot de passe" type="password" v-model="password2" />
-          <MainButton label="Inscription" @click="signup" />
+          <mainButton 
+            label = "connexion"
+            @click="signup"
+            :isloading = isLoading
+          />
           
           <div class="divider-container">
             <div class="divider"></div>
@@ -50,12 +54,12 @@
 <script>
   import { IonContent, IonPage, IonModal, IonIcon } from '@ionic/vue';
   import { alertCircleOutline, closeCircleOutline } from 'ionicons/icons';
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent } from 'vue';
   import InputFamily from '../tools/inputfamily.vue';
   import MainButton from '../button/mainButton.vue';
   import FooterLayout from '../components/tools/footerLayout.vue';
   import { useRouter } from 'vue-router';
-  import useSignup from '../logic js/registration';
+  import useSignup from '../authentication/registration';
 
     
   
@@ -71,12 +75,12 @@
       const router = useRouter();
 
       const { first_name, last_name, username, email, password, password2,
-              errorMessage, frenchMessage, newModal, openNewModal, signup } = useSignup();
+              errorMessage, frenchMessage, newModal, isLoading, openNewModal, signup } = useSignup();
       
       return {
       first_name, last_name, username, email, password, password2,
       errorMessage, frenchMessage, newModal, openNewModal, signup,
-      alertCircleOutline, closeCircleOutline, router
+      alertCircleOutline, closeCircleOutline, router, isLoading
       };
   }
 
