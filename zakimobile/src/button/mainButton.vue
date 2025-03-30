@@ -1,21 +1,29 @@
 <template>
-    <ion-button>{{ label }}</ion-button>
+    <ion-button
+        :aria-busy = "isloading"
+        :aria-label = "label"
+        @click="$emit('click',$event)"
+    >   
+        <loaderButton v-if="isloading" />
+        <slot v-else>{{ label }}</slot>
+    </ion-button>
 </template>
   
 <script>
 import { IonButton } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import loaderButton from './loaderButton.vue';
 
 export default defineComponent({
-    components: { IonButton },
 
-    props: {
-        label: {
-            type: String,
-            required: true,
-            default: "commencer"
-        }
-    }
+  components: {
+    IonButton, loaderButton,
+  },  
+  props: {
+    label: { type: String, default: "Commencer" },
+    isloading: { type: Boolean, default: false },
+  },
+  emits: ["click"] // Déclaration explicite des événements
 });
 </script>
   

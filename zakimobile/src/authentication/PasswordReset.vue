@@ -148,11 +148,9 @@
           try {
             const response = await axios.post(`http://127.0.0.1:8000/account/password/reset/confirm/${token.value}/`,{
               new_password: password.value,
-              confirm_password: confirmPassword.value
+              confirm_password: confirmPassword.value,
             });
-            if (response.data.valid) {
-              router.push('/signin')
-            }
+            router.push('/signin')
           } catch(error) {
             newModal.value = true;
             errorMessage.value = error.response?.data.error;

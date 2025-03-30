@@ -17,8 +17,10 @@
         type = "password"
         v-model="password"
       />
-      <mainButton label = "connexion"
-        @click="login"    
+      <mainButton 
+        label = "connexion"
+        @click="login"
+        :isloading = isLoading
       />
       <p v-if="attempt >= 1">Mot de passe <span>oublié?</span></p>
       <div class="divider-container">
@@ -60,15 +62,16 @@
 import { IonPage, IonContent } from '@ionic/vue';
 import { alertCircleOutline, closeCircleOutline } from 'ionicons/icons';
 import { defineComponent, ref } from 'vue';
-import mainButton from '../button/mainButton.vue'
+import mainButton from '../button/mainButton.vue';
 import FooterLayout from '../components/tools/footerLayout.vue';
 import inputfamily from '../tools/inputfamily.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import LoaderButton from '../button/loaderButton.vue';
   
   export default defineComponent({
     components: {
-      IonPage, IonContent, mainButton, FooterLayout, inputfamily, alertCircleOutline,
+      IonPage, IonContent, mainButton,LoaderButton, FooterLayout, inputfamily, alertCircleOutline,
       closeCircleOutline
     },
 
@@ -78,13 +81,15 @@ import axios from 'axios';
       const router = useRouter();
       const newModal = ref(false);
       const errorMessage = ref('');
-      const attempt = ref(0)
-      
+      const attempt = ref(0);
+      const isLoading = ref(false);
       // function to handle user login
       const login = async () => {
+        isLoading.value =true
         if (!username.value || !password.value) {
           newModal.value = true;
-          errorMessage.value = "Remplissez tous les champs"
+          errorMessage.value = "Remplissez tous les champs";
+          isLoading.value = false;
           return ;
         }
         try {
@@ -95,23 +100,43 @@ import axios from 'axios';
           const { access, refresh } = response.data;
           localStorage.setItem('access_token', access);
           localStorage.setItem('refresh_token', refresh);
-          console.log('Login successful!', access);
+          isLoading.value = false;
 
           // Redirection seulement si la connexion est réussie
           router.push('/profile');
         } 
 
         catch (error) {
-          console.error('Login failed:', error.response?.data);
-          newModal.value = true;
-          errorMessage.value = error.response?.data.error;
-          attempt.value ++
+          // Capture spécifique de l'erreur CORS/backend injoignable
+          if (!error.response && error.message === "Network Error") {
+            newModal.value = true;
+            errorMessage.value = "Le serveur ne répond pas (backend éteint ou problème CORS)";
+            console.error("Erreur réseau détectée:", {
+              type: "CORS/Backend unreachable",
+              details: error.message
+            });
+            isLoading.value = false;
+          }
+          // Gestion des autres erreurs
+          else if (error.response) {
+            newModal.value = true;
+            errorMessage.value = error.response.data?.error || "Identifiants incorrects";
+            isLoading.value = false;
+          }
+          else {
+            newModal.value = true;
+            errorMessage.value = "Erreur inconnue";
+            isLoading.value = false;
+          }
+
+          attempt.value++;
+          isLoading.value = false;
         }
       };
 
       return {
         username, password, login, router, newModal, errorMessage, alertCircleOutline,
-        closeCircleOutline, attempt
+        closeCircleOutline, attempt, isLoading
       };
     },
   });

@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 export default function useSignup() {
     const router = useRouter();
     const newModal = ref(false);
+    const isLoading = ref(false);
     
     // Champs du formulaire
     const first_name = ref('');
@@ -25,9 +26,11 @@ export default function useSignup() {
 
     // Fonction d'inscription
     const signup = async () => {
+        isLoading.value = true;
         if (!first_name.value || !last_name.value || !username.value || !email.value || !password.value || !password2.value) {
             newModal.value = true;
             errorMessage.value = 'Remplissez tous les champs';
+            isLoading.value = false;
             return;
         }
         try {
@@ -39,18 +42,18 @@ export default function useSignup() {
                 first_name: first_name.value,
                 last_name: last_name.value
             });
-
-            console.log('Registration successful:', response.data);
+            isLoading.value = false;
             router.push('/signin');
         } catch (error) {
             console.error('Registration error:', error.response?.data);
             newModal.value = true;
             frenchMessage.value = error.response?.data || "Erreur inconnue";
             errorMessage.value = frenchMessage;
+            isLoading.value = false;
         }
     };
 
     return {
         first_name, last_name, username, email, password, password2,
-        errorMessage, frenchMessage, newModal, openNewModal, signup
+        errorMessage, frenchMessage, newModal, openNewModal, signup, isLoading
     }};
