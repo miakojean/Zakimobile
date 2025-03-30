@@ -15,11 +15,20 @@
             Mon compte
           </h3> 
           <div class="profile__pictures">
-            <i class="ri-user-line"></i>
+            <img 
+              v-if="profile.profile_picture" 
+              :src="'http://127.0.0.1:8000/account' + profile.profile_picture" 
+              alt="Profile picture"
+              class="profile-image"
+            >
+            <i v-else class="ri-user-line"></i>
           </div>
           <span>Changer ma photo</span>
         </div>
         <div class="profile__info center__flex">
+          <div class="input__group">
+            <itemLabel/>
+          </div>
           <div class="input__group">
             <label for="name">Nom</label>
             <p> {{ user.first_name }} </p>
@@ -47,6 +56,10 @@
             <p>{{ profile.birthday }}</p>
           </div>
           <div class="input__group">
+            <label for="commune">Commune</label>
+            <p>{{ profile.commune }}</p>
+          </div>
+          <div class="input__group">
             <label for="Adresse">Adresse</label>
             <p>{{ profile.address }}</p>
           </div>
@@ -67,6 +80,7 @@
 <script>
 import { IonPage, IonContent, IonHeader } from '@ionic/vue';
 import { defineComponent, ref, onMounted } from 'vue';
+import itemLabel from '../tools/itemLabel.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
@@ -74,7 +88,7 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
-    IonHeader
+    IonHeader, itemLabel
   },
 
   setup() {
@@ -94,6 +108,7 @@ export default defineComponent({
       phone_number:'',
       address: '',
       birthday:'',
+      commune:'',
     });
 
     // Reactive error message
@@ -202,7 +217,7 @@ p{
 
 .profile__pictures{
   width:100%;
-  background:#f1efef;
+  background:none;
   padding: 3.8rem;
   display: flex;
   justify-content: center;

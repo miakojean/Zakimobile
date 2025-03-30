@@ -14,17 +14,17 @@ POST http://127.0.0.1:8000/account/login/
 Content-Type: application/json
 
 {
-    "username": "johndoe",  
-    "password": "Motdepasse123" 
+  "username": "johndoe",  
+  "password": "Jeanyves123456789" 
 }
 
 GET http://127.0.0.1:8000/account/profile/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMzE5NTI1LCJpYXQiOjE3NDIzMTU5MjUsImp0aSI6IjY3MTlhYzc5MDhkOTRiN2RiMjk1YjM3YThiZjc5MTM2IiwidXNlcl9pZCI6MX0.bxWSa8_CnfbzcGlGrktu-iI5j-CU4ErlsFG6kZ1LURc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMzQwNzkyLCJpYXQiOjE3NDMzMzcxOTIsImp0aSI6ImQ4OTZiOTQyYjE3YTQ3ODJhNTlkMGUyMzc5ZWJlNzAwIiwidXNlcl9pZCI6MX0.o16cO9J4wTjRvLWSvH8I1I_tXjx9hpbxbUfhe88cncg
 
 {
-    "username": "johndoe",  
-    "password": "P@$$wOrd123" 
+  "username": "johndoe",  
+  "password": "Jeanyves123456789" 
 }
 
 
@@ -33,7 +33,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMDU2NTQxLCJpYXQiOjE3NDIwNTI5NDEsImp0aSI6IjdhZTQ1NmZlMjM3YzQ4MTE5YmZlNzZjMDQ1ZmMxODBmIiwidXNlcl9pZCI6MX0.spkV8XM1Rcdk2y6Zef7Eob1tFfx2U5hTdrOpUcDYZjs
 
 {
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MjEzOTI2MiwiaWF0IjoxNzQyMDUyODYyLCJqdGkiOiI4ZTM3MTBiZjkzYTM0YTg3ODViZmFkNDhkYTY0MzllNCIsInVzZXJfaWQiOjF9.Qjok79lKB1yy108xOybfcSR3pDsyVVYCLydEm5555gg"
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MjEzOTI2MiwiaWF0IjoxNzQyMDUyODYyLCJqdGkiOiI4ZTM3MTBiZjkzYTM0YTg3ODViZmFkNDhkYTY0MzllNCIsInVzZXJfaWQiOjF9.Qjok79lKB1yy108xOybfcSR3pDsyVVYCLydEm5555gg"
 }
 
 POST http://127.0.0.1:8000/api/token/refresh/
