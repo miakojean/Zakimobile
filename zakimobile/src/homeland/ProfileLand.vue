@@ -25,49 +25,17 @@
           </div>
           <span>Changer ma photo</span>
         </div>
-        <div class="profile__info center__flex">
-          <div class="input__group">
-            <itemLabel/>
-          </div>
-          <div class="input__group">
-            <label for="name">Nom</label>
-            <p> {{ user.first_name }} </p>
-          </div>
-          <div class="input__group">
-            <label for="name">Prenoms</label>
-            <p>{{user.last_name}}</p>
-          </div>
-          <div class="input__group">
-            <label for="email">Email</label>
-            <p>{{ user.email }}</p>
-          </div>
-          <div class="input__group">
-            <label for="username">Username</label>
-            <p>{{ user.username }}</p>
-          </div>
-          <div class="input__group">
-            <label for="Genre">Genre</label>
-            <div :class="{'male': profile.gender === 'Homme', 'female': profile.gender === 'Femme' }">
-              <i :class="{'ri-men-line': profile.gender === 'Homme', 'ri-women-line': profile.gender === 'Femme'}"></i>
-            </div>
-          </div>
-          <div class="input__group">
-            <label for="BirthDate">Date de naissance</label>
-            <p>{{ profile.birthday }}</p>
-          </div>
-          <div class="input__group">
-            <label for="commune">Commune</label>
-            <p>{{ profile.commune }}</p>
-          </div>
-          <div class="input__group">
-            <label for="Adresse">Adresse</label>
-            <p>{{ profile.address }}</p>
-          </div>
-          <div class="input__group">
-            <label for="phone_number">N° de téléphone</label>
-            <p>{{ profile.phone_number }}</p>
-          </div>
-        </div>
+          <ion-list :inset="true" lines="full" class="list__info">
+            <itemLabel label="Nom" :valeur="user.first_name"/>
+            <itemLabel label="Prenoms" :valeur="user.last_name"/>
+            <itemLabel label="Email" :valeur="user.email"/>
+            <itemLabel label="Username" :valeur="user.username"/>
+            <itemLabel label="Date de naissance" :valeur="profile.birthday"/>
+            <itemLabel label="commune" :valeur="profile.commune"/>
+            <itemLabel label="Adresse" :valeur="profile.address"/>
+            <itemLabel label="N° de téléphone" :valeur="profile.phone_number"/>
+            <itemLabel label="Genre" :valeur="profile.gender"/>
+          </ion-list>
         <div class="logout" @click="router.push('/signin')">
           <i class="ri-logout-box-line" @click="voirInformation"></i>
           <p>Déconnexion</p>
@@ -78,9 +46,10 @@
 </template>
   
 <script>
-import { IonPage, IonContent, IonHeader } from '@ionic/vue';
+import { IonPage, IonContent, IonHeader, IonList } from '@ionic/vue';
 import { defineComponent, ref, onMounted } from 'vue';
 import itemLabel from '../tools/itemLabel.vue';
+import itemList from '../tools/itemList.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
@@ -88,7 +57,7 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
-    IonHeader, itemLabel
+    IonHeader, itemLabel, IonList, itemList
   },
 
   setup() {
@@ -178,6 +147,7 @@ export default defineComponent({
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .profile__container{
@@ -200,6 +170,10 @@ p{
   padding: 1rem;
 }
 
+.list__info{
+  width: 100%;
+}
+
 .main__header .done{
   padding: 0.3rem;
   background: #67d89a;
@@ -212,7 +186,6 @@ p{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
 }
 
 .profile__pictures{
@@ -240,48 +213,6 @@ p{
 
 .profile__info{
   width: 100%;
-  gap: 0.5rem;
-}
-
-.input__group{
-  width: 100%;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  gap: 1rem;
-}
-
-.male{
-  border: 1px solid #058C42;
-  background: #058C42;
-  padding: 0.5rem;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
-
-.female{
-  border: 1px solid #058C42;
-  background: #058C42;
-  padding: 0.5rem;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
-
-.gender {
-  border: 1px solid #058C42;
-  background: #058C42;
-  padding: 0.5rem;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #f1efef;
 }
 
 .logout{

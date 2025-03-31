@@ -3,16 +3,12 @@
     <div class="header__container">
       <div class="name">
         <span>Hello</span>
-        <p>John Doe</p>
+        <p>{{ userName }}</p>
       </div>
       <div class="notifications__family">
         <div class="items__notifs">
           <ion-icon name="notifications-outline"></ion-icon>
           <ion-badge color="danger">{{notif}}</ion-badge>
-        </div>
-        <div class="items__notifs">
-          <ion-icon name="cart-outline"></ion-icon>
-          <ion-badge color="danger">{{ articles }}</ion-badge>
         </div>
       </div>
     </div>
@@ -26,14 +22,14 @@ import { defineComponent, ref } from 'vue';
 export default defineComponent ({
 
   props: {
+    userName:{
+      type: String,
+      default:'Aucun Nom'
+    },
     notif: {
       type: Number,
       default: null
     },
-    articles: {
-      type: Number,
-      default: 0,
-    }
   },
 
   components: {

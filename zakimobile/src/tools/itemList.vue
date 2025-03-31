@@ -13,6 +13,8 @@
         <ion-note color="medium">Unsubscribe at any time</ion-note>
         </ion-toggle>
     </ion-item>
+    <itemLabel/>
+    <itemLabel/>
     </ion-list>
 </template>
   
@@ -31,6 +33,7 @@ import {
     IonTitle,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import itemLabel from './itemLabel.vue';
 
 export default defineComponent({
     components: {
@@ -45,6 +48,7 @@ export default defineComponent({
     IonToggle,
     IonToolbar,
     IonTitle,
+    itemLabel
     },
 });
 </script>

@@ -4,32 +4,16 @@
         <ion-tab-bar color="light">
             <div class="footer__main">
                 <ion-tab-button tab="1">
-                    <div class="btn__class">
-                        <img class="home__icon" src="../../data/Icones/home-outline.svg" alt="My Icon" />
-                        <ion-label class="custom-label">Accueil</ion-label>
-                        <ion-badge color="danger"></ion-badge>
-                    </div>
+                    
                 </ion-tab-button>   
                 <ion-tab-button tab="2">
-                    <div class="btn__class">
-                        <img class="home__icon" src="../../data/Icones/time-outline.svg" alt="My Icon" />
-                        <ion-label class="custom-label">Historique</ion-label>
-                        <ion-badge color="danger"></ion-badge>
-                    </div>
+                    
                 </ion-tab-button>  
                 <ion-tab-button tab="3">
-                    <div class="btn__class">
-                        <img class="home__icon" src="../../data/Icones/settings-outline.svg" alt="My Icon" />
-                        <ion-label class="custom-label">Paramètres</ion-label>
-                        <ion-badge color="danger"></ion-badge>
-                    </div>
+                    
                 </ion-tab-button>  
                 <ion-tab-button tab="4">
-                    <div class="btn__class">
-                        <img class="home__icon" src="../../data/Icones/person-outline.svg" alt="My Icon" />
-                        <ion-label class="custom-label">Profile</ion-label>
-                        <ion-badge color="danger"></ion-badge>
-                    </div>
+                    
                 </ion-tab-button>
             </div>
         </ion-tab-bar>
