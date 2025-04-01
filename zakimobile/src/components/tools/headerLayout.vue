@@ -1,22 +1,28 @@
 <template>
-  <ionHeader>
+  <IonHeader>
     <div class="header__container">
       <div class="name">
         <span>Hello</span>
         <p>{{ userName }}</p>
       </div>
-      <div class="notifications__family">
-        <div class="items__notifs">
-          <ion-icon name="notifications-outline"></ion-icon>
-          <ion-badge color="danger">{{notif}}</ion-badge>
-        </div>
+      <div class="notifications" aria-label="Notifications">
+        <IonIcon 
+          class="notification-icon" 
+          :icon="notificationsOutline"
+          aria-hidden="true"
+        />
+        <ion-badge 
+          color="danger"
+          aria-live="polite"
+        >47</ion-badge>
       </div>
     </div>
-  </ionHeader>
+  </IonHeader>
 </template>
 
 <script>
 import { IonHeader, IonIcon } from '@ionic/vue';
+import { notificationsOutline } from 'ionicons/icons'; // Ou notifications
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent ({
@@ -25,22 +31,22 @@ export default defineComponent ({
     userName:{
       type: String,
       default:'Aucun Nom'
-    },
-    notif: {
-      type: Number,
-      default: null
-    },
+    }
   },
 
   components: {
     IonHeader,
     IonIcon
   },
+
+  setup(){
+    return { notificationsOutline }; // Renomme si nécessaire
+  }
   
 });
 </script>
 
-<style>
+<style scoped>
 
 .header__container{
   padding: 0.5rem;
@@ -61,43 +67,29 @@ export default defineComponent ({
   color: #058C42;
 }
 
-
-.notifications__family{
-  display: flex;
-  gap: 1rem;
-}
-
-.item__notifs{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem;
-}
-
-.cart p{
-  color: white;
-}
-
-.items__notifs i {
+.notification-icon {
   font-size: 1.5rem;
   color: #058C42;
 }
 
-.items__notifs{
+.notifications {
   position: relative;
+  display: inline-block;
 }
 
+ion-badge {
+  position: absolute;
+  top: -18px;
+  right: -2px;
+  font-size: 0.7em;
+  min-width: 18px;
+  height: 18px;
+  line-height: 18px;
+}
 
 ion-icon {
   font-size: 1.5rem; 
   color: #058C42;
 }
 
-ion-badge {
-  position: absolute;
-  top: -70%;
-  left: -20%;
-}
 </style>

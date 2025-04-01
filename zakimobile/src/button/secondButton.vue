@@ -1,16 +1,17 @@
 <template>
     <ion-button  @click="emitNextStep">
         {{label}} 
-        <i class="ri-arrow-right-line"></i>
+        <ion-icon :icon="arrowForwardOutline" />
     </ion-button>
 </template>
   
 <script>
-import { IonButton } from '@ionic/vue';
+import { IonButton, IonIcon } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import { arrowForwardOutline } from 'ionicons/icons';
 
 export default defineComponent({
-    components: { IonButton },
+    components: { IonButton, IonIcon,arrowForwardOutline },
 
     props:{
         label:{
@@ -28,7 +29,7 @@ export default defineComponent({
             emit('next-step');
         }
         return {
-            emitNextStep,
+            emitNextStep, arrowForwardOutline
         };
     },
 });

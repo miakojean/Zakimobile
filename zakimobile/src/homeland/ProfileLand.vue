@@ -92,7 +92,7 @@ export default defineComponent({
         isLoading.value = true; // Start loading
         const accessToken = localStorage.getItem('access_token');
         if (!accessToken) {
-          router.push('/connexion'); // Redirect to login if no token
+          router.push('/signin'); // Redirect to login if no token
           return;
         }
 

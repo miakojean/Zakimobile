@@ -18,20 +18,19 @@
           <span>{{ fruit.prix }} FCFA</span>
           <div class="add__products">
             <div class="add__logo">
-              <ion-icon name="add-circle-outline"></ion-icon>
+              <IonIcon class="add__products" :icon="addCircleOutline"></IonIcon>
             </div>
           </div>
         </div>
       </div>
     </IonContent>
-    <navigationFooter/>
   </IonPage>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted} from 'vue'; // Import defineComponent
 import { IonPage, IonContent, IonIcon, } from '@ionic/vue';
-import { addCircleOutline} from 'ionicons/icons';
+import {addCircleOutline} from 'ionicons/icons';
 import HeaderLayout from '../components/tools/headerLayout.vue';
 import Fruits from '../data/Articles';
 import MainButton from '../button/mainButton.vue';
@@ -50,17 +49,15 @@ export default defineComponent({
     MainButton,
     resarchBox,
     suggestionLists,
-    addCircleOutline,
     NavigationFooter
   },
   setup() {
+    const router = useRouter()
     const fruits = ref(Fruits); // Use ref to make it reactive
 
     const goToArticleDetails = (slug) => {
       router.push({ name: 'articleDetails', params: { slug: slug } });
     };
-
-    const router = useRouter()
 
     const user = ref({
       username: '',
@@ -89,7 +86,7 @@ export default defineComponent({
         if (error.response && error.response.status === 401) {
           // Token is expired or invalid
           localStorage.removeItem('access_token'); // Clear the expired token
-          router.push('/connexion'); // Redirect to login
+          router.push('/signin'); // Redirect to login
         } else {
           console.error('Failed to fetch user data:', error);
         }
@@ -105,7 +102,9 @@ export default defineComponent({
     return {
       fruits,
       router,
-      goToArticleDetails, user, fetchUserData
+      goToArticleDetails, user, fetchUserData,
+      addCircleOutline,
+
     };
   },
 });

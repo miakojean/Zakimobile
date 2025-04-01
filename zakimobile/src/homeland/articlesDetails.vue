@@ -17,9 +17,7 @@
         </div>
         <div class="weight__price">
           <div class="up__down">
-            <i class="ri-indeterminate-circle-line" @click="decrement"></i>
-            <p> {{ amount }} kg</p>
-            <i class="ri-add-circle-line" @click="increment"></i>
+            <p> {{ amount }} kg</p> 
           </div>
           <span>$6.00</span>
         </div>
@@ -29,8 +27,6 @@
         </div>
         <div class="add__cart">
           <mainButton label="Commander" />
-          <i class="ri-heart-line" v-if="!isLoved" @click="iLike"></i>
-          <i class="ri-heart-fill" v-if="isLoved" @click="iLike"></i>
         </div>
       </div>
     </ionContent>
