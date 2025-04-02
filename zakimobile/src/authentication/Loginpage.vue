@@ -103,7 +103,7 @@ import LoaderButton from '../button/loaderButton.vue';
           isLoading.value = false;
 
           // Redirection seulement si la connexion est réussie
-          router.push('/HomePage');
+          router.push('/');
         } 
 
         catch (error) {

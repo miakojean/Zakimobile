@@ -10,7 +10,7 @@
           class="notification-icon" 
           :icon="notificationsOutline"
           aria-hidden="true"
-        />
+        ></IonIcon>
         <ion-badge 
           color="danger"
           aria-live="polite"
@@ -77,6 +77,19 @@ export default defineComponent ({
   display: inline-block;
 }
 
+.dot-badge {
+  --background: #ff6d00; /* Orange personnalisé */
+  --color: transparent; /* Cache le texte */
+  
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  min-width: auto;
+  font-size: 0;
+}
 ion-badge {
   position: absolute;
   top: -18px;

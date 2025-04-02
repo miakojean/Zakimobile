@@ -3,60 +3,39 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 const routes = [
   {
     path: '/',
-    redirect: '/home'
-  },
-  {
-    path: '/home',
-    name: 'Home',
-    component: () => import('../startview/Startview.vue'),
-    meta: { noTransition: true }
-  },
-  {
-    path:'/aboutaccount', /* sign in or sign up */
-    name: "aboutaccount",
-    component: () => import('../startview/Aboutaccount.vue'),
-    meta: { noTransition: true }
+    redirect: '/home',
   },
   {
     path: '/signin',
-    name: 'signin',
+    name: 'connexion',
     component: () => import('../authentication/Loginpage.vue')
   },
   {
-    path: '/signup',
-    name: 'signup',
-    component: ()=> import('../authentication/Registration.vue')
+    path: '/',
+    component: () => import('../components/tools/navigationFooter.vue'),
+    children: [
+      {
+        path: '',
+        redirect: '/home',
+      },
+      {
+        path: 'home',
+        component: () => import('../views/mainland/Home.vue'),
+      },
+      {
+        path: 'cart',
+        component: () => import('../views/mainland/Cart.vue'),
+      },
+      {
+        path: 'library',
+        component: () => import('../views/mainland/Settings.vue'),
+      },
+      {
+        path: 'search',
+        component: () => import('../views/mainland/Profile.vue'),
+      },
+    ],
   },
-  {
-    path:'/sendmail',
-    name:'sendmail',
-    component: () => import('../authentication/sendEmail.vue')
-  },
-  {
-    path:'/resetpassword',
-    name:'resetpassword',
-    component: () => import('../authentication/PasswordReset.vue')
-  },
-  {
-    path: '/profile',
-    name: 'profile',
-    component: () => import('../homeland/ProfileLand.vue')
-  },
-  {
-    path: '/HomePage',
-    name: 'homepage',
-    component: () => import('../homeland/homepage.vue')
-  },
-  {
-    path:'/article',
-    name:'article',
-    component: () => import('../homeland/articlesDetails.vue')
-  },
-  {
-    path: '/article/:slug', // Le `:slug` indique un paramètre dynamique
-    name: 'articleDetails', // Un nom de route plus générique
-    component: () => import('../homeland/articlesDetails.vue')
-  }
 ];
 
 const router = createRouter({

@@ -1,39 +1,59 @@
 <template>
-  <ion-tab-bar color="light">
-    <ion-tab-button tab="1">
-      <ion-icon :icon="heart" />
-      <ion-label>Favorites</ion-label>
-      <ion-badge color="danger"></ion-badge>
-    </ion-tab-button>
+  <ion-tabs class="ion-no-border" style="--background: #fff; --color-selected: #000;">
+    <ion-router-outlet></ion-router-outlet>
+    <ion-tab-bar slot="bottom" class="ion-tab-button">
+      <ion-tab-button tab="home" href="/home" >
+        <ion-icon :icon="homeOutline" />
+        <ion-label>Acceuil</ion-label>
+      </ion-tab-button>
 
-    <ion-tab-button tab="2">
-      <ion-icon :icon="musicalNote" />
-      <ion-label>Music</ion-label>
-    </ion-tab-button>
+      <ion-tab-button tab="cart" href="/cart">
+        <ion-icon :icon="cartOutline" />
+        <ion-label>Panier</ion-label>
+      </ion-tab-button>
 
-    <ion-tab-button tab="3">
-      <ion-icon :icon="calendar" />
-      <ion-label>Calendar</ion-label>
-      <ion-badge color="danger">47</ion-badge>
-    </ion-tab-button>
-  </ion-tab-bar>
+      <ion-tab-button tab="search" href="/search">
+        <ion-icon :icon="search" />
+        <ion-label>Search</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="library" href="/library">
+        <ion-icon :icon="personCircleOutline" />
+        <ion-label>Profile</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </template>
 
 <script>
-  import { IonBadge, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/vue';
-  import { heart, calendar, musicalNote } from 'ionicons/icons';
-  import { defineComponent } from 'vue';
+  import { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon } from '@ionic/vue';
 
-  export default defineComponent({
-    components: {
-      IonBadge,
-      IonTabBar,
-      IonTabButton,
-      IonIcon,
-      IonLabel,
+  import { homeOutline,cartOutline, personCircleOutline, radio, library, search } from 'ionicons/icons';
+
+  export default {
+    components: { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon },
+    data() {
+      return {
+        radio,
+        library,
+        search,
+        homeOutline,
+        cartOutline,
+        personCircleOutline,
+      };
     },
-    setup() {
-      return { heart, calendar, musicalNote };
-    },
-  });
+  };
 </script>
+
+<style scoped>
+  .ion-tab-bar {
+    --background: #fff;
+    --color: gray;
+    --color-selected: #3880ff;
+  }
+
+  .ion-tab-button {
+    --color: #6b6b6b;
+    --color-selected: #058C42;
+  }
+</style>
