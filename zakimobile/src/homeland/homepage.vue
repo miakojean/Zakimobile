@@ -119,7 +119,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   gap: 0;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 8px 0 rgba(0, 0, 0, 0.19);
+  /*box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 8px 0 rgba(0, 0, 0, 0.19);*/
 }
 
 .about__articles span {
