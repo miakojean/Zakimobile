@@ -1,6 +1,6 @@
 <template>
   <ion-tabs class="ion-no-border" style="--background: #fff; --color-selected: #000;">
-    <ion-router-outlet></ion-router-outlet>
+    <ion-router-outlet :animated="false"></ion-router-outlet>
     <ion-tab-bar slot="bottom" class="ion-tab-button">
       <ion-tab-button tab="home" href="/home" >
         <ion-icon :icon="homeOutline" />
@@ -47,7 +47,7 @@
 
 <style scoped>
   .ion-tab-bar {
-    --background: #fff;
+    --background: #80fab7;
     --color: gray;
     --color-selected: #3880ff;
   }
@@ -55,5 +55,9 @@
   .ion-tab-button {
     --color: #6b6b6b;
     --color-selected: #058C42;
+  }
+
+  .ion-no-border{
+    --background: #80fab7;
   }
 </style>

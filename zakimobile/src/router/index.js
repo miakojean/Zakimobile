@@ -11,6 +11,11 @@ const routes = [
     component: () => import('../authentication/Loginpage.vue')
   },
   {
+    path: '/signup',
+    name: 'inscription',
+    component: () => import('../authentication/Registration.vue')
+  },
+  {
     path: '/',
     component: () => import('../components/tools/navigationFooter.vue'),
     children: [
