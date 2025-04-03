@@ -1,13 +1,5 @@
 <template>
     <ionPage>
-      <ionHeader>
-        <div class="main__header">
-          <i class="ri-arrow-left-line"></i>
-          <div class="done" style="display: none;">
-            <i class="ri-check-fill"></i>
-          </div>
-        </div>
-      </ionHeader>
       <ionContent>
         <div class="main__container profile__container">
           <div class="profile__pic">
@@ -48,6 +40,7 @@
 <script>
   import { IonPage, IonContent, IonHeader, IonList } from '@ionic/vue';
   import { defineComponent, ref, onMounted } from 'vue';
+  import headerLayout2 from '../../components/tools/headerLayout.vue';
   import itemLabel from '../../tools/itemLabel.vue';
   import itemList from '../../tools/itemList.vue';
   import { useRouter } from 'vue-router';
@@ -57,7 +50,7 @@
     components: {
       IonPage,
       IonContent,
-      IonHeader, itemLabel, IonList, itemList
+      IonHeader, itemLabel, IonList, itemList, headerLayout2
     },
   
     setup() {

@@ -29,7 +29,7 @@ export default defineComponent({
   
 <style scoped>
 ion-button {
-    width: 90%;
+    width: 100%;
     --background: #058C42;
     --background-hover: #058C42;
     --background-activated: #058C42;

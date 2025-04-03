@@ -15,8 +15,8 @@
               <p>{{ fruit.name }}</p>
               <span>1 {{ fruit.metrics }}</span>
             </div>
-            <span>{{ fruit.prix }} FCFA</span>
             <div class="add__products">
+              <span style="margin-left: 1rem; font-weight: 600;">{{ fruit.prix }} FCFA</span>
               <div class="add__logo">
                 <IonIcon class="add__products" :icon="addCircleOutline"></IonIcon>
               </div>
@@ -150,8 +150,8 @@
     width: 100%;
     color: #616161;
     display: flex;
-    justify-content: end;
-  
+    justify-content: space-between;
+    align-items: center;
   }
   
   .add__logo{

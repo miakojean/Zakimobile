@@ -1,45 +1,16 @@
 <template>
   <ionPage>
-    <ionHeader>
-      <div class="main__header">
-        <i class="ri-arrow-left-line"></i>
-        <div class="done" style="display: none;">
-          <i class="ri-check-fill"></i>
-        </div>
-      </div>
-    </ionHeader>
+    <headerLayout2/>
     <ionContent>
       <div class="main__container profile__container">
-        <div class="profile__pic">
-          <h3>
-            Mon compte
-          </h3> 
-          <div class="profile__pictures">
-            <img 
-              v-if="profile.profile_picture" 
-              :src="'http://127.0.0.1:8000/account' + profile.profile_picture" 
-              alt="Profile picture"
-              class="profile-image"
-            >
-            <i v-else class="ri-user-line"></i>
-          </div>
-          <span>Changer ma photo</span>
-        </div>
-          <ion-list :inset="true" lines="full" class="list__info">
-            <itemLabel label="Nom" :valeur="user.first_name"/>
-            <itemLabel label="Prenoms" :valeur="user.last_name"/>
-            <itemLabel label="Email" :valeur="user.email"/>
-            <itemLabel label="Username" :valeur="user.username"/>
-            <itemLabel label="Date de naissance" :valeur="profile.birthday"/>
-            <itemLabel label="commune" :valeur="profile.commune"/>
-            <itemLabel label="Adresse" :valeur="profile.address"/>
-            <itemLabel label="N° de téléphone" :valeur="profile.phone_number"/>
-            <itemLabel label="Genre" :valeur="profile.gender"/>
-          </ion-list>
-        <div class="logout" @click="router.push('/signin')">
-          <i class="ri-logout-box-line" @click="voirInformation"></i>
-          <p>Déconnexion</p>
-        </div>
+        <ion-list :inset="true" lines="full" class="list__info">
+          <cartItem/>
+          <cartItem/>
+          <cartItem/>
+          <cartItem/>
+        </ion-list>
+        <aboutMoney/>
+        <mainButton/>
       </div>
     </ionContent>
   </ionPage>
@@ -52,12 +23,16 @@ import itemLabel from '../../tools/itemLabel.vue';
 import itemList from '../../tools/itemList.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import headerLayout2 from '../../components/tools/headerLayout2.vue';
+import CartItem from '../../components/tools/cart/cartItem.vue';
+import aboutMoney from '../../components/tools/cart/aboutMoney.vue';
+import mainButton from '../../button/mainButton.vue';
 
 export default defineComponent({
   components: {
-    IonPage,
-    IonContent,
-    IonHeader, itemLabel, IonList, itemList
+    IonPage, itemLabel, IonList,
+    IonContent, itemList, headerLayout2,
+    IonHeader, CartItem, aboutMoney, mainButton
   },
 
   setup() {
@@ -172,6 +147,11 @@ p{
 
 .list__info{
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  gap: 1rem;
 }
 
 .main__header .done{
