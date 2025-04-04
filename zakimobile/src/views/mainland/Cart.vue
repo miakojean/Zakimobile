@@ -10,7 +10,7 @@
           <cartItem/>
         </ion-list>
         <aboutMoney/>
-        <mainButton/>
+        <nextButton/>
       </div>
     </ionContent>
   </ionPage>
@@ -26,13 +26,13 @@ import axios from 'axios';
 import headerLayout2 from '../../components/tools/headerLayout2.vue';
 import CartItem from '../../components/tools/cart/cartItem.vue';
 import aboutMoney from '../../components/tools/cart/aboutMoney.vue';
-import mainButton from '../../button/mainButton.vue';
+import nextButton from '../../button/nextButton.vue';
 
 export default defineComponent({
   components: {
     IonPage, itemLabel, IonList,
     IonContent, itemList, headerLayout2,
-    IonHeader, CartItem, aboutMoney, mainButton
+    IonHeader, CartItem, aboutMoney, nextButton
   },
 
   setup() {

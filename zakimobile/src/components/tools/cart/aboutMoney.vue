@@ -1,67 +1,66 @@
 <template>
-    <ion-item class="cart__item" lines="full">
-      <ion-list class="full-width-list" :inset="true">
-        <ion-item class="ion-text-wrap">
-            <div class="items__infos">
-                <ion-label>Sous-total</ion-label>
-                <ion-label>300 FCFA</ion-label>
-            </div>
-        </ion-item>
-        <ion-item>
-            <div class="items__infos">
-                <ion-label>Frais de livraison</ion-label>
-                <ion-label>300 FCFA</ion-label>
-            </div>
-        </ion-item>
-        <ion-item>
-            <div class="items__infos">
-                <ion-label>Code de réduction</ion-label>
-                <ion-label>300 FCFA</ion-label>
-            </div>
-        </ion-item>
-      </ion-list>
+  <ion-list class="full-width-list" :inset="true" style="width: 100%;">
+    <ion-item>
+      <ion-label><p>Sous-total</p></ion-label>
+      <ion-label slot="end"><p>4000 FCFA</p></ion-label>
     </ion-item>
+    <ion-item>
+      <ion-label><p>Frais de livraison</p></ion-label>
+      <ion-label slot="end"><p>1000 FCFA</p></ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-toggle>
+        <ion-label><p>Code de réduction</p></ion-label>
+        <ion-input label="Mon code ici"></ion-input>
+      </ion-toggle>
+      </ion-item>
+    <ion-item>
+      <ion-label><p>Total</p></ion-label>
+      <ion-label slot="end"><p>5000 FCFA</p></ion-label>
+    </ion-item>
+  </ion-list>
 </template>
   
 <script>
-  import { 
-    IonItem, 
-    IonList, 
-    IonLabel 
-  } from '@ionic/vue';
+  import { IonItem, IonList, IonLabel, } from '@ionic/vue';
   import { defineComponent } from 'vue';
+  import { chevronForward, listCircle } from 'ionicons/icons';
   
   export default defineComponent({
     components: { 
       IonItem,
       IonList,
       IonLabel
+    },
+    props: {
+      subtotal: {
+        type: Number,
+        default: 0
+      },
+      deliveryFee: {
+        type: Number,
+        default: 0
+      },
+      discountCode: {
+        type: String,
+        default: ''
+      },
+      total: {
+        type: Number,
+        default: 0
+      }
+    },
+    setup() {
+      return { 
+        chevronForward, 
+        listCircle 
+      };
     }
   });
 </script>
   
 <style scoped>
-.cart__item {
---inner-padding-end: 0;
---padding-start: 0;
-width: 100%;
-}
-
-.full-width-list {
-width: 100%;
-margin: 0;
-}
-
-.items__infos{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-}
-
-ion-item {
---inner-border-width: 0;
---padding-start: 0;
+p{
+  color: #292929;
 }
 </style>

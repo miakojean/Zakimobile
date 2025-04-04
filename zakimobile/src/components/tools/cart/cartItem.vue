@@ -3,8 +3,8 @@
         <img src="../../../assets/Articles/ananas.jpeg" alt="" class="cart__image" />
         <div class="item__group">
             <div class="items__infos">
-                <ion-label>Ananas</ion-label>
-                <ion-label>300 FCFA</ion-label>
+                <ion-label><p>Ananas</p></ion-label>
+                <ion-label><p>300 FCFA</p></ion-label>
             </div>
             <div class="items__infos">
                 <IonIcon :icon="closeOutline" class="delete-icon"></IonIcon>
@@ -38,6 +38,10 @@ import upAndOwn from './upAndOwn.vue';
 <style scoped>
 ion-item {
     --padding-start: 0;
+}
+
+p{
+    color: #525252;
 }
 
 .cart__item{
