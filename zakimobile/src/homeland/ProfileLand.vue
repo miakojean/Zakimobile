@@ -35,6 +35,7 @@
             <itemLabel label="Adresse" :valeur="profile.address"/>
             <itemLabel label="N° de téléphone" :valeur="profile.phone_number"/>
             <itemLabel label="Genre" :valeur="profile.gender"/>
+            
           </ion-list>
         <div class="logout" @click="router.push('/signin')">
           <i class="ri-logout-box-line" @click="voirInformation"></i>
@@ -49,7 +50,7 @@
 import { IonPage, IonContent, IonHeader, IonList } from '@ionic/vue';
 import { defineComponent, ref, onMounted } from 'vue';
 import itemLabel from '../tools/itemLabel.vue';
-import itemList from '../tools/itemList.vue';
+import itemLabel2 from '../tools/itemLabel2.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
@@ -57,7 +58,7 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
-    IonHeader, itemLabel, IonList, itemList
+    IonHeader, itemLabel, IonList, itemLabel2
   },
 
   setup() {

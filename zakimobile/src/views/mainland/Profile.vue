@@ -8,27 +8,28 @@
             </h3> 
             <div class="profile__pictures">
               <img 
-                v-if="profile.profile_picture" 
                 :src="'http://127.0.0.1:8000/account' + profile.profile_picture" 
                 alt="Profile picture"
                 class="profile-image"
               >
-              <i v-else class="ri-user-line"></i>
             </div>
             <span>Changer ma photo</span>
           </div>
             <ion-list :inset="true" lines="full" class="list__info">
-              <itemLabel label="Nom" :valeur="user.first_name"/>
-              <itemLabel label="Prenoms" :valeur="user.last_name"/>
-              <itemLabel label="Email" :valeur="user.email"/>
-              <itemLabel label="Username" :valeur="user.username"/>
-              <itemLabel label="Date de naissance" :valeur="profile.birthday"/>
-              <itemLabel label="commune" :valeur="profile.commune"/>
-              <itemLabel label="Adresse" :valeur="profile.address"/>
-              <itemLabel label="N° de téléphone" :valeur="profile.phone_number"/>
+              <itemLabel label="Nom" :valeur="user.first_name || 'Completez vos informations' "/>
+              <itemLabel label="Prenoms" :valeur="user.last_name || 'Completez vos informations'  "/>
+              <itemLabel label="Email" :valeur="user.email || 'Completez vos informations'  "/>
+              <itemLabel label="Username" :valeur="user.username || 'Completez vos informations'  "/>
+              <itemLabel 
+                label="Date de naissance" 
+                :valeur="profile.birthday || 'Compléter vos informations'"
+              />
+              <itemLabel label="commune" :valeur="profile.commune || 'Completez vos informations' "/>
+              <itemLabel label="Adresse" :valeur="profile.address || 'Completez vos informations' "/>
+              <itemLabel label="N° de téléphone" :valeur="profile.phone_number || 'Completez vos informations' "/>
               <itemLabel label="Genre" :valeur="profile.gender"/>
             </ion-list>
-          <div class="logout" @click="router.push('/signin')">
+          <div class="logout" @click="logout">
             <i class="ri-logout-box-line" @click="voirInformation"></i>
             <p>Déconnexion</p>
           </div>
@@ -42,15 +43,16 @@
   import { defineComponent, ref, onMounted } from 'vue';
   import headerLayout2 from '../../components/tools/headerLayout.vue';
   import itemLabel from '../../tools/itemLabel.vue';
-  import itemList from '../../tools/itemList.vue';
+  import itemList from '../../tools/itemLabel2.vue';
   import { useRouter } from 'vue-router';
   import axios from 'axios';
+import itemLabel2 from '../../tools/itemLabel2.vue';
   
   export default defineComponent({
     components: {
       IonPage,
       IonContent,
-      IonHeader, itemLabel, IonList, itemList, headerLayout2
+      IonHeader, itemLabel, IonList, itemList, headerLayout2, itemLabel2
     },
   
     setup() {
@@ -115,6 +117,60 @@
           isLoading.value = false; // Stop loading
         }
       };
+
+      const logout = async () => {
+        try {
+          const accessToken = localStorage.getItem('access_token');
+          const refreshToken = localStorage.getItem('refresh_token');
+          
+          if (!accessToken || !refreshToken) {
+              console.error('No tokens found');
+              return;
+          }
+
+          const response = await axios.post(
+            'http://127.0.0.1:8000/account/logout/',
+            { refresh: refreshToken },  // Corps de la requête
+            {
+              headers: {
+                  Authorization: `Bearer ${accessToken}`
+              }
+            }
+          );
+
+          // Si la déconnexion réussit (statut 2xx)
+          if (response.status >= 200 && response.status < 300) {
+            // 1. Supprimer les tokens du localStorage
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            
+            // 2. Rediriger vers la page de login/accueil
+            window.location.href = '/login';  // Ou utiliser un router Vue si disponible
+            // this.$router.push('/login');  // Si tu utilises Vue Router
+            
+            // 3. Optionnel : Afficher un message de succès
+            alert('Déconnexion réussie !');
+          }
+        } catch (error) {
+          console.error('Logout failed:', error);
+          
+          // Gestion des erreurs spécifiques
+          if (error.response) {
+              // Erreur venue du serveur (4xx, 5xx)
+              if (error.response.status === 401) {
+                  alert('Session expirée. Veuillez vous reconnecter.');
+              } else {
+                  alert(`Erreur serveur: ${error.response.status}`);
+              }
+          } else {
+              alert('Erreur réseau ou serveur indisponible');
+          }
+          
+          // Force la suppression des tokens même en cas d'échec
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+        }
+      };
   
       // Call the function to fetch user data when the component is mounted
       onMounted(() => {
@@ -128,7 +184,7 @@
         errorMessage,
         isLoading,
         fetchUserData,
-        router
+        router, logout
       };
     },
   });

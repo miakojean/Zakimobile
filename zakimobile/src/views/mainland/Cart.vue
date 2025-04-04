@@ -20,7 +20,7 @@
 import { IonPage, IonContent, IonHeader, IonList } from '@ionic/vue';
 import { defineComponent, ref, onMounted } from 'vue';
 import itemLabel from '../../tools/itemLabel.vue';
-import itemList from '../../tools/itemList.vue';
+import itemList from '../../tools/itemLabel2.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import headerLayout2 from '../../components/tools/headerLayout2.vue';
