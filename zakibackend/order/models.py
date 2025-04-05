@@ -20,15 +20,15 @@ class Product(models.Model):
 class Order(models.Model):
 
     STATUS_CHOICES = [
-    ('PDG', 'Pending'),
-    ('DLD', 'Delivered'),
-    ('CLD', 'Canceled'),
-]
+    ('Pending', 'Pending'),
+    ('Delivered', 'Delivered'),
+    ('Canceled', 'Canceled'),
+    ]
 
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)  
     date_commande = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='PDG')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
 
     def __str__(self):
         return f"{self.user.username} - {self.get_status_display()}"
