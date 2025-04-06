@@ -1,18 +1,26 @@
 <template>
     <ion-item class="cart__item">
-        <img src="../../../assets/Articles/ananas.jpeg" alt="" class="cart__image" />
+        <img :src="item.image" :alt="item.name" class="cart__image" />
         <div class="item__group">
             <div class="items__infos">
-                <ion-label><p>Ananas</p></ion-label>
-                <ion-label><p>300 FCFA</p></ion-label>
+                <ion-label><p>{{ item.name }}</p></ion-label>
+                <ion-label><p>{{ item.prix }} FCFA</p></ion-label>
             </div>
             <div class="items__infos">
-                <IonIcon :icon="closeOutline" class="delete-icon"></IonIcon>
-                <upAndOwn/>
+                <IonIcon 
+                    :icon="closeOutline" 
+                    class="delete-icon"
+                    @click="$emit('remove')"
+                ></IonIcon>
+                <upAndOwn 
+                    :quantity="item.quantity"
+                    @increment="increment"
+                    @decrement="decrement"
+                />
             </div>
         </div>
     </ion-item>
-  </template>
+</template>
   
 <script>
 import {IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonIcon} from '@ionic/vue';
@@ -20,19 +28,29 @@ import { closeOutline } from 'ionicons/icons';
 import { defineComponent } from 'vue';
 import upAndOwn from './upAndOwn.vue';
 
+export default defineComponent({
+components: { 
+    IonCard, IonCardContent, 
+    IonCardHeader, IonCardSubtitle, upAndOwn, IonIcon
+},
 
-    export default defineComponent({
-    components: { 
-        IonCard, IonCardContent, 
-        IonCardHeader, IonCardSubtitle, upAndOwn, IonIcon
-    },
-
-    setup() {
-        return {
-            closeOutline
-        }
+props: {
+    item: {
+        type: Object,
+        required: true
     }
-    });
+},
+
+emits: ['remove', 'increment', 'decrement'],
+
+setup() {
+    return {
+        closeOutline,
+        increment,
+        decrement
+    }
+}
+});
 </script>
   
 <style scoped>

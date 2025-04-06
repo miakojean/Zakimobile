@@ -4,12 +4,14 @@
     <ionContent>
       <div class="main__container profile__container">
         <ion-list :inset="true" lines="full" class="list__info">
-          <cartItem/>
-          <cartItem/>
-          <cartItem/>
-          <cartItem/>
+          <cartItem 
+            v-for="(item, index) in cart.items" 
+            :key="index"
+            :item="item"
+            @remove="cart.removeItem(index)"
+          />
         </ion-list>
-        <aboutMoney/>
+        <aboutMoney :total="total"/>
         <nextButton/>
       </div>
     </ionContent>
@@ -27,6 +29,8 @@ import headerLayout2 from '../../components/tools/headerLayout2.vue';
 import CartItem from '../../components/tools/cart/cartItem.vue';
 import aboutMoney from '../../components/tools/cart/aboutMoney.vue';
 import nextButton from '../../button/nextButton.vue';
+import { useCartStore } from '../../data/store/cart';
+import { computed } from 'vue';
 
 export default defineComponent({
   components: {
@@ -37,6 +41,11 @@ export default defineComponent({
 
   setup() {
     const router = useRouter();
+
+    const cart = useCartStore();
+    const total = computed(() => {
+      return cart.items.reduce((sum, item) => sum + (item.quantity * item.prix), 0);
+    });
 
     // Reactive user object
     const user = ref({
@@ -110,7 +119,7 @@ export default defineComponent({
       errorMessage,
       isLoading,
       fetchUserData,
-      router
+      router, cart, total,
     };
   },
 });

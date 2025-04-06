@@ -15,6 +15,7 @@
 
       <ion-tab-button tab="cart" href="/cart">
         <ion-icon :icon="cartOutline" />
+        <ion-badge color="danger">{{ itemNumber }}</ion-badge>
         <ion-label>Panier</ion-label>
       </ion-tab-button>
 
@@ -32,22 +33,34 @@
 </template>
 
 <script>
-  import { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon } from '@ionic/vue';
+import { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon } from '@ionic/vue';
+import { homeOutline,cartOutline, personCircleOutline, readerOutline, search } from 'ionicons/icons';
+import { defineComponent,} from 'vue';
+import { useCartStore } from '../../data/store/cart'; // Chemin à ajuster
+import { storeToRefs } from 'pinia';
 
-  import { homeOutline,cartOutline, personCircleOutline, readerOutline, search } from 'ionicons/icons';
 
-  export default {
-    components: { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon },
-    data() {
-      return {
-        search,
-        homeOutline,
-        cartOutline,
-        personCircleOutline,
-        readerOutline,
-      };
-    },
-  };
+export default defineComponent({
+  name: 'NavigationFooter',
+  components: { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon },
+
+  setup() {
+
+    const cartStore = useCartStore();
+    const { count } = storeToRefs(cartStore); // Pour garder la réactivité
+
+    return {
+      homeOutline,
+      cartOutline,
+      personCircleOutline,
+      readerOutline,
+      search,
+      count,
+      cartStore,
+      itemNumber: count // Connecte le compteur du store à ton template
+    };
+  },
+});
 </script>
 
 <style scoped>

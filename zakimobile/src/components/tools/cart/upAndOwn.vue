@@ -9,9 +9,9 @@
 <script>
 import { addCircleOutline, removeCircleOutline } from 'ionicons/icons';
 import { IonIcon } from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 export default defineComponent ({
-  
+
   components: {
     IonIcon
   },
@@ -21,20 +21,20 @@ export default defineComponent ({
       default: 1
     }
   },
-  setup(){
+  emits: ['increment', 'decrement'],
+  setup(props, { emit }) {
 
-    const itemQuantity = ref(1);
     const increaseQuantity = () => {
-      itemQuantity.value++;
+      emit('increment');
     };
     const decreaseQuantity = () => {
-      if (itemQuantity.value > 1) {
-        itemQuantity.value--;
+      if (props.itemQuantity > 1) {
+        emit('decrement');
       }
     };
 
     return {
-      addCircleOutline, removeCircleOutline, itemQuantity, increaseQuantity, decreaseQuantity
+      addCircleOutline, removeCircleOutline, itemQuantity: props.itemQuantity, increaseQuantity, decreaseQuantity
     }
   }
 })
