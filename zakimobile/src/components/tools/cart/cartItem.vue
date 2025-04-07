@@ -12,44 +12,30 @@
                     class="delete-icon"
                     @click="$emit('remove')"
                 ></IonIcon>
-                <upAndOwn 
-                    :quantity="item.quantity"
-                    @increment="increment"
-                    @decrement="decrement"
-                />
+                <upAndOwn v-model="item.quantity" />
             </div>
         </div>
     </ion-item>
 </template>
   
 <script>
-import {IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonIcon} from '@ionic/vue';
+import { IonItem, IonLabel, IonIcon } from '@ionic/vue';
 import { closeOutline } from 'ionicons/icons';
 import { defineComponent } from 'vue';
 import upAndOwn from './upAndOwn.vue';
 
 export default defineComponent({
-components: { 
-    IonCard, IonCardContent, 
-    IonCardHeader, IonCardSubtitle, upAndOwn, IonIcon
-},
-
-props: {
-    item: {
-        type: Object,
-        required: true
+    components: { IonItem, IonLabel, IonIcon, upAndOwn },
+    props: {
+        item: {
+            type: Object,
+            required: true
+        }
+    },
+    emits: ['remove'],
+    setup(props, { emit }) {
+        return { closeOutline };
     }
-},
-
-emits: ['remove', 'increment', 'decrement'],
-
-setup() {
-    return {
-        closeOutline,
-        increment,
-        decrement
-    }
-}
 });
 </script>
   

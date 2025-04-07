@@ -4,11 +4,13 @@
     <ionContent>
       <div class="main__container profile__container">
         <ion-list :inset="true" lines="full" class="list__info">
+          <!-- Boucle sur les articles du panier -->
           <cartItem 
             v-for="(item, index) in cart.items" 
             :key="index"
             :item="item"
             @remove="cart.removeItem(index)"
+            @update:modelValue="(newQty) => cart.updateQuantity(index, newQty)"
           />
         </ion-list>
         <aboutMoney :total="total"/>
