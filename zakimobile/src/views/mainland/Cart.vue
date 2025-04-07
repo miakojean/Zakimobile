@@ -6,14 +6,17 @@
         <ion-list :inset="true" lines="full" class="list__info">
           <!-- Boucle sur les articles du panier -->
           <cartItem 
-            v-for="(item, index) in cart.items" 
+            v-for="(item, index) in cart.cartItems" 
             :key="index"
             :item="item"
             @remove="cart.removeItem(index)"
             @update:modelValue="(newQty) => cart.updateQuantity(index, newQty)"
           />
         </ion-list>
-        <aboutMoney :total="total"/>
+        <aboutMoney
+          :subtotal="Number(total)" 
+          :delivery-fee="Number(1000)"
+        />
         <nextButton/>
       </div>
     </ionContent>
@@ -22,15 +25,16 @@
   
 <script>
 import { IonPage, IonContent, IonHeader, IonList } from '@ionic/vue';
-import { defineComponent, ref, onMounted } from 'vue';
-import itemLabel from '../../tools/itemLabel.vue';
-import itemList from '../../tools/itemLabel2.vue';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
 import headerLayout2 from '../../components/tools/headerLayout2.vue';
 import CartItem from '../../components/tools/cart/cartItem.vue';
 import aboutMoney from '../../components/tools/cart/aboutMoney.vue';
 import nextButton from '../../button/nextButton.vue';
+import itemLabel from '../../tools/itemLabel.vue';
+import itemList from '../../tools/itemLabel2.vue';
+
+import { useRouter } from 'vue-router';
+import { defineComponent, ref, onMounted } from 'vue';
+import axios from 'axios';
 import { useCartStore } from '../../data/store/cart';
 import { computed } from 'vue';
 
@@ -46,7 +50,7 @@ export default defineComponent({
 
     const cart = useCartStore();
     const total = computed(() => {
-      return cart.items.reduce((sum, item) => sum + (item.quantity * item.prix), 0);
+      return cart.cartItems.reduce((sum, item) => sum + (item.quantity * item.prix), 0);
     });
 
     // Reactive user object

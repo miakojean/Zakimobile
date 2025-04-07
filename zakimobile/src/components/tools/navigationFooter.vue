@@ -15,7 +15,7 @@
 
       <ion-tab-button tab="cart" href="/cart">
         <ion-icon :icon="cartOutline" />
-        <ion-badge color="danger">{{ itemNumber }}</ion-badge>
+        <ion-badge color="danger">{{ uniqueItemsCount }}</ion-badge>
         <ion-label>Panier</ion-label>
       </ion-tab-button>
 
@@ -38,6 +38,8 @@ import { homeOutline,cartOutline, personCircleOutline, readerOutline, search } f
 import { defineComponent,} from 'vue';
 import { useCartStore } from '../../data/store/cart'; // Chemin à ajuster
 import { storeToRefs } from 'pinia';
+const cartStore = useCartStore();
+const { uniqueItemsCount } = storeToRefs(cartStore);
 
 
 export default defineComponent({
@@ -57,6 +59,7 @@ export default defineComponent({
       search,
       count,
       cartStore,
+      uniqueItemsCount,
       itemNumber: count // Connecte le compteur du store à ton template
     };
   },

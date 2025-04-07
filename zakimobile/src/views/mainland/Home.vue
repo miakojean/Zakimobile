@@ -163,6 +163,12 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
   }
+
+  .add__products span{
+    font-weight: 600;
+    color: #058C42;
+    font-size: 0.8rem;
+  }
   
   .add__logo{
     padding: 0.5rem;

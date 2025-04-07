@@ -16,7 +16,7 @@
             </div>
         </div>
     </ion-item>
-</template>
+</template> 
   
 <script>
 import { IonItem, IonLabel, IonIcon } from '@ionic/vue';
