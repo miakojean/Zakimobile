@@ -100,6 +100,7 @@ import LoaderButton from '../button/loaderButton.vue';
           const { access, refresh } = response.data;
           localStorage.setItem('access_token', access);
           localStorage.setItem('refresh_token', refresh);
+          localStorage.setItem('username', username.value);
           isLoading.value = false;
 
           // Redirection seulement si la connexion est réussie
@@ -133,6 +134,8 @@ import LoaderButton from '../button/loaderButton.vue';
           isLoading.value = false;
         }
       };
+
+
 
       return {
         username, password, login, router, newModal, errorMessage, alertCircleOutline,

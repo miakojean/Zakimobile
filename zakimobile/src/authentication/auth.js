@@ -1,53 +1,57 @@
-// authStore.js
+// stores/authStore.js
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter()
-  
+
   // State
   const user = ref(null)
-  const accessToken = ref(localStorage.getItem('access_token') || null)
-  const refreshToken = ref(localStorage.getItem('refresh_token') || null)
-  const isAuthenticated = ref(false)
-  const isLoading = ref(false)
-  const error = ref(null)
-
-  // Getters
-  const getUser = () => user.value
-  const getAccessToken = () => accessToken.value
-  const isUserAuthenticated = () => isAuthenticated.value
+  const tokens = ref({
+    access: localStorage.getItem('access_token') || null,
+    refresh: localStorage.getItem('refresh_token') || null
+  })
+  const authStatus = ref({
+    isLoading: false,
+    error: null,
+    isAuthenticated: !!localStorage.getItem('access_token')
+  })
 
   // Actions
   const login = async (credentials) => {
-    isLoading.value = true
-    error.value = null
-    
+    authStatus.value.isLoading = true
+    authStatus.value.error = null
+
     try {
       const response = await axios.post('http://127.0.0.1:8000/account/login/', credentials)
       
-      // Set tokens
-      accessToken.value = response.data.access
-      refreshToken.value = response.data.refresh
+      // Mise à jour des tokens
+      tokens.value = {
+        access: response.data.access,
+        refresh: response.data.refresh
+      }
       
-      // Store tokens in localStorage
-      localStorage.setItem('access_token', accessToken.value)
-      localStorage.setItem('refresh_token', refreshToken.value)
+      // Stockage dans localStorage
+      localStorage.setItem('access_token', tokens.value.access)
+      localStorage.setItem('refresh_token', tokens.value.refresh)
       
-      // Fetch user profile
+      // Récupération du profil utilisateur
       await fetchUserProfile()
       
-      // Redirect after successful login
+      // Mise à jour du statut
+      authStatus.value.isAuthenticated = true
+      
+      // Redirection
       router.push('/')
       
       return true
-    } catch (err) {
-      error.value = err.response?.data?.detail || 'Échec de la connexion'
-      throw err
+    } catch (error) {
+      handleAuthError(error)
+      throw error
     } finally {
-      isLoading.value = false
+      authStatus.value.isLoading = false
     }
   }
 
@@ -55,74 +59,78 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await axios.get('http://127.0.0.1:8000/account/profile/', {
         headers: {
-          Authorization: `Bearer ${accessToken.value}`
+          Authorization: `Bearer ${tokens.value.access}`
         }
       })
-      
       user.value = response.data.user
-      isAuthenticated.value = true
-    } catch (err) {
+    } catch (error) {
       logout()
-      throw err
+      throw error
     }
   }
 
   const logout = () => {
-    // Clear tokens
-    accessToken.value = null
-    refreshToken.value = null
+    // Réinitialisation du state
     user.value = null
-    isAuthenticated.value = false
+    tokens.value = { access: null, refresh: null }
+    authStatus.value = {
+      isLoading: false,
+      error: null,
+      isAuthenticated: false
+    }
     
-    // Remove from localStorage
+    // Nettoyage du localStorage
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
     
-    // Redirect to login
+    // Redirection
     router.push('/login')
   }
 
   const checkAuth = async () => {
-    if (accessToken.value) {
-      try {
-        await fetchUserProfile()
-        return true
-      } catch {
-        logout()
-        return false
-      }
+    if (!tokens.value.access) return false
+    
+    try {
+      await fetchUserProfile()
+      authStatus.value.isAuthenticated = true
+      return true
+    } catch (error) {
+      logout()
+      return false
     }
-    return false
   }
 
-  // Initialize auth state when store is created
-  const init = async () => {
-    if (accessToken.value) {
+  // Gestion centralisée des erreurs
+  const handleAuthError = (error) => {
+    if (!error.response && error.message === "Network Error") {
+      authStatus.value.error = "Le serveur ne répond pas (backend éteint ou problème CORS)"
+    } else if (error.response) {
+      authStatus.value.error = error.response.data?.error || "Identifiants incorrects"
+    } else {
+      authStatus.value.error = "Erreur inconnue lors de l'authentification"
+    }
+  }
+
+  // Initialisation au chargement du store
+  const initialize = async () => {
+    if (tokens.value.access) {
       await checkAuth()
     }
   }
 
-  // Call init
-  init()
+  // Appel initial
+  initialize()
 
   return {
     // State
     user,
-    accessToken,
-    refreshToken,
-    isAuthenticated,
-    isLoading,
-    error,
-    
-    // Getters
-    getUser,
-    getAccessToken,
-    isUserAuthenticated,
+    tokens,
+    ...authStatus.value, // Spread pour accès direct à isLoading, error, isAuthenticated
     
     // Actions
     login,
     logout,
-    fetchUserProfile,
-    checkAuth
+    checkAuth,
+    fetchUserProfile
   }
 })
