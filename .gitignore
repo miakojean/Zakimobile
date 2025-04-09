@@ -1,0 +1,81 @@
+# Django-specific
+*.pyc
+__pycache__/
+db.sqlite3
+media/  # Peut être commenté si tu souhaites suivre les médias locaux
+static/ # Peut être commenté selon ta configuration de développement
+
+# Environment-specific
+env/
+.venv/
+venv/
+.env
+
+# Logs
+*.log
+logs/
+
+# Testing
+.pytest_cache/
+coverage/
+htmlcov/
+.coverage
+
+# IDE-specific
+.idea/
+*.iml
+.vscode/
+
+# Build and distribution (if applicable)
+build/
+dist/
+*.egg-info/
+
+# Other temporary files
+*.swp
+*.swo
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build
+dist/
+build/
+www/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Cache and temp
+.cache/
+temp/
+tmp/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Ionic/Cordova (if applicable)
+platforms/
+plugins/

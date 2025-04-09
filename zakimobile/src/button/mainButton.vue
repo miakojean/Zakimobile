@@ -1,0 +1,57 @@
+<template>
+    <ion-button
+        :aria-busy = "isloading"
+        :aria-label = "label"
+        @click="$emit('click',$event)"
+    >   
+        <loaderButton v-if="isloading" />
+        <slot v-else>{{ label }}</slot>
+    </ion-button>
+</template>
+  
+<script>
+import { IonButton } from '@ionic/vue';
+import { defineComponent } from 'vue';
+import loaderButton from './loaderButton.vue';
+
+export default defineComponent({
+
+  components: {
+    IonButton, loaderButton,
+  },  
+  props: {
+    label: { type: String, default: "Commencer" },
+    isloading: { type: Boolean, default: false },
+  },
+  emits: ["click"] // Déclaration explicite des événements
+});
+</script>
+  
+<style scoped>
+ion-button {
+    width: 90%;
+    --background: #058C42;
+    --background-hover: #058C42;
+    --background-activated: #058C42;
+    --background-focused: #058C42;
+
+    --color: white;
+    font-size: 1rem;
+    font-weight: 600;
+
+    --border-radius: 16px;
+    --border-color: none;
+    --border-style: none;
+    --border-width: none;
+
+    --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+
+    --ripple-color: deeppink;
+
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+
+    text-transform: none;
+    --transition: none;
+}
+</style>

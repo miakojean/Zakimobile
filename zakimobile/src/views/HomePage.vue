@@ -1,56 +1,124 @@
 <template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
+  <ionPage>
+    <IonContent>
+      <div class="main__container">
 
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
+        <img
+          v-if="activeIndex === 0"
+          src="../assets/zaki assets/fruit shop-rafiki.svg"
+          alt=""
+        />  
 
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+        <img
+          v-if="activeIndex === 1"
+          src="../assets/zaki assets/healthy food-amico.svg"
+          alt="fruit"
+        />
+
+        <img
+          v-if="activeIndex === 2"
+          src="../assets/zaki assets/Agreement-bro.svg"
+          alt="partenaire"
+        />
+
+        <!-- Transition for text -->
+
+        <div class="main__text" v-if="activeIndex === 0">
+          <h2>Bienvenue chez <span class="logo">Zaki</span></h2>
+          <p>Faites vos courses tranquillement depuis chez vous</p>
+        </div>
+        <div class="main__text" v-else-if="activeIndex === 1">
+          <h2>Commandez!!</h2>
+          <p>Découvrez vos ingrédients favoris sur notre application</p>
+        </div>
+        <div class="main__text" v-else-if="activeIndex === 2">
+          <h2>Commencer</h2>
+          <p>Facilitez vous la vie en nous confiant vos courses</p>
+        </div>
+
+
+        <!-- Bouton pour avancer dans les étapes -->
+        <secondButton label="Suivant" @next-step="handleNextStep" v-if = "activeIndex <= 1" />
+        <mainButton 
+          v-else @click="() => router.push('/signin')"
+          label = "commencer"
+        />
+        <!-- Stepper reçoit activeIndex en prop pour suivre l'état -->
+        <stepper :activeIndex="activeIndex" @click="handleEvent" />
+
+        
       </div>
-    </ion-content>
-  </ion-page>
+
+      
+    </IonContent>
+    <FooterLayout/>
+  </ionPage>
 </template>
 
-<script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+<script>
+import { IonContent, IonPage, useIonRouter } from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
+import secondButton from '../button/secondButton.vue';
+import mainButton from '../button/mainButton.vue'
+import stepper from '../components/tools/stepper.vue';
+import FooterLayout from '../components/tools/footerLayout.vue';
+import { useRouter} from 'vue-router';
+
+export default defineComponent({
+  components: {
+    IonPage,
+    IonContent,
+    secondButton,
+    mainButton,
+    stepper,
+    FooterLayout,
+  },
+
+  setup() {
+    const router = useRouter();
+    const activeIndex = ref(0);
+    const message = ref('');
+
+    const handleEvent = (data) => {
+      activeIndex.value = data; // Update activeIndex based on stepper click
+      message.value = data; // Update message
+    };
+
+    const handleNextStep = () => {
+      activeIndex.value++;
+      if (activeIndex.value > 2) {
+        activeIndex.value = 0;
+      }
+    };
+
+    return {
+      activeIndex,
+      handleEvent,
+      message,
+      handleNextStep,
+      router,
+    };
+  },
+});
 </script>
 
 <style scoped>
-#container {
+
+.main__text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.main__text h2 {
   text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.main__text p {
+  text-align: center;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
 </style>

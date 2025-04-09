@@ -1,0 +1,101 @@
+POST http://127.0.0.1:8000/account/register/
+Content-Type: application/json
+
+{
+    "username": "johnyydoe",
+    "email": "johndoe@gmail.com",
+    "password": "P@$$wOrd123",
+    "password2": "P@$$wOrd123",
+    "first_name": "John",
+    "last_name": "Doe"
+}
+
+POST http://127.0.0.1:8000/account/login/
+Content-Type: application/json
+
+{
+  "username": "johndoe",  
+  "password": "Jeanyves123456789" 
+}
+
+GET http://127.0.0.1:8000/account/profile/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMzQwNzkyLCJpYXQiOjE3NDMzMzcxOTIsImp0aSI6ImQ4OTZiOTQyYjE3YTQ3ODJhNTlkMGUyMzc5ZWJlNzAwIiwidXNlcl9pZCI6MX0.o16cO9J4wTjRvLWSvH8I1I_tXjx9hpbxbUfhe88cncg
+
+{
+  "username": "johndoe",  
+  "password": "Jeanyves123456789" 
+}
+
+
+POST http://127.0.0.1:8000/account/logout/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMDU2NTQxLCJpYXQiOjE3NDIwNTI5NDEsImp0aSI6IjdhZTQ1NmZlMjM3YzQ4MTE5YmZlNzZjMDQ1ZmMxODBmIiwidXNlcl9pZCI6MX0.spkV8XM1Rcdk2y6Zef7Eob1tFfx2U5hTdrOpUcDYZjs
+
+{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MjEzOTI2MiwiaWF0IjoxNzQyMDUyODYyLCJqdGkiOiI4ZTM3MTBiZjkzYTM0YTg3ODViZmFkNDhkYTY0MzllNCIsInVzZXJfaWQiOjF9.Qjok79lKB1yy108xOybfcSR3pDsyVVYCLydEm5555gg"
+}
+
+POST http://127.0.0.1:8000/api/token/refresh/
+Content-Type: application/json
+
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MjEzNTQwMCwiaWF0IjoxNzQyMDQ5MDAwLCJqdGkiOiI2ZDhmZDkzZjdjNWI0MmExYTFlYTM3NjMyMmY5YzlhYSIsInVzZXJfaWQiOjF9.etJt7ubSBQyc-xTAPQN6I6c74dzpJYNk70PdWSR367Q"
+}
+
+POST http://127.0.0.1:8000/account/password/reset/
+Content-Type: application/json
+
+{
+    "email": "sinistre12@gmail.com"
+}
+
+POST http://localhost:8000/account/password/verify-token/
+Content-Type: application/json
+
+{
+  "email": "sinistre12@gmail.com",
+  "token": "f5231374-eb29-4e4c-8340-cc6ff42cce36"
+}
+
+POST http://127.0.0.1:8000/account/password/reset/confirm/5f6ddcca-c0b1-46ac-be26-7c21f107fa0d/
+Content-Type: application/json
+
+{
+  "new_password": "Motdepasse123",
+  "confirm_password": "Motdepasse123"
+}
+
+### Test 1 : Token valide
+POST http://localhost:8000/api/password/verify-token/
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "token": "123456"
+}
+
+### Test 2 : Token invalide
+POST http://localhost:8000/api/password/verify-token/
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "token": "mauvais_token"
+}
+
+### Test 3 : Email manquant (erreur 400)
+POST http://localhost:8000/api/password/verify-token/
+Content-Type: application/json
+
+{
+  "token": "123456"
+}
+
+PATCH http://127.0.0.1:8000/account/updateprofile/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0MTUxNzkwLCJpYXQiOjE3NDQxNDgxOTAsImp0aSI6IjllODgxM2YyMDA5MjRjYmZiYjA4YzhhYzkwYzJiNzdkIiwidXNlcl9pZCI6M30.lRtgH-cj4MEIY4mGGRpCjLUKYOMcnHgZuHR0lSvEsA4
+
+{
+  "birthday": "1990-05-15"
+}
