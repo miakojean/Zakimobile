@@ -5,15 +5,15 @@
         <h3 :class="{ 'italicGray': valeur === 'Complétez vos informations' }">
           <span v-if="type !== 'gender'">{{ valeur || 'Complétez vos informations' }}</span>
           <span v-else class="gender-display">
-            <span v-if="valeur === 'M'" class="gender-icon male">
-              <ion-icon :icon="maleOutline"></ion-icon> Masculin
+            <span v-if="valeur === 'Homme'" class="gender-icon male">
+              <ion-icon :icon="maleOutline"></ion-icon> M
             </span>
-            <span v-else-if="valeur === 'F'" class="gender-icon female">
-              <ion-icon :icon="femaleOutline"></ion-icon> Féminin
+            <span v-else-if="valeur === 'Femme'" class="gender-icon female">
+              <ion-icon :icon="femaleOutline"></ion-icon> F
             </span>
-            <span v-else class="gender-icon unknown">
-              <ion-icon :icon="personOutline"></ion-icon> Non spécifié
-            </span>
+            <h3 v-else class="italicGray">
+              Non spécifié
+            </h3>
           </span>
         </h3>
       </template>
@@ -28,12 +28,12 @@
       <div v-if="isEditing && type === 'gender'" class="gender-options">
         <ion-radio-group v-model="localValue">
           <ion-item lines="none">
-            <ion-radio value="M" class="gender-option">
+            <ion-radio value="Homme" class="gender-option">
               <ion-icon :icon="maleOutline"></ion-icon> Masculin
             </ion-radio>
           </ion-item>
           <ion-item lines="none">
-            <ion-radio value="F" class="gender-option">
+            <ion-radio value="Femme" class="gender-option">
               <ion-icon :icon="femaleOutline"></ion-icon> Féminin
             </ion-radio>
           </ion-item>
@@ -199,7 +199,7 @@ p {
 }
 
 .gender-icon {
-  width: 24px;
+  width: 100%;
   height: 24px;
   border-radius: 50%;
   display: flex;

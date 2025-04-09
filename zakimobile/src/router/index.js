@@ -47,6 +47,11 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     redirect: '/home' // Fallback pour les routes inexistantes
+  },
+  {
+    path: '/camera',
+    name: 'camera',
+    component: () => import('../tools/camera.vue')
   }
 ];
 

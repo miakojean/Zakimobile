@@ -3,17 +3,22 @@
       <ionContent>
         <div class="main__container profile__container">
           <div class="profile__pic">
-            <h3>
-              Mon compte
-            </h3> 
-            <div class="profile__pictures">
+            <h3>Mon compte</h3> 
+            <div class="profile__pictures" @click="triggerFileInput">
               <img 
-                :src="'http://127.0.0.1:8000/account' + profile.profile_picture" 
+                :src="profile.profile_picture ? 'http://127.0.0.1:8000/account' + profile.profile_picture : defaultProfilePic" 
                 alt="Profile picture"
                 class="profile-image"
               >
+              <input 
+                type="file" 
+                ref="fileInput"
+                accept="image/*"
+                @change="handleFileChange"
+                style="display: none"
+              >
             </div>
-            <span>Changer ma photo</span>
+            <span @click="triggerFileInput">Changer ma photo</span>
           </div>
           <ion-list :inset="true" lines="full" class="list__info">
             <itemLabel 
@@ -39,6 +44,7 @@
     
 <script>
 import { IonPage, IonContent, IonHeader, IonList } from '@ionic/vue';
+import { camera } from 'ionicons/icons';
 import { defineComponent, ref, onMounted } from 'vue';
 import headerLayout2 from '../../components/tools/headerLayout.vue';
 import itemLabel from '../../tools/itemLabel.vue';
@@ -48,7 +54,7 @@ import axios from 'axios';
   
 export default defineComponent({
   components: {
-    IonPage, IonContent, IonHeader, itemLabel, IonList, itemList, headerLayout2,
+    IonPage, IonContent, IonHeader, itemLabel, IonList, itemList, headerLayout2, camera
   },
 
   setup() {
@@ -60,6 +66,8 @@ export default defineComponent({
     const editedFields = ref({});
     const errorMessage = ref('');
     const isLoading = ref(true);
+    const fileInput = ref(null);
+    const defaultProfilePic = ref('https://ionicframework.com/docs/img/demos/avatar.svg');
     const editableFields = [
       { name: 'username', label: 'Nom d\'utilisateur', path: 'user' },
       { name: 'first_name', label: 'Prénom', path: 'user' },
@@ -87,6 +95,44 @@ export default defineComponent({
         value,
         path: field.path
       };
+    };
+
+    const triggerFileInput = () => {
+      if (fileInput.value) {
+        fileInput.value.click();
+      } else {
+        console.error("L'élément input file n'a pas été trouvé");
+      }
+    };
+
+    const handleFileChange = async (event) => {
+      console.log("Fichier sélectionné", event.target.files);
+      const file = event.target.files[0];
+      if (!file) return;
+
+      try {
+        const formData = new FormData();
+        formData.append('profile_picture', file);
+
+        const accessToken = localStorage.getItem('access_token');
+        const response = await axios.patch(
+          'http://127.0.0.1:8000/account/updateprofile/',
+          formData,
+          {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        );
+
+        // Mettre à jour l'image affichée
+        if (response.data.profile_picture) {
+          profile.value.profile_picture = response.data.profile_picture;
+        }
+      } catch (error) {
+        console.error('Erreur lors du changement de photo:', error);
+      }
     };
     // Function to fetch user data
     const fetchUserData = async () => {
@@ -245,6 +291,10 @@ export default defineComponent({
       handleEditStart, updateField,
       saveChanges,
       editedFields,
+      triggerFileInput,
+      handleFileChange,
+      camera,
+      defaultProfilePic
     };
   },
 });
