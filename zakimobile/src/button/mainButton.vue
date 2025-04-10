@@ -1,8 +1,8 @@
 <template>
     <ion-button
-        :aria-busy = "isloading"
-        :aria-label = "label"
-        @click="$emit('click',$event)"
+      :aria-busy = "isloading"
+      :aria-label = "label"
+      @click="$emit('click',$event)"
     >   
         <loaderButton v-if="isloading" />
         <slot v-else>{{ label }}</slot>

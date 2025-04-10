@@ -24,7 +24,7 @@
         <ion-label>Search</ion-label>
       </ion-tab-button>
 
-      <ion-tab-button tab="library" href="/profile">
+      <ion-tab-button tab="settings" href="/settings">
         <ion-icon :icon="personCircleOutline" />
         <ion-label>Profile</ion-label>
       </ion-tab-button>

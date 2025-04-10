@@ -9,7 +9,7 @@
       </div>
       <inputfamily
         type = "text"
-        placeholder = "nom d'utilisateur"
+        placeholder = "nom d'utilisateur ou email"
         v-model="username"
       />
       <inputfamily
@@ -66,8 +66,8 @@ import mainButton from '../button/mainButton.vue';
 import FooterLayout from '../components/tools/footerLayout.vue';
 import inputfamily from '../tools/inputfamily.vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 import LoaderButton from '../button/loaderButton.vue';
+import {login as loginService} from '../_services/authServices.js'
   
   export default defineComponent({
     components: {
@@ -83,7 +83,7 @@ import LoaderButton from '../button/loaderButton.vue';
       const errorMessage = ref('');
       const attempt = ref(0);
       const isLoading = ref(false);
-      // function to handle user login
+
       const login = async () => {
         isLoading.value =true
         if (!username.value || !password.value) {
@@ -92,51 +92,18 @@ import LoaderButton from '../button/loaderButton.vue';
           isLoading.value = false;
           return ;
         }
-        try {
-          const response = await axios.post('http://127.0.0.1:8000/account/login/', {
-            username: username.value,
-            password: password.value,
-          });
-          const { access, refresh } = response.data;
-          localStorage.setItem('access_token', access);
-          localStorage.setItem('refresh_token', refresh);
-          localStorage.setItem('username', username.value);
+
+        const result = await loginService(username.value, password.value);
+        if (result.success) {
           isLoading.value = false;
-
-          // Redirection seulement si la connexion est réussie
-          router.push('/');
-        } 
-
-        catch (error) {
-          // Capture spécifique de l'erreur CORS/backend injoignable
-          if (!error.response && error.message === "Network Error") {
-            newModal.value = true;
-            errorMessage.value = "Le serveur ne répond pas (backend éteint ou problème CORS)";
-            console.error("Erreur réseau détectée:", {
-              type: "CORS/Backend unreachable",
-              details: error.message
-            });
-            isLoading.value = false;
-          }
-          // Gestion des autres erreurs
-          else if (error.response) {
-            newModal.value = true;
-            errorMessage.value = error.response.data?.error || "Identifiants incorrects";
-            isLoading.value = false;
-          }
-          else {
-            newModal.value = true;
-            errorMessage.value = "Erreur inconnue";
-            isLoading.value = false;
-          }
-
+          router.push('/home');
+        } else {
+          newModal.value = true;
+          errorMessage.value = result.message || "Erreur de connexion";
+          isLoading.value = false;
           attempt.value++;
-          isLoading.value = false;
         }
       };
-
-
-
       return {
         username, password, login, router, newModal, errorMessage, alertCircleOutline,
         closeCircleOutline, attempt, isLoading

@@ -33,7 +33,7 @@
               @validate="saveChanges"
             />
           </ion-list>
-          <div class="logout" @click="logout">
+          <div class="logout" @click="handleLogout">
             <i class="ri-logout-box-line"></i>
             <p>Déconnexion</p>
           </div>
@@ -50,6 +50,8 @@ import headerLayout2 from '../../components/tools/headerLayout.vue';
 import itemLabel from '../../tools/itemLabel.vue';
 import itemList from '../../tools/itemLabel2.vue';
 import { useRouter } from 'vue-router';
+import {logout} from '../../_services/authServices.js'
+import { fetchUserProfile } from '../../_services/userInformation.js';
 import axios from 'axios';
   
 export default defineComponent({
@@ -98,11 +100,7 @@ export default defineComponent({
     };
 
     const triggerFileInput = () => {
-      if (fileInput.value) {
-        fileInput.value.click();
-      } else {
-        console.error("L'élément input file n'a pas été trouvé");
-      }
+      fileInput.value?.click();
     };
 
     const handleFileChange = async (event) => {
@@ -137,91 +135,56 @@ export default defineComponent({
     // Function to fetch user data
     const fetchUserData = async () => {
       try {
-        isLoading.value = true; // Start loading
-        const accessToken = localStorage.getItem('access_token');
-        if (!accessToken) {
-          router.push('/signin'); // Redirect to login if no token
-          return;
-        }
+        isLoading.value = true;
+        errorMessage.value = '';
 
-        // Fetch user data from the backend
-        const response = await axios.get('http://127.0.0.1:8000/account/profile/', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        // Utilisation du service userInformation
+        const result = await fetchUserProfile();
 
-        // Log the entire API response to debug
-        console.log('API Response:', response.data);
-
-        // Update the reactive objects with the response data
-        user.value = response.data.user; // Assign user data directly
-        profile.value = response.data.profile; // Assign profile data (if it exists)
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          // Token is expired or invalid
-          localStorage.removeItem('access_token'); // Clear the expired token
-          router.push('/signin'); // Redirect to login
+        if (result.success) {
+          user.value = result.user;
+          profile.value = result.profile || {}; // Garantit un objet même si null
+          
+          // Debug
+          console.log('User data loaded:', {
+            user: user.value,
+            profile: profile.value
+          });
         } else {
-          console.error('Failed to fetch user data:', error);
-          errorMessage.value = 'Failed to fetch user data. Please try again.';
+          errorMessage.value = result.error;
+          
+          // Gestion spécifique des erreurs d'authentification
+          if (result.shouldLogout) {
+            localStorage.removeItem('access_token');
+            router.push('/signin');
+          }
         }
+      } catch (error) {
+        console.error('Unexpected error:', error);
+        errorMessage.value = 'Une erreur inattendue est survenue';
       } finally {
-        isLoading.value = false; // Stop loading
+        isLoading.value = false;
       }
     };
 
-    const logout = async () => {
-      try {
-        const accessToken = localStorage.getItem('access_token');
-        const refreshToken = localStorage.getItem('refresh_token');
+    // Dans ton composant
+    const handleLogout = async () => {
+      const result = await logout();
+      
+      if (result.success) {
+        // Redirection
+        router.push('/login');
         
-        if (!accessToken || !refreshToken) {
-            console.error('No tokens found');
-            return;
-        }
-
-        const response = await axios.post(
-          'http://127.0.0.1:8000/account/logout/',
-          { refresh: refreshToken },  // Corps de la requête
-          {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-          }
-        );
-
-        // Si la déconnexion réussit (statut 2xx)
-        if (response.status >= 200 && response.status < 300) {
-          // 1. Supprimer les tokens du localStorage
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          
-          // 2. Rediriger vers la page de login/accueil
-          window.location.href = '/login';  // Ou utiliser un router Vue si disponible
-          // this.$router.push('/login');  // Si tu utilises Vue Router
-          
-          // 3. Optionnel : Afficher un message de succès
-          alert('Déconnexion réussie !');
-        }
-      } catch (error) {
-        console.error('Logout failed:', error);
-        
-        // Gestion des erreurs spécifiques
-        if (error.response) {
-            // Erreur venue du serveur (4xx, 5xx)
-            if (error.response.status === 401) {
-                alert('Session expirée. Veuillez vous reconnecter.');
-            } else {
-                alert(`Erreur serveur: ${error.response.status}`);
-            }
-        } else {
-            alert('Erreur réseau ou serveur indisponible');
-        }
-        
-        // Force la suppression des tokens même en cas d'échec
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        // Optionnel : Message toast
+        showToast({
+          message: result.message,
+          color: 'success'
+        });
+      } else {
+        showToast({
+          message: result.error || 'Erreur lors de la déconnexion',
+          color: 'danger'
+        });
       }
     };
 
@@ -284,7 +247,7 @@ export default defineComponent({
       errorMessage,
       isLoading,
       fetchUserData,
-      router, logout,
+      router, handleLogout,
       editableFields,
       getFieldValue,
       isSaving, showSaveButton,
@@ -294,7 +257,8 @@ export default defineComponent({
       triggerFileInput,
       handleFileChange,
       camera,
-      defaultProfilePic
+      defaultProfilePic,
+      fileInput,
     };
   },
 });

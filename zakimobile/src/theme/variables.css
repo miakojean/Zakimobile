@@ -4,6 +4,14 @@
     font-family: 'inter';
 }
 
+html {
+    --ion-safe-area-left: 25px;
+}
+
+ion-modal {
+    --ion-safe-area-top: 0;
+}
+
 :root{
     --primary-color: #058C42;
 }

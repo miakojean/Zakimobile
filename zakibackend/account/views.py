@@ -83,22 +83,44 @@ class UserRegistrationView(APIView):
 
 class UserLoginView(APIView):
     def post(self, request):
-        username = request.data.get('username')
+        email_or_username = request.data.get('email_or_username')
         password = request.data.get('password')
 
-        if not username or not password:
-            return Response({'error': 'Veuillez fournir un nom d\'utilisateur et un mot de passe.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not email_or_username or not password:
+            return Response(
+                {'error': 'Veuillez fournir un email/nom d\'utilisateur et un mot de passe.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        user = authenticate(request, username=username, password=password)
+        # Authentification par email ou username
+        user = None
+        if '@' in email_or_username:
+            try:
+                user = User.objects.get(email=email_or_username)
+            except User.DoesNotExist:
+                pass
+        else:
+            user = authenticate(username=email_or_username, password=password)
 
-        if user is not None:
+        # Si l'authentification par email, vérifie le mot de passe manuellement
+        if user and '@' in email_or_username:
+            if not user.check_password(password):
+                user = None
+
+        if user:
             refresh = RefreshToken.for_user(user)
             return Response({
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
+                'user_id': user.id,
+                'username': user.username
             })
         else:
-            return Response({'error': 'Nom d\'utilisateur ou mot de passe incorrect.'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                {'error': 'Identifiants incorrects.'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
 
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
