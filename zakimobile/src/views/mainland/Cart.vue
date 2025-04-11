@@ -17,7 +17,7 @@
           :subtotal="Number(total)" 
           :delivery-fee="Number(1000)"
         />
-        <nextButton/>
+        <nextButton @click="voirPanier"/>
       </div>
     </ionContent>
   </ionPage>
@@ -32,10 +32,9 @@ import nextButton from '../../button/nextButton.vue';
 import itemLabel from '../../tools/itemLabel.vue';
 import itemList from '../../tools/itemLabel2.vue';
 import { useRouter } from 'vue-router';
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import { useCartStore } from '../../data/store/cart';
-import { computed } from 'vue';
+import { useAboutCartStore } from '../../_services/aboutCart';
 
 export default defineComponent({
   components: {
@@ -47,10 +46,11 @@ export default defineComponent({
   setup() {
     const router = useRouter();
 
-    const cart = useCartStore();
-    const total = computed(() => {
-      return cart.cartItems.reduce((sum, item) => sum + (item.quantity * item.prix), 0);
-    });
+    const store = useAboutCartStore();
+    const cart = store.cart;
+    const voirPanier = () => {
+      console.log(cart);
+    };
 
     // Reactive user object
     const user = ref({
@@ -119,12 +119,8 @@ export default defineComponent({
 
     // Return the reactive objects and function (if needed in the template)
     return {
-      user,
-      profile,
-      errorMessage,
-      isLoading,
-      fetchUserData,
-      router, cart, total,
+      user, profile, errorMessage, isLoading,
+      fetchUserData, router, voirPanier, cart
     };
   },
 });

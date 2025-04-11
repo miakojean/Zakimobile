@@ -17,7 +17,7 @@
             <div class="add__products">
               <span style="margin-left: 1rem; font-weight: 600;">{{ fruit.prix }} FCFA</span>
               <div class="add__logo">
-                <IonIcon class="add__products" :icon="addCircleOutline" @click="addToCart(index)"></IonIcon>
+                <IonIcon class="add__products" :icon="addCircleOutline" @click="voirPanier(index)"></IonIcon>
               </div>
             </div>
           </div>
@@ -38,6 +38,7 @@ import suggestionLists from '../../components/tools/suggestionLists.vue';
 import { useRouter } from 'vue-router';
 import NavigationFooter from '../../components/tools/navigationFooter.vue';
 import axios from 'axios';
+import { useAboutCartStore } from '../../_services/aboutCart';
 
 
 export default defineComponent({
@@ -53,11 +54,14 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const fruits = ref(Fruits); // Use ref to make it reactive
-    const cart = ref([]);
-    const addToCart = (index) => {
-      cart.value.push(fruits.value[index])
-      console.log(cart.value);
+    
+    // About the cart 
+    const store = useAboutCartStore();
+    const voirPanier = (index) => {
+      store.addToCart(fruits.value[index]); // Add the first fruit to the cart as an example
+      console.log(store.cart)
     }
+    // About the cart store
 
     const user = ref({ username: '', first_name: '', last_name: '', email: '',});
 
@@ -94,7 +98,7 @@ export default defineComponent({
 
     return {
       fruits, router, user, fetchUserData, addCircleOutline,
-      addToCart
+      voirPanier
     };
   },
 });
