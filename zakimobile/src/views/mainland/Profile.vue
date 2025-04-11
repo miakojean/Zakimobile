@@ -174,17 +174,8 @@ export default defineComponent({
       if (result.success) {
         // Redirection
         router.push('/login');
-        
-        // Optionnel : Message toast
-        showToast({
-          message: result.message,
-          color: 'success'
-        });
       } else {
-        showToast({
-          message: result.error || 'Erreur lors de la déconnexion',
-          color: 'danger'
-        });
+          return result.error;
       }
     };
 

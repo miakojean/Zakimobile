@@ -85,24 +85,26 @@ import {login as loginService} from '../_services/authServices.js'
       const isLoading = ref(false);
 
       const login = async () => {
-        isLoading.value =true
+        isLoading.value = true;
+        
         if (!username.value || !password.value) {
-          newModal.value = true;
           errorMessage.value = "Remplissez tous les champs";
+          newModal.value = true;
           isLoading.value = false;
-          return ;
+          return;
         }
 
         const result = await loginService(username.value, password.value);
+        
         if (result.success) {
-          isLoading.value = false;
           router.push('/home');
         } else {
-          newModal.value = true;
           errorMessage.value = result.message || "Erreur de connexion";
-          isLoading.value = false;
+          newModal.value = true;
           attempt.value++;
         }
+        
+        isLoading.value = false;
       };
       return {
         username, password, login, router, newModal, errorMessage, alertCircleOutline,

@@ -15,34 +15,40 @@ const api = axios.create({
 });
 
 // Gestion des tokens
-const storeTokens = (access, refresh, username) => {
+// Modifier storeTokens
+const storeTokens = (access, refresh, username, profile = null) => {
   localStorage.setItem('access_token', access);
   localStorage.setItem('refresh_token', refresh);
   localStorage.setItem('username', username);
-  localStorage.setItem('profile', profile)
+  if (profile) localStorage.setItem('profile', JSON.stringify(profile));
   
-  // Configure les headers Axios par défaut
   api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
 };
 
+// Modifier la fonction login
 export const login = async (emailOrUsername, password) => {
   try {
     const response = await api.post('/account/login/', {
-      email_or_username: emailOrUsername, // Adapté à ta vue Django
+      email_or_username: emailOrUsername,
       password,
     });
 
-    const { access, refresh } = response.data;
-    storeTokens(access, refresh, emailOrUsername);
+    const { access, refresh, user, profile } = response.data;
+    storeTokens(access, refresh, emailOrUsername, profile);
 
     return { 
-      success: true, 
-      data: response.data,
-      user: { username: emailOrUsername },
-      profile: response.date.profile
+      success: true,
+      user: user || { username: emailOrUsername },
+      profile,
+      message: "Connexion réussie" // Ajouté pour cohérence
     };
   } catch (error) {
-    return handleAuthError(error);
+    const errorData = handleAuthError(error);
+    return {
+      success: false,
+      message: errorData.error, // Renommé pour cohérence
+      details: errorData.details
+    };
   }
 };
 
