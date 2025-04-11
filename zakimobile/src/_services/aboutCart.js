@@ -18,6 +18,10 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
         cart.value.push(index);
     }
 
+    function removeFromCart(index) {
+        cart.value.splice(index, 1);
+    }
+
     function clearCart() {
         cart.value = [];
     }
@@ -31,6 +35,7 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
         cartTotalDiscount,
         cartItemCount,
         addToCart,
-        clearCart
+        clearCart,
+        removeFromCart
     };
 });
