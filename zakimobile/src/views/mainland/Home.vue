@@ -8,7 +8,6 @@
           <div class="about__articles"  
             v-for="(fruit, index) in fruits"  
             :key="index"
-            @click="goToArticleDetails(fruit.name.toLowerCase().replace(' ', '-'))"
             >
             <img class="articles__pictures" :src=" fruit.image " :alt="fruit.name">
             <div class="info">
@@ -17,8 +16,8 @@
             </div>
             <div class="add__products">
               <span style="margin-left: 1rem; font-weight: 600;">{{ fruit.prix }} FCFA</span>
-              <div class="add__logo" @click="(e) => addToCart(fruit, e)">
-                <IonIcon class="add__products" :icon="addCircleOutline"></IonIcon>
+              <div class="add__logo">
+                <IonIcon class="add__products" :icon="addCircleOutline" @click="addToCart(index)"></IonIcon>
               </div>
             </div>
           </div>
@@ -39,8 +38,6 @@ import suggestionLists from '../../components/tools/suggestionLists.vue';
 import { useRouter } from 'vue-router';
 import NavigationFooter from '../../components/tools/navigationFooter.vue';
 import axios from 'axios';
-import { useCartStore } from '../../data/store/cart';
-import { storeToRefs } from 'pinia';
 
 
 export default defineComponent({
@@ -56,24 +53,13 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const fruits = ref(Fruits); // Use ref to make it reactive
+    const cart = ref([]);
+    const addToCart = (index) => {
+      cart.value.push(fruits.value[index])
+      console.log(cart.value);
+    }
 
-    const goToArticleDetails = (slug) => {
-      router.push({ name: 'articleDetails', params: { slug: slug } });
-    };
-
-    const user = ref({
-      username: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-    });
-
-    const cart = useCartStore();
-    // Modifie le click handler pour passer le fruit courant
-    const addToCart = (fruit, event) => {
-    event.stopPropagation(); // Empêche le déclenchement du click sur l'article
-    cart.addToCart(fruit);
-    };
+    const user = ref({ username: '', first_name: '', last_name: '', email: '',});
 
     const fetchUserData = async () => {
       try {
@@ -106,14 +92,9 @@ export default defineComponent({
       fetchUserData();
     });
 
-    // Use onMounted inside setup
-
     return {
-      fruits,
-      router,
-      goToArticleDetails, user, fetchUserData,
-      addCircleOutline,
-      cart, addToCart
+      fruits, router, user, fetchUserData, addCircleOutline,
+      addToCart
     };
   },
 });

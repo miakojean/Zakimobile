@@ -31,7 +31,6 @@ import aboutMoney from '../../components/tools/cart/aboutMoney.vue';
 import nextButton from '../../button/nextButton.vue';
 import itemLabel from '../../tools/itemLabel.vue';
 import itemList from '../../tools/itemLabel2.vue';
-
 import { useRouter } from 'vue-router';
 import { defineComponent, ref, onMounted } from 'vue';
 import axios from 'axios';
