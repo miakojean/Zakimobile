@@ -15,7 +15,7 @@
 
       <ion-tab-button tab="cart" href="/cart">
         <ion-icon :icon="cartOutline" />
-        <ion-badge color="danger">{{ uniqueItemsCount }}</ion-badge>
+        <ion-badge color="danger">{{ cartItemCount }}</ion-badge>
         <ion-label>Panier</ion-label>
       </ion-tab-button>
 
@@ -36,11 +36,8 @@
 import { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon } from '@ionic/vue';
 import { homeOutline,cartOutline, personCircleOutline, readerOutline, search, cogOutline } from 'ionicons/icons';
 import { defineComponent,} from 'vue';
-import { useCartStore } from '../../data/store/cart'; // Chemin à ajuster
-import { storeToRefs } from 'pinia';
-const cartStore = useCartStore();
-const { uniqueItemsCount } = storeToRefs(cartStore);
-
+import { useAboutCartStore } from '../../_services/aboutCart';
+import { computed } from 'vue';
 
 export default defineComponent({
   name: 'NavigationFooter',
@@ -48,8 +45,8 @@ export default defineComponent({
 
   setup() {
 
-    const cartStore = useCartStore();
-    const { count } = storeToRefs(cartStore); // Pour garder la réactivité
+    const store = useAboutCartStore();
+    const cartItemCount = computed(() => store.cartItemCount);
 
     return {
       homeOutline,
@@ -58,10 +55,7 @@ export default defineComponent({
       readerOutline,
       search,
       cogOutline,
-      count,
-      cartStore,
-      uniqueItemsCount,
-      itemNumber: count // Connecte le compteur du store à ton template
+      store, cartItemCount
     };
   },
 });
