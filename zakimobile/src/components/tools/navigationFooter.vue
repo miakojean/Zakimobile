@@ -19,14 +19,14 @@
         <ion-label>Panier</ion-label>
       </ion-tab-button>
 
-      <ion-tab-button tab="search" href="/settings">
+      <ion-tab-button tab="search" href="/search">
         <ion-icon :icon="search" />
         <ion-label>Search</ion-label>
       </ion-tab-button>
 
       <ion-tab-button tab="settings" href="/settings">
-        <ion-icon :icon="personCircleOutline" />
-        <ion-label>Profile</ion-label>
+        <ion-icon :icon="cogOutline" />
+        <ion-label>Paramètres</ion-label>
       </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>
@@ -34,7 +34,7 @@
 
 <script>
 import { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon } from '@ionic/vue';
-import { homeOutline,cartOutline, personCircleOutline, readerOutline, search } from 'ionicons/icons';
+import { homeOutline,cartOutline, personCircleOutline, readerOutline, search, cogOutline } from 'ionicons/icons';
 import { defineComponent,} from 'vue';
 import { useCartStore } from '../../data/store/cart'; // Chemin à ajuster
 import { storeToRefs } from 'pinia';
@@ -57,6 +57,7 @@ export default defineComponent({
       personCircleOutline,
       readerOutline,
       search,
+      cogOutline,
       count,
       cartStore,
       uniqueItemsCount,

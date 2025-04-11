@@ -59,7 +59,7 @@
   
 <script>
 
-import { IonPage, IonContent } from '@ionic/vue';
+import { IonPage, IonContent, IonModal, IonIcon } from '@ionic/vue';
 import { alertCircleOutline, closeCircleOutline } from 'ionicons/icons';
 import { defineComponent, ref } from 'vue';
 import mainButton from '../button/mainButton.vue';
@@ -72,7 +72,7 @@ import {login as loginService} from '../_services/authServices.js'
   export default defineComponent({
     components: {
       IonPage, IonContent, mainButton,LoaderButton, FooterLayout, inputfamily, alertCircleOutline,
-      closeCircleOutline
+      closeCircleOutline, IonModal, IonIcon
     },
 
     setup() {
@@ -183,5 +183,11 @@ h4{
   justify-content: center;
   align-items: center;
   gap: 2rem;
+}
+
+ion-modal {
+  --width: 100%;
+  --height: 100%;
+  --border-radius: 16px;
 }
 </style>

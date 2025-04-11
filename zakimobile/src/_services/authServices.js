@@ -19,6 +19,7 @@ const storeTokens = (access, refresh, username) => {
   localStorage.setItem('access_token', access);
   localStorage.setItem('refresh_token', refresh);
   localStorage.setItem('username', username);
+  localStorage.setItem('profile', profile)
   
   // Configure les headers Axios par défaut
   api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
@@ -37,7 +38,8 @@ export const login = async (emailOrUsername, password) => {
     return { 
       success: true, 
       data: response.data,
-      user: { username: emailOrUsername } 
+      user: { username: emailOrUsername },
+      profile: response.date.profile
     };
   } catch (error) {
     return handleAuthError(error);
