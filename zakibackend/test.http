@@ -91,11 +91,3 @@ Content-Type: application/json
 {
   "token": "123456"
 }
-
-PATCH http://127.0.0.1:8000/account/updateprofile/
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0MTUxNzkwLCJpYXQiOjE3NDQxNDgxOTAsImp0aSI6IjllODgxM2YyMDA5MjRjYmZiYjA4YzhhYzkwYzJiNzdkIiwidXNlcl9pZCI6M30.lRtgH-cj4MEIY4mGGRpCjLUKYOMcnHgZuHR0lSvEsA4
-
-{
-  "birthday": "1990-05-15"
-}

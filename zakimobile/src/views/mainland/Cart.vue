@@ -13,11 +13,8 @@
             @update:modelValue="(newQty) => cart.updateQuantity(index, newQty)"
           />
         </ion-list>
-        <aboutMoney
-          :subtotal="Number(total)" 
-          :delivery-fee="Number(1000)"
-        />
-        <nextButton @click="voirPanier"/>
+        <aboutMoney/>
+        <nextButton/>
       </div>
     </ionContent>
   </ionPage>
@@ -25,16 +22,15 @@
   
 <script>
 import { IonPage, IonContent, IonHeader, IonList } from '@ionic/vue';
+import { defineComponent, ref, onMounted } from 'vue';
+import itemLabel from '../../tools/itemLabel.vue';
+import itemList from '../../tools/itemLabel2.vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
 import headerLayout2 from '../../components/tools/headerLayout2.vue';
 import CartItem from '../../components/tools/cart/cartItem.vue';
 import aboutMoney from '../../components/tools/cart/aboutMoney.vue';
 import nextButton from '../../button/nextButton.vue';
-import itemLabel from '../../tools/itemLabel.vue';
-import itemList from '../../tools/itemLabel2.vue';
-import { useRouter } from 'vue-router';
-import { defineComponent, ref, onMounted, computed } from 'vue';
-import axios from 'axios';
-import { useAboutCartStore } from '../../_services/aboutCart';
 
 export default defineComponent({
   components: {

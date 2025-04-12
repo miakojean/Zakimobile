@@ -9,7 +9,7 @@
       </div>
       <inputfamily
         type = "text"
-        placeholder = "nom d'utilisateur ou email"
+        placeholder = "nom d'utilisateur"
         v-model="username"
       />
       <inputfamily
@@ -59,20 +59,20 @@
   
 <script>
 
-import { IonPage, IonContent, IonModal, IonIcon } from '@ionic/vue';
+import { IonPage, IonContent } from '@ionic/vue';
 import { alertCircleOutline, closeCircleOutline } from 'ionicons/icons';
 import { defineComponent, ref } from 'vue';
 import mainButton from '../button/mainButton.vue';
 import FooterLayout from '../components/tools/footerLayout.vue';
 import inputfamily from '../tools/inputfamily.vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 import LoaderButton from '../button/loaderButton.vue';
-import {login as loginService} from '../_services/authServices.js'
   
   export default defineComponent({
     components: {
       IonPage, IonContent, mainButton,LoaderButton, FooterLayout, inputfamily, alertCircleOutline,
-      closeCircleOutline, IonModal, IonIcon
+      closeCircleOutline
     },
 
     setup() {
@@ -83,29 +83,57 @@ import {login as loginService} from '../_services/authServices.js'
       const errorMessage = ref('');
       const attempt = ref(0);
       const isLoading = ref(false);
-
+      // function to handle user login
       const login = async () => {
-        isLoading.value = true;
-        
+        isLoading.value =true
         if (!username.value || !password.value) {
+          newModal.value = true;
           errorMessage.value = "Remplissez tous les champs";
-          newModal.value = true;
           isLoading.value = false;
-          return;
+          return ;
         }
+        try {
+          const response = await axios.post('http://127.0.0.1:8000/account/login/', {
+            username: username.value,
+            password: password.value,
+          });
+          const { access, refresh } = response.data;
+          localStorage.setItem('access_token', access);
+          localStorage.setItem('refresh_token', refresh);
+          isLoading.value = false;
 
-        const result = await loginService(username.value, password.value);
-        
-        if (result.success) {
-          router.push('/home');
-        } else {
-          errorMessage.value = result.message || "Erreur de connexion";
-          newModal.value = true;
+          // Redirection seulement si la connexion est réussie
+          router.push('/');
+        } 
+
+        catch (error) {
+          // Capture spécifique de l'erreur CORS/backend injoignable
+          if (!error.response && error.message === "Network Error") {
+            newModal.value = true;
+            errorMessage.value = "Le serveur ne répond pas (backend éteint ou problème CORS)";
+            console.error("Erreur réseau détectée:", {
+              type: "CORS/Backend unreachable",
+              details: error.message
+            });
+            isLoading.value = false;
+          }
+          // Gestion des autres erreurs
+          else if (error.response) {
+            newModal.value = true;
+            errorMessage.value = error.response.data?.error || "Identifiants incorrects";
+            isLoading.value = false;
+          }
+          else {
+            newModal.value = true;
+            errorMessage.value = "Erreur inconnue";
+            isLoading.value = false;
+          }
+
           attempt.value++;
+          isLoading.value = false;
         }
-        
-        isLoading.value = false;
       };
+
       return {
         username, password, login, router, newModal, errorMessage, alertCircleOutline,
         closeCircleOutline, attempt, isLoading
@@ -185,11 +213,5 @@ h4{
   justify-content: center;
   align-items: center;
   gap: 2rem;
-}
-
-ion-modal {
-  --width: 100%;
-  --height: 100%;
-  --border-radius: 16px;
 }
 </style>

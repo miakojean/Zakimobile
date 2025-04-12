@@ -1,59 +1,57 @@
 <template>
   <div class="main">
     <IonIcon class="add__products" :icon="removeCircleOutline" @click="decreaseQuantity"></IonIcon>
-    {{ modelValue }}
+    {{ itemQuantity }}
     <IonIcon class="add__products" :icon="addCircleOutline" @click="increaseQuantity"></IonIcon>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
 import { addCircleOutline, removeCircleOutline } from 'ionicons/icons';
 import { IonIcon } from '@ionic/vue';
-
-export default defineComponent({
-  components: { IonIcon },
+import { defineComponent, ref } from 'vue';
+export default defineComponent ({
+  
+  components: {
+    IonIcon
+  },
   props: {
-    modelValue: {
+    itemQuantity: {
       type: Number,
       default: 1
     }
   },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const increaseQuantity = () => {
-      emit('update:modelValue', props.modelValue + 1);
-    };
+  setup(){
 
+    const itemQuantity = ref(1);
+    const increaseQuantity = () => {
+      itemQuantity.value++;
+    };
     const decreaseQuantity = () => {
-      if (props.modelValue > 1) {
-        emit('update:modelValue', props.modelValue - 1);
+      if (itemQuantity.value > 1) {
+        itemQuantity.value--;
       }
     };
 
     return {
-      addCircleOutline,
-      removeCircleOutline,
-      increaseQuantity,
-      decreaseQuantity
-    };
+      addCircleOutline, removeCircleOutline, itemQuantity, increaseQuantity, decreaseQuantity
+    }
   }
-});
+})
 </script>
 
 <style>
-.main {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  border: 1px solid #E0E0E0;
-  border-radius: 1rem;
-  padding: 0.1rem;
-  font-size: 1rem;
-}
-
-.add__products {
-  font-size: 1.3rem;
-}
+  .main{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid #E0E0E0;
+    border-radius:1rem;
+    padding: 0.1rem;
+    font-size: 1rem;
+  }
+  .add__products{
+    font-size: 1.3rem;
+  }
 </style>

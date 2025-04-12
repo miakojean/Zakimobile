@@ -1,0 +1,61 @@
+### Test de la route pour obtenir toutes les catégories
+GET http://127.0.0.1:8000/api/categories/ 
+Accept: application/json
+
+### Test de la route pour obtenir une catégorie spécifique
+GET http://127.0.0.1:8000/api/categories/1/ 
+Accept: application/json
+
+### Test de la route pour créer une nouvelle catégorie
+POST http://127.0.0.1:8000/api/categories/ 
+Content-Type: application/json
+{
+  "nom": "Nouvelle catégorie"
+}
+
+### Test de la route pour obtenir tous les produits
+GET http://127.0.0.1:8000/products/ 
+Accept: application/json
+
+### Test de la route pour obtenir un produit spécifique
+GET http://127.0.0.1:8000/products/1/ 
+Accept: application/json
+
+### Test de la route pour créer un nouveau produit
+POST http://127.0.0.1:8000/products/ 
+Content-Type: application/json
+{
+  "nom": "Produit Test",
+  "prix": 99.99,
+  "category": 1
+}
+
+### Test de la route pour obtenir tous les produits dans une commande
+GET http://127.0.0.1:8000/order-products/ 
+Accept: application/json
+
+### Test de la route pour obtenir un produit spécifique dans une commande
+GET http://127.0.0.1:8000/order-products/1/ 
+Accept: application/json
+
+### Test de la route pour obtenir toutes les commandes
+GET http://127.0.0.1:8000/orders/ 
+Accept: application/json
+
+### Test de la route pour obtenir une commande spécifique
+GET http://127.0.0.1:8000/orders/1/ 
+Accept: application/json
+
+### Test de la route pour créer une commande
+POST http://127.0.0.1:8000/create/ 
+Content-Type: application/json
+{
+  "user": 1,
+  "status": "En cours",
+  "order_products": [
+    {
+      "product_id": 1,
+      "quantity": 2
+    }
+  ]
+}
