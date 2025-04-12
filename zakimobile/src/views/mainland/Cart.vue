@@ -122,6 +122,8 @@ export default defineComponent({
       user, profile, errorMessage, isLoading,
       fetchUserData, router, voirPanier, cart
     };
+
+    //on garde cette version
   },
 });
 </script>

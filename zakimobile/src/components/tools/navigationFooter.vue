@@ -58,6 +58,7 @@ export default defineComponent({
       store, cartItemCount
     };
   },
+  // on garde cette version
 });
 </script>
 

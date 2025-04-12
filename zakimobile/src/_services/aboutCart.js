@@ -26,6 +26,8 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
         cart.value = [];
     }
 
+    // On garde cette version
+
     return { 
         cart,
         cartItem,

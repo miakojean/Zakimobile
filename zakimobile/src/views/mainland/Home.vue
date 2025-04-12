@@ -100,7 +100,7 @@ export default defineComponent({
       fruits, router, user, fetchUserData, addCircleOutline,
       voirPanier
     };
-  },
+  }, // on garde cette version
 });
 </script>
   
