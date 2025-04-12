@@ -10,7 +10,7 @@
                 <IonIcon 
                     :icon="closeOutline" 
                     class="delete-icon"
-                    @click="$emit('remove')"
+                    @click="$emit('remove')" 
                 ></IonIcon>
                 <upAndOwn v-model="item.quantity" />
             </div>

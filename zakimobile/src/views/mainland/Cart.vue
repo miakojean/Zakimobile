@@ -9,7 +9,7 @@
             v-for="(item, index) in cart" 
             :key="index"
             :item="item"
-            @remove="cart.removeItem(index)"
+            @remove="remove(index)"
             @update:modelValue="(newQty) => cart.updateQuantity(index, newQty)"
           />
         </ion-list>
@@ -48,6 +48,7 @@ export default defineComponent({
 
     const store = useAboutCartStore();
     const cart = store.cart;
+    const remove = store.removeFromCart
     const voirPanier = () => {
       console.log(cart);
     };
@@ -120,7 +121,8 @@ export default defineComponent({
     // Return the reactive objects and function (if needed in the template)
     return {
       user, profile, errorMessage, isLoading,
-      fetchUserData, router, voirPanier, cart
+      fetchUserData, router, voirPanier, cart,
+      remove
     };
   },
 });
