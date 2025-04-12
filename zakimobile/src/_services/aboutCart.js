@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import axios from "axios";
 
 export const useAboutCartStore = defineStore('aboutCart', () => {
     // State (données réactives)
@@ -11,15 +12,20 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
     const cartTotalDiscount = ref(0);
 
     // Getters (propriétés calculées)
-    const cartItemCount = computed(() => cart.value.length);
+    const cartItemCount = computed(() => cart.value.length); 
 
     // Actions (méthodes)
     function addToCart(index) {
-        cart.value.push(index);
+        if (cart.value.includes(index)){
+            return;
+        } else cart.value.push(index)
     }
 
     function removeFromCart(index) {
-        cart.value.splice(index, 1);
+        const position = cart.value.indexOf(index)
+        if (position > -1){
+            cart.value.splice(position, 1)
+        }
     }
 
     function clearCart() {

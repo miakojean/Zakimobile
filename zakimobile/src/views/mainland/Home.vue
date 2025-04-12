@@ -8,6 +8,7 @@
           <div class="about__articles"  
             v-for="(fruit, index) in fruits"  
             :key="index"
+            @click="goToArticleDetails(fruit.name.toLowerCase().replace(' ', '-'))"
             >
             <img class="articles__pictures" :src=" fruit.image " :alt="fruit.name">
             <div class="info">
@@ -17,7 +18,7 @@
             <div class="add__products">
               <span style="margin-left: 1rem; font-weight: 600;">{{ fruit.prix }} FCFA</span>
               <div class="add__logo">
-                <IonIcon class="add__products" :icon="addCircleOutline" @click="voirPanier(index)"></IonIcon>
+                <IonIcon class="add__products" :icon="addCircleOutline"></IonIcon>
               </div>
             </div>
           </div>
@@ -27,69 +28,68 @@
 </template>
   
 <script>
-import { defineComponent, ref, onMounted} from 'vue'; // Import defineComponent
-import { IonPage, IonContent, IonIcon, IonFooter, } from '@ionic/vue';
-import {addCircleOutline} from 'ionicons/icons';
-import HeaderLayout from '../../components/tools/headerLayout.vue';
-import Fruits from '../../data/Articles';
-import MainButton from '../../button/mainButton.vue';
-import resarchBox from '../../components/tools/resarchBox.vue';
-import suggestionLists from '../../components/tools/suggestionLists.vue';
-import { useRouter } from 'vue-router';
-import NavigationFooter from '../../components/tools/navigationFooter.vue';
-import axios from 'axios';
-import { useAboutCartStore } from '../../_services/aboutCart';
-
-
-export default defineComponent({
-  components: {
-    IonPage, IonFooter, IonContent,
-    IonIcon,
-    HeaderLayout,
-    MainButton,
-    resarchBox,
-    suggestionLists,
-    NavigationFooter
-  },
-  setup() {
-    const router = useRouter()
-    const fruits = ref(Fruits); // Use ref to make it reactive
-    
-    // About the cart 
-    const store = useAboutCartStore();
-    const voirPanier = (index) => {
-      store.addToCart(fruits.value[index]); // Add the first fruit to the cart as an example
-      console.log(store.cart)
-    }
-    // About the cart store
-
-    const user = ref({ username: '', first_name: '', last_name: '', email: '',});
-
-    const fetchUserData = async () => {
-      try {
-        // Fetch user data from the backend
-        const accessToken = localStorage.getItem('access_token');
-        if (!accessToken) {
-          router.push('/signin'); // Redirect to login if no token
-          return;
+  import { defineComponent, ref, onMounted} from 'vue'; // Import defineComponent
+  import { IonPage, IonContent, IonIcon, IonFooter, } from '@ionic/vue';
+  import {addCircleOutline} from 'ionicons/icons';
+  import HeaderLayout from '../../components/tools/headerLayout.vue';
+  import Fruits from '../../data/Articles';
+  import MainButton from '../../button/mainButton.vue';
+  import resarchBox from '../../components/tools/resarchBox.vue';
+  import suggestionLists from '../../components/tools/suggestionLists.vue';
+  import { useRouter } from 'vue-router';
+  import NavigationFooter from '../../components/tools/navigationFooter.vue';
+  import axios from 'axios';
+  
+  export default defineComponent({
+    components: {
+      IonPage, IonFooter, IonContent,
+      IonIcon,
+      HeaderLayout,
+      MainButton,
+      resarchBox,
+      suggestionLists,
+      NavigationFooter
+    },
+    setup() {
+      const router = useRouter()
+      const fruits = ref(Fruits); // Use ref to make it reactive
+  
+      const goToArticleDetails = (slug) => {
+        router.push({ name: 'articleDetails', params: { slug: slug } });
+      };
+  
+      const user = ref({
+        username: '',
+        first_name: '',
+        last_name: '',
+        email: '',
+      });
+  
+      const fetchUserData = async () => {
+        try {
+          // Fetch user data from the backend
+          const accessToken = localStorage.getItem('access_token');
+          if (!accessToken) {
+            router.push('/signin'); // Redirect to login if no token
+            return;
+          }
+          const response = await axios.get('http://127.0.0.1:8000/account/profile/', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          // Update the reactive objects with the response data
+          console.log(response.data)
+          user.value = response.data.user; // Assign user data directly
+        } catch (error) {
+          if (error.response && error.response.status === 401) {
+            // Token is expired or invalid
+            localStorage.removeItem('access_token'); // Clear the expired token
+            router.push('/signin'); // Redirect to login
+          } else {
+            console.error('Failed to fetch user data:', error);
+          }
         }
-        const response = await axios.get('http://127.0.0.1:8000/account/profile/', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        // Update the reactive objects with the response data
-        console.log(response.data)
-        user.value = response.data.user; // Assign user data directly
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          // Token is expired or invalid
-          localStorage.removeItem('access_token'); // Clear the expired token
-          router.push('/signin'); // Redirect to login
-        } else {
-          console.error('Failed to fetch user data:', error);
-        }
-      }
     };
 
     onMounted(() => {
@@ -147,12 +147,6 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  .add__products span{
-    font-weight: 600;
-    color: #058C42;
-    font-size: 0.8rem;
   }
   
   .add__logo{

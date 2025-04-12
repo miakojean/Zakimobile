@@ -3,256 +3,191 @@
       <ionContent>
         <div class="main__container profile__container">
           <div class="profile__pic">
-            <h3>Mon compte</h3> 
-            <div class="profile__pictures" @click="triggerFileInput">
+            <h3>
+              Mon compte
+            </h3> 
+            <div class="profile__pictures">
               <img 
-                :src="profile.profile_picture ? 'http://127.0.0.1:8000/account' + profile.profile_picture : defaultProfilePic" 
+                :src="'http://127.0.0.1:8000/account' + profile.profile_picture" 
                 alt="Profile picture"
                 class="profile-image"
               >
-              <input 
-                type="file" 
-                ref="fileInput"
-                accept="image/*"
-                @change="handleFileChange"
-                style="display: none"
-              >
             </div>
-            <span @click="triggerFileInput">Changer ma photo</span>
+            <span>Changer ma photo</span>
           </div>
-          <ion-list :inset="true" lines="full" class="list__info">
-            <itemLabel 
-              v-for="field in editableFields"
-              :key="field.name"
-              :label="field.label"
-              :valeur="getFieldValue(field)"
-              :placeholder="field.placeholder"
-              :type="field.type"
-              @update:valeur="(val) => updateField(field, val)"
-              @edit-start="handleEditStart"
-              @validate="saveChanges"
-            />
-          </ion-list>
-          <div class="logout" @click="handleLogout">
-            <i class="ri-logout-box-line"></i>
+            <ion-list :inset="true" lines="full" class="list__info">
+              <itemLabel label="Nom" :valeur="user.first_name || 'Completez vos informations' "/>
+              <itemLabel label="Prenoms" :valeur="user.last_name || 'Completez vos informations'  "/>
+              <itemLabel label="Email" :valeur="user.email || 'Completez vos informations'  "/>
+              <itemLabel label="Username" :valeur="user.username || 'Completez vos informations'  "/>
+              <itemLabel 
+                label="Date de naissance" 
+                :valeur="profile.birthday || 'Compléter vos informations'"
+              />
+              <itemLabel label="commune" :valeur="profile.commune || 'Completez vos informations' "/>
+              <itemLabel label="Adresse" :valeur="profile.address || 'Completez vos informations' "/>
+              <itemLabel label="N° de téléphone" :valeur="profile.phone_number || 'Completez vos informations' "/>
+              <itemLabel label="Genre" :valeur="profile.gender"/>
+            </ion-list>
+          <div class="logout" @click="logout">
+            <i class="ri-logout-box-line" @click="voirInformation"></i>
             <p>Déconnexion</p>
           </div>
         </div>
-      </ionContent> 
+      </ionContent>
     </ionPage>
 </template>
     
 <script>
-import { IonPage, IonContent, IonHeader, IonList } from '@ionic/vue';
-import { camera } from 'ionicons/icons';
-import { defineComponent, ref, onMounted } from 'vue';
-import headerLayout2 from '../../components/tools/headerLayout.vue';
-import itemLabel from '../../tools/itemLabel.vue';
-import itemList from '../../tools/itemLabel2.vue';
-import { useRouter } from 'vue-router';
-import {logout} from '../../_services/authServices.js'
-import { fetchUserProfile } from '../../_services/userInformation.js';
-import axios from 'axios';
+  import { IonPage, IonContent, IonHeader, IonList } from '@ionic/vue';
+  import { defineComponent, ref, onMounted } from 'vue';
+  import headerLayout2 from '../../components/tools/headerLayout.vue';
+  import itemLabel from '../../tools/itemLabel.vue';
+  import itemList from '../../tools/itemLabel2.vue';
+  import { useRouter } from 'vue-router';
+  import axios from 'axios';
+import itemLabel2 from '../../tools/itemLabel2.vue';
   
-export default defineComponent({
-  components: {
-    IonPage, IonContent, IonHeader, itemLabel, IonList, itemList, headerLayout2, camera
-  },
-
-  setup() {
-    const router = useRouter();
-    const user = ref({ username: '', first_name: '', last_name: '',  email: '',});
-    const profile = ref ({ gender:'', phone_number:'', address: '', birthday:'', commune:'',});
-    const showSaveButton = ref(false);
-    const isSaving = ref(false);
-    const editedFields = ref({});
-    const errorMessage = ref('');
-    const isLoading = ref(true);
-    const fileInput = ref(null);
-    const defaultProfilePic = ref('https://ionicframework.com/docs/img/demos/avatar.svg');
-    const editableFields = [
-      { name: 'username', label: 'Nom d\'utilisateur', path: 'user' },
-      { name: 'first_name', label: 'Prénom', path: 'user' },
-      { name: 'last_name', label: 'Nom', path: 'user' },
-      { name: 'email', label: 'Email', path: 'user' },
-      { name: 'birthday', label: 'Date de naissance', type: 'date', placeholder: 'AAAA/MM/JJ', path: 'profile' },
-      { name: 'commune', label: 'Commune', path: 'profile' },
-      { name: 'address', label: 'Adresse', path: 'profile' },
-      { name: 'phone_number', label: 'N° de téléphone', path: 'profile' },
-      { name: 'gender', label: 'Genre',type:'gender', path: 'profile' },
-    ];
-
-    const getFieldValue = (field) => {
-      return field.path === 'user' 
-        ? user.value[field.name] || 'Complétez vos informations'
-        : profile.value[field.name] || 'Complétez vos informations';
-    };
-
-    const handleEditStart = () => {
-      showSaveButton.value = true;
-    };
-
-    const updateField = (field, value) => {
-      editedFields.value[field.name] = {
-        value,
-        path: field.path
-      };
-    };
-
-    const triggerFileInput = () => {
-      fileInput.value?.click();
-    };
-
-    const handleFileChange = async (event) => {
-      console.log("Fichier sélectionné", event.target.files);
-      const file = event.target.files[0];
-      if (!file) return;
-
-      try {
-        const formData = new FormData();
-        formData.append('profile_picture', file);
-
-        const accessToken = localStorage.getItem('access_token');
-        const response = await axios.patch(
-          'http://127.0.0.1:8000/account/updateprofile/',
-          formData,
-          {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`,
-              'Content-Type': 'multipart/form-data'
-            }
+  export default defineComponent({
+    components: {
+      IonPage,
+      IonContent,
+      IonHeader, itemLabel, IonList, itemList, headerLayout2, itemLabel2
+    },
+  
+    setup() {
+      const router = useRouter();
+  
+      // Reactive user object
+      const user = ref({
+        username: '',
+        first_name: '',
+        last_name: '',
+        email: '',
+      });
+  
+      // Reactive profile object
+      const profile = ref ({
+        gender:'',
+        phone_number:'',
+        address: '',
+        birthday:'',
+        commune:'',
+      });
+  
+      // Reactive error message
+      const errorMessage = ref('');
+  
+      // Reactive loading state
+      const isLoading = ref(true);
+  
+      // Function to fetch user data
+      const fetchUserData = async () => {
+        try {
+          isLoading.value = true; // Start loading
+          const accessToken = localStorage.getItem('access_token');
+          if (!accessToken) {
+            router.push('/signin'); // Redirect to login if no token
+            return;
           }
-        );
-
-        // Mettre à jour l'image affichée
-        if (response.data.profile_picture) {
-          profile.value.profile_picture = response.data.profile_picture;
-        }
-      } catch (error) {
-        console.error('Erreur lors du changement de photo:', error);
-      }
-    };
-    // Function to fetch user data
-    const fetchUserData = async () => {
-      try {
-        isLoading.value = true;
-        errorMessage.value = '';
-
-        // Utilisation du service userInformation
-        const result = await fetchUserProfile();
-
-        if (result.success) {
-          user.value = result.user;
-          profile.value = result.profile || {}; // Garantit un objet même si null
-          
-          // Debug
-          console.log('User data loaded:', {
-            user: user.value,
-            profile: profile.value
-          });
-        } else {
-          errorMessage.value = result.error;
-          
-          // Gestion spécifique des erreurs d'authentification
-          if (result.shouldLogout) {
-            localStorage.removeItem('access_token');
-            router.push('/signin');
-          }
-        }
-      } catch (error) {
-        console.error('Unexpected error:', error);
-        errorMessage.value = 'Une erreur inattendue est survenue';
-      } finally {
-        isLoading.value = false;
-      }
-    };
-
-    // Dans ton composant
-    const handleLogout = async () => {
-      const result = await logout();
-      
-      if (result.success) {
-        // Redirection
-        router.push('/login');
-      } else {
-          return result.error;
-      }
-    };
-
-    // Call the function to fetch user data when the component is mounted
-    onMounted(() => {
-      fetchUserData();
-    });
-
-    const saveChanges = async () => {
-      isSaving.value = true;
-      try {
-        const accessToken = localStorage.getItem('access_token');
-
-        if (Object.keys(editedFields.value).length === 0) {
-          console.log('Aucune modification à sauvegarder');
-          return;
-        }
-        
-        // Préparer les données à envoyer
-        const updates = {};
-        for (const [field, data] of Object.entries(editedFields.value)) {
-          updates[field] = data.value;
-        }
-
-        const response = await axios.patch(
-          'http://127.0.0.1:8000/account/updateprofile/',
-          updates,
-          {
+  
+          // Fetch user data from the backend
+          const response = await axios.get('http://127.0.0.1:8000/account/profile/', {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
-          }
-        );
-
-        // Mettre à jour le state local
-        for (const [field, data] of Object.entries(editedFields.value)) {
-          if (data.path === 'user') {
-            user.value[field] = data.value;
+          });
+  
+          // Log the entire API response to debug
+          console.log('API Response:', response.data);
+  
+          // Update the reactive objects with the response data
+          user.value = response.data.user; // Assign user data directly
+          profile.value = response.data.profile; // Assign profile data (if it exists)
+        } catch (error) {
+          if (error.response && error.response.status === 401) {
+            // Token is expired or invalid
+            localStorage.removeItem('access_token'); // Clear the expired token
+            router.push('/signin'); // Redirect to login
           } else {
-            profile.value[field] = data.value;
+            console.error('Failed to fetch user data:', error);
+            errorMessage.value = 'Failed to fetch user data. Please try again.';
           }
+        } finally {
+          isLoading.value = false; // Stop loading
         }
+      };
 
-        // Réinitialiser
-        editedFields.value = {};
-        showSaveButton.value = false;
-        
-        console.log('Modifications enregistrées avec succès');
-      } catch (error) {
-        console.error('Erreur lors de la sauvegarde:', error);
-      } finally {
-        isSaving.value = false;
-      }
-    };
+      const logout = async () => {
+        try {
+          const accessToken = localStorage.getItem('access_token');
+          const refreshToken = localStorage.getItem('refresh_token');
+          
+          if (!accessToken || !refreshToken) {
+              console.error('No tokens found');
+              return;
+          }
 
-    // Return the reactive objects and function (if needed in the template)
-    return {
-      user,
-      profile,
-      errorMessage,
-      isLoading,
-      fetchUserData,
-      router, handleLogout,
-      editableFields,
-      getFieldValue,
-      isSaving, showSaveButton,
-      handleEditStart, updateField,
-      saveChanges,
-      editedFields,
-      triggerFileInput,
-      handleFileChange,
-      camera,
-      defaultProfilePic,
-      fileInput,
-    };
-  },
-});
+          const response = await axios.post(
+            'http://127.0.0.1:8000/account/logout/',
+            { refresh: refreshToken },  // Corps de la requête
+            {
+              headers: {
+                  Authorization: `Bearer ${accessToken}`
+              }
+            }
+          );
+
+          // Si la déconnexion réussit (statut 2xx)
+          if (response.status >= 200 && response.status < 300) {
+            // 1. Supprimer les tokens du localStorage
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            
+            // 2. Rediriger vers la page de login/accueil
+            window.location.href = '/login';  // Ou utiliser un router Vue si disponible
+            // this.$router.push('/login');  // Si tu utilises Vue Router
+            
+            // 3. Optionnel : Afficher un message de succès
+            alert('Déconnexion réussie !');
+          }
+        } catch (error) {
+          console.error('Logout failed:', error);
+          
+          // Gestion des erreurs spécifiques
+          if (error.response) {
+              // Erreur venue du serveur (4xx, 5xx)
+              if (error.response.status === 401) {
+                  alert('Session expirée. Veuillez vous reconnecter.');
+              } else {
+                  alert(`Erreur serveur: ${error.response.status}`);
+              }
+          } else {
+              alert('Erreur réseau ou serveur indisponible');
+          }
+          
+          // Force la suppression des tokens même en cas d'échec
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+        }
+      };
+  
+      // Call the function to fetch user data when the component is mounted
+      onMounted(() => {
+        fetchUserData();
+      });
+  
+      // Return the reactive objects and function (if needed in the template)
+      return {
+        user,
+        profile,
+        errorMessage,
+        isLoading,
+        fetchUserData,
+        router, logout
+      };
+    },
+  });
 </script>
     
 <style scoped>

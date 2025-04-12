@@ -1,42 +1,42 @@
 <template>
     <ion-item class="cart__item">
-        <img :src="item.image" :alt="item.name" class="cart__image" />
+        <img src="../../../assets/Articles/ananas.jpeg" alt="" class="cart__image" />
         <div class="item__group">
             <div class="items__infos">
-                <ion-label><p>{{ item.name }}</p></ion-label>
-                <ion-label><p>{{ item.prix }} FCFA</p></ion-label>
+                <ion-label><p>Ananas</p></ion-label>
+                <ion-label><p>300 FCFA</p></ion-label>
             </div>
             <div class="items__infos">
                 <IonIcon 
                     :icon="closeOutline" 
                     class="delete-icon"
-                    @click="$emit('remove')"
+                    @click="$emit('remove')" 
                 ></IonIcon>
                 <upAndOwn v-model="item.quantity" />
             </div>
         </div>
     </ion-item>
-</template> 
+  </template>
   
 <script>
-import { IonItem, IonLabel, IonIcon } from '@ionic/vue';
+import {IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonIcon} from '@ionic/vue';
 import { closeOutline } from 'ionicons/icons';
 import { defineComponent } from 'vue';
 import upAndOwn from './upAndOwn.vue';
 
-export default defineComponent({
-    components: { IonItem, IonLabel, IonIcon, upAndOwn },
-    props: {
-        item: {
-            type: Object,
-            required: true
-        }
+
+    export default defineComponent({
+    components: { 
+        IonCard, IonCardContent, 
+        IonCardHeader, IonCardSubtitle, upAndOwn, IonIcon
     },
-    emits: ['remove'],
-    setup(props, { emit }) {
-        return { closeOutline };
+
+    setup() {
+        return {
+            closeOutline
+        }
     }
-});
+    });
 </script>
   
 <style scoped>

@@ -35,28 +35,18 @@ const routes = [
         component: () => import('../views/mainland/Cart.vue')
       },
       {
-        path: 'search',
+        path: 'settings',
         component: () => import('../views/mainland/Settings.vue')
       },
       {
-        path: 'settings',
-        component: () => import('../views/mainland/Settings.vue')
+        path: 'profile',
+        component: () => import('../views/mainland/Profile.vue')
       }
     ]
   },
   {
     path: '/:pathMatch(.*)*',
     redirect: '/home' // Fallback pour les routes inexistantes
-  },
-  {
-    path: '/camera',
-    name: 'camera',
-    component: () => import('../tools/camera.vue')
-  },
-  {
-    path:'/profile',
-    name: 'profile',
-    component: ()=>import('../views/mainland/Profile.vue')
   }
 ];
 
