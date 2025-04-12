@@ -15,7 +15,9 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
 
     // Actions (méthodes)
     function addToCart(index) {
-        cart.value.push(index);
+        if(cart.value.includes(index)){
+            return ;
+        }else cart.value.push(index);
     }
 
     function removeFromCart(index) {
@@ -24,7 +26,7 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
 
     function clearCart() {
         cart.value = [];
-    }
+    } 
 
     return { 
         cart,

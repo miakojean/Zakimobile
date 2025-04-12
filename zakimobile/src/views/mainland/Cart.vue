@@ -9,12 +9,12 @@
             v-for="(item, index) in cart" 
             :key="index"
             :item="item"
-            @remove="cart.removeItem(index)"
+            @remove="remove(index)"
             @update:modelValue="(newQty) => cart.updateQuantity(index, newQty)"
           />
         </ion-list>
         <aboutMoney
-          :subtotal="Number(total)" 
+          :subtotal="Number(1000)"
           :delivery-fee="Number(1000)"
         />
         <nextButton @click="voirPanier"/>
@@ -51,6 +51,7 @@ export default defineComponent({
     const voirPanier = () => {
       console.log(cart);
     };
+    const remove = store.removeFromCart; 
 
     // Reactive user object
     const user = ref({
@@ -120,7 +121,7 @@ export default defineComponent({
     // Return the reactive objects and function (if needed in the template)
     return {
       user, profile, errorMessage, isLoading,
-      fetchUserData, router, voirPanier, cart
+      fetchUserData, router, voirPanier, cart, remove
     };
   },
 });
