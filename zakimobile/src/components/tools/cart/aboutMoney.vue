@@ -2,7 +2,7 @@
   <ion-list class="full-width-list" :inset="true" style="width: 100%;">
     <ion-item>
       <ion-label><p>Sous-total</p></ion-label>
-      <ion-label slot="end"><p>4000 FCFA</p></ion-label>
+      <ion-label slot="end"><p>{{ subtotal }} FCFA</p></ion-label>
     </ion-item>
     <ion-item>
       <ion-label><p>Frais de livraison</p></ion-label>

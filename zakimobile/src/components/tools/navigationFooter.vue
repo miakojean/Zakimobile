@@ -15,17 +15,18 @@
 
       <ion-tab-button tab="cart" href="/cart">
         <ion-icon :icon="cartOutline" />
+        <ion-badge color="danger">{{ cartItemCount }}</ion-badge>
         <ion-label>Panier</ion-label>
       </ion-tab-button>
 
-      <ion-tab-button tab="search" href="/settings">
+      <ion-tab-button tab="search" href="/search">
         <ion-icon :icon="search" />
         <ion-label>Search</ion-label>
       </ion-tab-button>
 
-      <ion-tab-button tab="library" href="/profile">
-        <ion-icon :icon="personCircleOutline" />
-        <ion-label>Profile</ion-label>
+      <ion-tab-button tab="settings" href="/settings">
+        <ion-icon :icon="cogOutline" />
+        <ion-label>Paramètres</ion-label>
       </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>
@@ -57,7 +58,6 @@ export default defineComponent({
       store, cartItemCount
     };
   },
-  // on garde cette version
 });
 </script>
 

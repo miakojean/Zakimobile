@@ -8,7 +8,6 @@
           <div class="about__articles"  
             v-for="(fruit, index) in fruits"  
             :key="index"
-            @click="goToArticleDetails(fruit.name.toLowerCase().replace(' ', '-'))"
             >
             <img class="articles__pictures" :src=" fruit.image " :alt="fruit.name">
             <div class="info">
@@ -18,7 +17,7 @@
             <div class="add__products">
               <span style="margin-left: 1rem; font-weight: 600;">{{ fruit.prix }} FCFA</span>
               <div class="add__logo">
-                <IonIcon class="add__products" :icon="addCircleOutline"></IonIcon>
+                <IonIcon class="add__products" :icon="addCircleOutline" @click="voirPanier(index)"></IonIcon>
               </div>
             </div>
           </div>
@@ -39,6 +38,7 @@
   import { useRouter } from 'vue-router';
   import NavigationFooter from '../../components/tools/navigationFooter.vue';
   import axios from 'axios';
+  import { useAboutCartStore } from '../../_services/aboutCart';
   
   export default defineComponent({
     components: {
@@ -53,6 +53,12 @@
     setup() {
       const router = useRouter()
       const fruits = ref(Fruits); // Use ref to make it reactive
+      const store = useAboutCartStore();
+      const voirPanier = (index) => {
+        store.cartTotalPrice
+        store.addToCart(fruits.value[index]); // Add the first fruit to the cart as an example
+        console.log(store.cartTotalPrice)
+      }
   
       const goToArticleDetails = (slug) => {
         router.push({ name: 'articleDetails', params: { slug: slug } });

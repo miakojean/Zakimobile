@@ -6,26 +6,32 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
     // State (données réactives)
     const cart = ref([]);
     const cartItem = ref(0);
-    const cartTotal = ref(0);
     const cartTotalItems = ref(0);
-    const cartTotalPrice = ref(0);
     const cartTotalDiscount = ref(0);
+    const cartItemPrice = ref([])
 
     // Getters (propriétés calculées)
-    const cartItemCount = computed(() => cart.value.length); 
-
+    const cartItemCount = computed(() => cart.value.length);
+    const cartTotalPrice = computed(() => {
+        return cart.value.reduce((total, item) => {
+          return total + (Number(item.price) || 0);
+        }, 0);
+    });
+      
+    
     // Actions (méthodes)
     function addToCart(index) {
         if (cart.value.includes(index)){
             return;
-        } else cart.value.push(index)
+        } else cart.value.push(index) ;
     }
 
     function removeFromCart(index) {
-        const position = cart.value.indexOf(index)
-        if (position > -1){
-            cart.value.splice(position, 1)
-        }
+        cart.value.splice(index, 1);
+    }
+
+    function lookAtPrice() {
+        console.log(cartTotal)
     }
 
     function clearCart() {
@@ -37,13 +43,13 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
     return { 
         cart,
         cartItem,
-        cartTotal,
         cartTotalItems,
-        cartTotalPrice,
+        cartItemPrice,
         cartTotalDiscount,
         cartItemCount,
+        cartTotalPrice,
         addToCart,
         clearCart,
-        removeFromCart
+        removeFromCart, lookAtPrice
     };
 });
