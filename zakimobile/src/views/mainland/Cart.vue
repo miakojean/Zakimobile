@@ -2,7 +2,7 @@
   <ionPage>
     <headerLayout2/>
     <ionContent>
-      <div class="main__container profile__container">
+      <div class="main__container profile__container" v-if="cart.length > 0">
         <ion-list :inset="true" lines="full" class="list__info">
           <!-- Boucle sur les articles du panier -->
           <cartItem 
@@ -19,6 +19,10 @@
           :delivery-fee="Number(1000)"
         />
         <nextButton @click="voirPanier"/>
+      </div>
+      <div class="main__container profile__container" v-else>
+        <h3>Votre panier est vide</h3>
+        <p>Ajoutez des articles à votre panier pour commencer vos achats.</p>
       </div>
     </ionContent>
   </ionPage>
