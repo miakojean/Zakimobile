@@ -12,7 +12,11 @@
                     class="delete-icon"
                     @click="$emit('remove')"
                 ></IonIcon>
-                <upAndOwn v-model="item.quantity" />
+                <div class="main">
+                    <IonIcon class="add__products" :icon="removeCircleOutline" @click="decreaseQuantity"></IonIcon>
+                    {{ item.quantity }}
+                    <IonIcon class="add__products" :icon="addCircleOutline" @click="increaseQuantity"></IonIcon>
+                </div>
             </div>
         </div>
     </ion-item>
@@ -20,7 +24,7 @@
   
 <script>
 import { IonItem, IonLabel, IonIcon } from '@ionic/vue';
-import { closeOutline } from 'ionicons/icons';
+import { closeOutline, addCircleOutline, removeCircleOutline } from 'ionicons/icons';
 import { defineComponent } from 'vue';
 import upAndOwn from './upAndOwn.vue';
 
@@ -37,7 +41,27 @@ export default defineComponent({
         const emitPrice = () => {
             emit('lookprice', props.item.price);  // Émet le prix vers le parent
         };
-        return { closeOutline, emitPrice };
+        
+        const increaseQuantity = () => {
+            if (!props.item.quantity || typeof props.item.quantity !== 'number') {
+                props.item.quantity = 1;
+            }
+            props.item.quantity += 1;
+            emit('quantity-change', props.item); // Optionnel: émettre un événement
+        };
+
+        const decreaseQuantity = () => {
+            if (!props.item.quantity || typeof props.item.quantity !== 'number') {
+                props.item.quantity = 1;
+            }
+            if (props.item.quantity > 1) {
+                props.item.quantity -= 1;
+                emit('quantity-change', props.item); // Optionnel: émettre un événement
+            }
+        };
+        return { closeOutline, emitPrice, addCircleOutline, removeCircleOutline
+            ,increaseQuantity, decreaseQuantity, 
+        }
     }
 });
 </script>

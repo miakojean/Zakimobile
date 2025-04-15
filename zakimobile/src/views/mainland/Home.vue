@@ -57,7 +57,6 @@
       const voirPanier = (index) => {
         store.cartTotalPrice
         store.addToCart(fruits.value[index]); // Add the first fruit to the cart as an example
-        console.log(store.cartTotalPrice)
       }
   
       const goToArticleDetails = (slug) => {

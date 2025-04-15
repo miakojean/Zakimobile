@@ -14,7 +14,9 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
     const cartItemCount = computed(() => cart.value.length);
     const cartTotalPrice = computed(() => {
         return cart.value.reduce((total, item) => {
-          return total + (Number(item.price) || 0);
+          const price = Number(item.price) || 0;
+          const quantity = Number(item.quantity) || 1; // Par défaut 1 si non spécifié
+          return total + (price * quantity);
         }, 0);
     });
       

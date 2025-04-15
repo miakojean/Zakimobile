@@ -8,6 +8,7 @@ const Fruits = [
     {
         name: "banane douce",
         price: 300,
+        quantity:1,
         description: "La banane douce, ou banane dessert, est un fruit tropical très populaire pour sa chair tendre, sucrée et parfumée.",
         metrics: 'Kilogramme',
         image: bananeDouceImage
@@ -15,6 +16,7 @@ const Fruits = [
     {
         name: "Orange",
         price: 300,
+        quantity:1,
         description: "",
         metrics: 'Kilogramme',
         image: orangeImage
@@ -22,6 +24,7 @@ const Fruits = [
     {
         name: "Ananas",
         price: 300,
+        quantity:1,
         description: "",
         metrics: 'Kilogramme',
         image: ananasImage
@@ -29,6 +32,7 @@ const Fruits = [
     {
         name: "Fraise",
         price: 300,
+        quantity:1,
         description: "",
         metrics: 'Kilogramme',
         image: fraiseImage
@@ -36,6 +40,7 @@ const Fruits = [
     {
         name: "Pomme",
         price: 300,
+        quantity:1,
         description: "",
         metrics: 'Kilogramme',
         image: pommeImage
@@ -43,6 +48,7 @@ const Fruits = [
     {
         name: "Mangue",
         price: 300,
+        quantity:1,
         description: "",
         metrics: 'Kilogramme',
         //image: mangueImage
@@ -50,6 +56,7 @@ const Fruits = [
     {
         name: "Raisin",
         price: 300,
+        quantity:1,
         description: "",
         metrics: 'Kilogramme',
         //image: raisinImage
@@ -57,6 +64,7 @@ const Fruits = [
     {
         name: "Citron",
         price: 300,
+        quantity:1,
         description: "",
         metrics: 'Kilogramme'
     }
