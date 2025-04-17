@@ -15,7 +15,7 @@
               <span>1 {{ fruit.metrics }}</span>
             </div>
             <div class="add__products">
-              <span style="margin-left: 1rem; font-weight: 600;">{{ fruit.prix }} FCFA</span>
+              <span style="margin-left: 1rem; font-weight: 600;">{{ fruit.price }} FCFA</span>
               <div class="add__logo">
                 <IonIcon class="add__products" :icon="addCircleOutline" @click="voirPanier(index)"></IonIcon>
               </div>

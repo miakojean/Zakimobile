@@ -23,7 +23,7 @@
               <itemLabel label="Username" :valeur="user.username || 'Completez vos informations'  "/>
               <itemLabel 
                 label="Date de naissance" 
-                :valeur="profile.birthday || 'Compléter vos informations'"
+                :valeur="profile.birthday || 'Completez vos informations'"
               />
               <itemLabel label="commune" :valeur="profile.commune || 'Completez vos informations' "/>
               <itemLabel label="Adresse" :valeur="profile.address || 'Completez vos informations' "/>
