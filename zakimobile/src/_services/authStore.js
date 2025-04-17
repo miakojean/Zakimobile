@@ -92,14 +92,45 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // Déconnexion
-  function logout() {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
-    localStorage.removeItem('user_store')
-    state.value.token = ''
-    state.value.user = {}
-    state.value.profile = {}
-    router.push('/signin')
+  async function logout() {
+    try {
+      const refreshToken = localStorage.getItem('refresh_token');
+      
+      if (refreshToken) {
+        await axios.post('http://127.0.0.1:8000/account/logout/', 
+          { refresh: refreshToken },
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+      }
+
+      // Réinitialisation du state
+      state.value = {
+        user: { username: '', first_name: '', last_name: '', email: '' },
+        profile: { gender: '', phone_number: '', address: '', birthday: '', commune: '' },
+        lastFetch: null,
+        token: '',
+        isLoggedIn: false
+      };
+
+      // Nettoyage du localStorage
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user_store');
+      
+      // Redirection
+      router.push('/signin');
+
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Nettoyage garantie même en cas d'erreur
+      localStorage.clear();
+      router.push('/signin');
+    }
   }
 
   // Initialisation au chargement du store

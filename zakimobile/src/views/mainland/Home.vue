@@ -1,9 +1,8 @@
 <template>
     <IonPage>
-      <headerLayout :userName = "user.username"/>
+      <headerLayout />
       <resarchBox/>
       <IonContent>
-        <mainButton @click="lookatInfo"/>
         <suggestionLists/>
         <div class="articles__container">
           <div class="about__articles"  
@@ -38,7 +37,6 @@ import resarchBox from '../../components/tools/resarchBox.vue';
 import suggestionLists from '../../components/tools/suggestionLists.vue';
 import { useRouter } from 'vue-router';
 import NavigationFooter from '../../components/tools/navigationFooter.vue';
-import axios from 'axios';
 import { useAboutCartStore } from '../../_services/aboutCart';
 import {useUserStore} from '../../_services/authStore.js'
 
@@ -66,51 +64,15 @@ export default defineComponent({
       router.push({ name: 'articleDetails', params: { slug: slug } });
     };
 
-    const user = ref({
-      username: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-    });
-
     const userStore = useUserStore()
     const lookatInfo = userStore.voirUser
 
-    const fetchUserData = async () => {
-      try {
-        // Fetch user data from the backend
-        const accessToken = localStorage.getItem('access_token');
-        if (!accessToken) {
-          router.push('/signin'); // Redirect to login if no token
-          return;
-        }
-        const response = await axios.get('http://127.0.0.1:8000/account/profile/', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        // Update the reactive objects with the response data
-        console.log(response.data)
-        user.value = response.data.user; // Assign user data directly
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          // Token is expired or invalid
-          localStorage.removeItem('access_token'); // Clear the expired token
-          router.push('/signin'); // Redirect to login
-        } else {
-          console.error('Failed to fetch user data:', error);
-        }
-      }
-  };
-
-  onMounted(() => {
-    fetchUserData();
-  });
-
-  return {
-    fruits, router, user, fetchUserData, addCircleOutline, lookatInfo,
+    return {
+    fruits, router,  addCircleOutline, lookatInfo,
     voirPanier
   };
+
+  
 }, // on garde cette version
 });
 </script>

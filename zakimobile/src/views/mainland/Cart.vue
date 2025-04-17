@@ -37,8 +37,7 @@ import nextButton from '../../button/nextButton.vue';
 import itemLabel from '../../tools/itemLabel.vue';
 import itemList from '../../tools/itemLabel2.vue';
 import { useRouter } from 'vue-router';
-import { defineComponent, ref, onMounted} from 'vue';
-import axios from 'axios';
+import { defineComponent, ref,} from 'vue';
 import { useAboutCartStore } from '../../_services/aboutCart';
 
 export default defineComponent({
@@ -59,75 +58,15 @@ export default defineComponent({
     };
     const remove = store.removeFromCart; 
 
-    // Reactive user object
-    const user = ref({
-      username: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-    });
-
-    // Reactive profile object
-    const profile = ref ({
-      gender:'',
-      phone_number:'',
-      address: '',
-      birthday:'',
-      commune:'',
-    });
-
     // Reactive error message
     const errorMessage = ref('');
 
     // Reactive loading state
     const isLoading = ref(true);
 
-    // Function to fetch user data
-    const fetchUserData = async () => {
-      try {
-        isLoading.value = true; // Start loading
-        const accessToken = localStorage.getItem('access_token');
-        if (!accessToken) {
-          router.push('/signin'); // Redirect to login if no token
-          return;
-        }
-
-        // Fetch user data from the backend
-        const response = await axios.get('http://127.0.0.1:8000/account/profile/', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        // Log the entire API response to debug
-        console.log('API Response:', response.data);
-
-        // Update the reactive objects with the response data
-        user.value = response.data.user; // Assign user data directly
-        profile.value = response.data.profile; // Assign profile data (if it exists)
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          // Token is expired or invalid
-          localStorage.removeItem('access_token'); // Clear the expired token
-          router.push('/connexion'); // Redirect to login
-        } else {
-          console.error('Failed to fetch user data:', error);
-          errorMessage.value = 'Failed to fetch user data. Please try again.';
-        }
-      } finally {
-        isLoading.value = false; // Stop loading
-      }
-    };
-
-    // Call the function to fetch user data when the component is mounted
-    onMounted(() => {
-      fetchUserData();
-    });
-
     // Return the reactive objects and function (if needed in the template)
     return {
-      user, profile, errorMessage, isLoading,
-      fetchUserData, router, voirPanier, cart, remove,
+      errorMessage, isLoading, router, voirPanier, cart, remove,
       store, cartItemPrice
     };
   },

@@ -1,7 +1,7 @@
 <template>
     <ion-item :button="true">
         <ion-icon  slot="start" :icon="personCircle" size="medium"></ion-icon>
-        <ion-label><p>Modifier le profile</p></ion-label>   
+        <ion-label><p>Voir mon profile</p></ion-label>   
     </ion-item>
 </template>
   
