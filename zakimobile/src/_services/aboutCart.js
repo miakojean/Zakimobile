@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import axios from "axios";
 
 export const useAboutCartStore = defineStore('aboutCart', () => {
@@ -9,6 +9,31 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
     const cartTotalItems = ref(0);
     const cartTotalDiscount = ref(0);
     const cartItemPrice = ref([])
+
+    // Charger le panier depuis localStorage au démarrage
+    function loadCartFromLocalStorage() {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+            cart.value = JSON.parse(savedCart);
+        }
+    }
+
+    // Appeler cette fonction au démarrage du store
+    loadCartFromLocalStorage();
+
+    // Sauvegarder le panier dans localStorage à chaque modification
+    function saveCartToLocalStorage() {
+        localStorage.setItem('cart', JSON.stringify(cart.value));
+    }
+
+    // Observer les changements du panier et sauvegarder automatiquement
+    watch(
+        () => cart.value,
+        (newCart) => {
+            saveCartToLocalStorage();
+        },
+        { deep: true } // Surveille les changements profonds (modifications dans les objets du tableau)
+    );
 
     // Getters (propriétés calculées)
     const cartItemCount = computed(() => cart.value.length);
@@ -38,6 +63,7 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
 
     function clearCart() {
         cart.value = [];
+        localStorage.removeItem('cart')
     }
 
     // On garde cette version

@@ -68,78 +68,82 @@ import inputfamily from '../tools/inputfamily.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import LoaderButton from '../button/loaderButton.vue';
+import {useUserStore} from '../_services/authStore.js'
   
-  export default defineComponent({
-    components: {
-      IonPage, IonContent, mainButton,LoaderButton, FooterLayout, inputfamily, alertCircleOutline,
-      closeCircleOutline
-    },
+export default defineComponent({
+  components: {
+    IonPage, IonContent, mainButton,LoaderButton, FooterLayout, inputfamily, alertCircleOutline,
+    closeCircleOutline
+  },
 
-    setup() {
-      const username = ref('');
-      const password = ref('');
-      const router = useRouter();
-      const newModal = ref(false);
-      const errorMessage = ref('');
-      const attempt = ref(0);
-      const isLoading = ref(false);
-      // function to handle user login
-      const login = async () => {
-        isLoading.value =true
-        if (!username.value || !password.value) {
+  setup() {
+    const username = ref('');
+    const password = ref('');
+    const router = useRouter();
+    const newModal = ref(false);
+    const errorMessage = ref('');
+    const attempt = ref(0);
+    const isLoading = ref(false);
+    const store = useUserStore();
+    
+    // function to handle user login
+    const login = async () => {
+      isLoading.value =true
+      if (!username.value || !password.value) {
+        newModal.value = true;
+        errorMessage.value = "Remplissez tous les champs";
+        isLoading.value = false;
+        return ;
+      }
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/account/login/', {
+          username: username.value,
+          password: password.value,
+        });
+        const { access, refresh } = response.data;
+        localStorage.setItem('access_token', access);
+        localStorage.setItem('refresh_token', refresh);
+        isLoading.value = false;
+        store.fetchUser(); // Met à jour l'état de connexion dans le store
+        store.saveToStorage();
+        // Redirection seulement si la connexion est réussie
+        router.push('/');
+      } 
+
+      catch (error) {
+        // Capture spécifique de l'erreur CORS/backend injoignable
+        if (!error.response && error.message === "Network Error") {
           newModal.value = true;
-          errorMessage.value = "Remplissez tous les champs";
-          isLoading.value = false;
-          return ;
-        }
-        try {
-          const response = await axios.post('http://127.0.0.1:8000/account/login/', {
-            username: username.value,
-            password: password.value,
+          errorMessage.value = "Le serveur ne répond pas (backend éteint ou problème CORS)";
+          console.error("Erreur réseau détectée:", {
+            type: "CORS/Backend unreachable",
+            details: error.message
           });
-          const { access, refresh } = response.data;
-          localStorage.setItem('access_token', access);
-          localStorage.setItem('refresh_token', refresh);
-          isLoading.value = false;
-
-          // Redirection seulement si la connexion est réussie
-          router.push('/');
-        } 
-
-        catch (error) {
-          // Capture spécifique de l'erreur CORS/backend injoignable
-          if (!error.response && error.message === "Network Error") {
-            newModal.value = true;
-            errorMessage.value = "Le serveur ne répond pas (backend éteint ou problème CORS)";
-            console.error("Erreur réseau détectée:", {
-              type: "CORS/Backend unreachable",
-              details: error.message
-            });
-            isLoading.value = false;
-          }
-          // Gestion des autres erreurs
-          else if (error.response) {
-            newModal.value = true;
-            errorMessage.value = error.response.data?.error || "Identifiants incorrects";
-            isLoading.value = false;
-          }
-          else {
-            newModal.value = true;
-            errorMessage.value = "Erreur inconnue";
-            isLoading.value = false;
-          }
-
-          attempt.value++;
           isLoading.value = false;
         }
-      };
+        // Gestion des autres erreurs
+        else if (error.response) {
+          newModal.value = true;
+          errorMessage.value = error.response.data?.error || "Identifiants incorrects";
+          isLoading.value = false;
+        }
+        else {
+          newModal.value = true;
+          errorMessage.value = "Erreur inconnue";
+          isLoading.value = false;
+        }
 
-      return {
-        username, password, login, router, newModal, errorMessage, alertCircleOutline,
-        closeCircleOutline, attempt, isLoading
-      };
-    },
-  });
+        attempt.value++;
+        isLoading.value = false;
+      }
+    };
+
+    return {
+      username, password, login, router, newModal, errorMessage, alertCircleOutline,
+      closeCircleOutline, attempt, isLoading
+    };
+  },
+});
 </script>
   
 <style scoped>

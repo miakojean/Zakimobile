@@ -67,7 +67,133 @@ const Fruits = [
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
-    }
+    },
+    {
+        name: "Papaye",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Goyave",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Avocat",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Kiwis",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Pêche",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Cerise",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Prune",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Figue",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Litchi",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Grenade",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Myrtille",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Framboise",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Mûre",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Cassis",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Noix de coco",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Durian",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Fruit du dragon",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Kumquat",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
 ]
 
 export default Fruits

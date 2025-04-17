@@ -2,26 +2,30 @@
     <ionHeader>
         <div class="header__container">
           <div class="name">
-            <IonIcon :icon="arrowBack"></IonIcon>
+            <IonIcon 
+            class="notification-icon" 
+            :icon="arrowBackOutline"
+            aria-hidden="true"
+            ></IonIcon>
           </div> 
         </div>
     </ionHeader>
 </template>
 
 <script>
-import { IonHeader } from '@ionic/vue';
+import { IonHeader, IonIcon } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-import { arrowBack } from 'ionicons/icons';
+import { arrowBackOutline } from 'ionicons/icons';
 export default defineComponent ({
 
     components: {
-      IonHeader, arrowBack
+      IonHeader, arrowBackOutline, IonIcon
     },
     setup() {
       const router = useRouter()
       return {
-        router, arrowBack, arrowBack
+        router, arrowBackOutline
       }
     }
 
