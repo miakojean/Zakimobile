@@ -7,59 +7,193 @@ import pommeImage from '../assets/Articles/pomme.png';
 const Fruits = [
     {
         name: "banane douce",
-        prix: 300,
+        price: 300,
+        quantity:1,
         description: "La banane douce, ou banane dessert, est un fruit tropical très populaire pour sa chair tendre, sucrée et parfumée.",
-        metrics: 'Kg',
+        metrics: 'Kilogramme',
         image: bananeDouceImage
     },
     {
         name: "Orange",
-        prix: 300,
+        price: 300,
+        quantity:1,
         description: "",
-        metrics: 'Kg',
+        metrics: 'Kilogramme',
         image: orangeImage
     },
     {
         name: "Ananas",
-        prix: 300,
+        price: 300,
+        quantity:1,
         description: "",
-        metrics: 'Kg',
+        metrics: 'Kilogramme',
         image: ananasImage
     },
     {
         name: "Fraise",
-        prix: 300,
+        price: 300,
+        quantity:1,
         description: "",
-        metrics: 'Kg',
+        metrics: 'Kilogramme',
         image: fraiseImage
     },
     {
         name: "Pomme",
-        prix: 300,
+        price: 300,
+        quantity:1,
         description: "",
-        metrics: 'Kg',
+        metrics: 'Kilogramme',
         image: pommeImage
     },
     {
         name: "Mangue",
-        prix: 300,
+        price: 300,
+        quantity:1,
         description: "",
-        metrics: 'Kg',
+        metrics: 'Kilogramme',
         //image: mangueImage
     },
     {
         name: "Raisin",
-        prix: 300,
+        price: 300,
+        quantity:1,
         description: "",
-        metrics: 'Kg',
+        metrics: 'Kilogramme',
         //image: raisinImage
     },
     {
         name: "Citron",
-        prix: 300,
+        price: 300,
+        quantity:1,
         description: "",
-        metrics: 'Kg'
-    }
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Papaye",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Goyave",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Avocat",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Kiwis",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Pêche",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Cerise",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Prune",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Figue",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Litchi",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Grenade",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Myrtille",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Framboise",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Mûre",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Cassis",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Noix de coco",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Durian",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Fruit du dragon",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
+    {
+        name: "Kumquat",
+        price: 300,
+        quantity:1,
+        description: "",
+        metrics: 'Kilogramme'
+    },
 ]
 
 export default Fruits

@@ -1,30 +1,31 @@
 <template>
     <ionHeader>
         <div class="header__container">
-            <div class="name">
-              <i class="fa-solid fa-arrow-left-long" @click="()=>{router.push('/HomePage')}"></i>
-            </div> 
-            <div class="item__notifs">
-                <i class="ri-shopping-cart-2-line"></i>
-                <div class="cart"><p>0</p></div>
-            </div>
+          <div class="name">
+            <IonIcon 
+            class="notification-icon" 
+            :icon="arrowBackOutline"
+            aria-hidden="true"
+            ></IonIcon>
+          </div> 
         </div>
     </ionHeader>
 </template>
 
 <script>
-import { IonHeader } from '@ionic/vue';
+import { IonHeader, IonIcon } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
+import { arrowBackOutline } from 'ionicons/icons';
 export default defineComponent ({
 
     components: {
-      IonHeader,
+      IonHeader, arrowBackOutline, IonIcon
     },
     setup() {
       const router = useRouter()
       return {
-        router
+        router, arrowBackOutline
       }
     }
 
