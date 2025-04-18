@@ -11,7 +11,7 @@
       <p>{{ label }}</p>
     </ion-label>
     <IonIcon
-      v-if="valeur && valeur.trim() === 'Compléter vos informations'"
+      v-if="valeur && valeur.trim() === 'Completez vos informations'"
       :icon="chevronForwardCircleOutline"
       class="delete-icon"
     ></IonIcon>
