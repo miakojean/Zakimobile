@@ -91,6 +91,8 @@ export const useUserStore = defineStore('user', () => {
     await fetchUser(true) // Force le refresh après login
   }
 
+  // Mise à jour du profil
+
   // Déconnexion
   async function logout() {
     try {

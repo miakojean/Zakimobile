@@ -2,20 +2,20 @@ POST http://127.0.0.1:8000/account/register/
 Content-Type: application/json
 
 {
-    "username": "johnyydoe",
-    "email": "johndoe@gmail.com",
-    "password": "P@$$wOrd123",
-    "password2": "P@$$wOrd123",
-    "first_name": "John",
-    "last_name": "Doe"
+  "username": "johnyydoe",
+  "email": "johndoe@gmail.com",
+  "password": "P@$$wOrd123",
+  "password2": "P@$$wOrd123",
+  "first_name": "John",
+  "last_name": "Doe"
 }
 
 POST http://127.0.0.1:8000/account/login/
 Content-Type: application/json
 
 {
-  "username": "johndoe",  
-  "password": "Jeanyves123456789" 
+  "username": "Konopka",  
+  "password": "Jeanyves123456@" 
 }
 
 GET http://127.0.0.1:8000/account/profile/
@@ -40,14 +40,14 @@ POST http://127.0.0.1:8000/api/token/refresh/
 Content-Type: application/json
 
 {
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MjEzNTQwMCwiaWF0IjoxNzQyMDQ5MDAwLCJqdGkiOiI2ZDhmZDkzZjdjNWI0MmExYTFlYTM3NjMyMmY5YzlhYSIsInVzZXJfaWQiOjF9.etJt7ubSBQyc-xTAPQN6I6c74dzpJYNk70PdWSR367Q"
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MjEzNTQwMCwiaWF0IjoxNzQyMDQ5MDAwLCJqdGkiOiI2ZDhmZDkzZjdjNWI0MmExYTFlYTM3NjMyMmY5YzlhYSIsInVzZXJfaWQiOjF9.etJt7ubSBQyc-xTAPQN6I6c74dzpJYNk70PdWSR367Q"
 }
 
 POST http://127.0.0.1:8000/account/password/reset/
 Content-Type: application/json
 
 {
-    "email": "sinistre12@gmail.com"
+  "email": "sinistre12@gmail.com"
 }
 
 POST http://localhost:8000/account/password/verify-token/
@@ -90,4 +90,13 @@ Content-Type: application/json
 
 {
   "token": "123456"
+}
+
+### Test de mise à jour du profil utilisateur
+PATCH  http://localhost:8000/account/updateprofile/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1MDE0OTIyLCJpYXQiOjE3NDUwMTEzMjIsImp0aSI6IjIyMzIzY2FiOWE2ZjRhNGU4OTQ4ZGU2NmU5MjhiZTA5IiwidXNlcl9pZCI6NX0.BqEH86NAbVD1Rkg53Lxd6xviRFbd0g2kIbTvFTD3yB4
+
+{
+  "commune": "Macory"
 }
