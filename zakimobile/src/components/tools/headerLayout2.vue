@@ -9,8 +9,8 @@
             ></IonIcon>
           </div>
           <div class="layout__title">
-            <ion-label class="title"><h4 class="title">Historique de commandes</h4></ion-label>
-            <ion-label><p class="subtitle">Toutes mes commandes</p></ion-label> 
+            <ion-label class="title"><h4 class="title">{{ title }}</h4></ion-label>
+            <ion-label><p class="subtitle">{{ subtitle }}</p></ion-label> 
           </div>
         </div>
     </ionHeader>
@@ -23,15 +23,27 @@ import { useRouter } from 'vue-router';
 import { arrowBackOutline } from 'ionicons/icons';
 export default defineComponent ({
 
-    components: {
-      IonHeader, arrowBackOutline, IonIcon, IonLabel
+  components: {
+    IonHeader, arrowBackOutline, IonIcon, IonLabel
+  },
+  
+  props: {
+    title: {
+      type: String,
+      default: 'Historique de commandes'
     },
-    setup() {
-      const router = useRouter()
-      return {
-        router, arrowBackOutline
-      }
+    subtitle: {
+      type: String,
+      default: 'Toutes mes commandes'
     }
+  },
+
+  setup() {
+    const router = useRouter()
+    return {
+      router, arrowBackOutline
+    }
+  }
 
 })
 </script>

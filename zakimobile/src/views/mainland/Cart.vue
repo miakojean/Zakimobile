@@ -1,6 +1,9 @@
 <template>
   <ionPage>
-    <headerLayout2/>
+    <headerLayout2
+      title="Mon panier"
+      subtitle="Tous mes articles"
+    />
     <ionContent>
       <div class="main__container profile__container" v-if="cart.length > 0">
         <ion-list :inset="true" lines="full" class="list__info">
