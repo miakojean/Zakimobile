@@ -1,163 +1,43 @@
-from rest_framework.views import APIView
+from django.shortcuts import render, HttpResponse
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from rest_framework import status
-from .models import Category, Product, Order, OrderProduct
-from .serializer import CategorySerializer, ProductSerializer, OrderSerializer, OrderProductSerializer
-from django.contrib.auth.models import User
+from .models import Order
+from .serializer import OrderSerializer
 
-# ---------- CATEGORY ----------
-class CategoryList(APIView):
-    def get(self, request):
-        categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
-        return Response(serializer.data)
+# Create your views here.
+def index(request):
+    return HttpResponse("Hello, world. You're at the order index.")
 
-    def post(self, request):
-        serializer = CategorySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class OrderListCreateView(generics.ListCreateAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-class CategoryDetail(APIView):
-    def get(self, request, pk):
-        try:
-            category = Category.objects.get(pk=pk)
-        except Category.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
 
-        serializer = CategorySerializer(category)
-        return Response(serializer.data)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
-    def put(self, request, pk):
-        try:
-            category = Category.objects.get(pk=pk)
-        except Category.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-        serializer = CategorySerializer(category, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
 
-    def delete(self, request, pk):
-        try:
-            category = Category.objects.get(pk=pk)
-        except Category.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    def perform_update(self, serializer):
+        instance = serializer.instance
+        if instance.status != 'pending':
+            return Response(
+                {"error": "Seules les commandes 'en attente' peuvent être modifiées"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer.save()
 
-        category.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-# ---------- PRODUCT ----------
-class ProductList(APIView):
-    def get(self, request):
-        products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class ProductDetail(APIView):
-    def get(self, request, pk):
-        try:
-            product = Product.objects.get(pk=pk)
-        except Product.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        serializer = ProductSerializer(product)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        try:
-            product = Product.objects.get(pk=pk)
-        except Product.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        serializer = ProductSerializer(product, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        try:
-            product = Product.objects.get(pk=pk)
-        except Product.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-# ---------- ORDER PRODUCT ----------
-class OrderProductList(APIView):
-    def get(self, request):
-        order_products = OrderProduct.objects.all()
-        serializer = OrderProductSerializer(order_products, many=True)
-        return Response(serializer.data)
-
-class OrderProductDetail(APIView):
-    def get(self, request, pk):
-        try:
-            order_product = OrderProduct.objects.get(pk=pk)
-        except OrderProduct.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        serializer = OrderProductSerializer(order_product)
-        return Response(serializer.data)
-
-# ---------- ORDER ----------
-class OrderList(APIView):
-    def get(self, request):
-        orders = Order.objects.all()
-        serializer = OrderSerializer(orders, many=True)
-        return Response(serializer.data)
-
-class OrderDetail(APIView):
-    def get(self, request, pk):
-        try:
-            order = Order.objects.get(pk=pk)
-        except Order.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        serializer = OrderSerializer(order)
-        return Response(serializer.data)
-
-# ---------- ORDER CREATION ----------
-class OrderCreateView(APIView):
-    def post(self, request):
-        data = request.data
-
-        try:
-            user = User.objects.get(id=data['user'])
-            order = Order.objects.create(user=user, status=data.get('status', 'PDG'))
-
-            for item in data.get('order_products', []):
-                product = Product.objects.get(id=item['product_id'])
-                quantity = item['quantity']
-                OrderProduct.objects.create(
-                    order=order,
-                    product=product,
-                    quantity=quantity,
-                    prix=product.prix * quantity
-                )
-
-            return Response({
-                "message": "Commande créée avec succès.",
-                "order_id": order.id
-            }, status=status.HTTP_201_CREATED)
-
-        except User.DoesNotExist:
-            return Response({"error": "Utilisateur introuvable."}, status=status.HTTP_400_BAD_REQUEST)
-
-        except Product.DoesNotExist:
-            return Response({"error": "Produit introuvable."}, status=status.HTTP_400_BAD_REQUEST)
-
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    def perform_destroy(self, instance):
+        if instance.status != 'pending':
+            return Response(
+                {"error": "Seules les commandes 'en attente' peuvent être supprimées"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        instance.delete()

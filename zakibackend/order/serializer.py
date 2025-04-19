@@ -1,40 +1,41 @@
 from rest_framework import serializers
-from .models import Category, Product, Order, OrderProduct
+from .models import Order, OrderItem, Product
 
-# Serializer pour Category
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['id', 'nom']  # Choisir les champs que tu veux exposer via l'API
-
-# Serializer pour Product
 class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()  # Sérialiser également la catégorie
-
     class Meta:
         model = Product
-        fields = ['id', 'nom', 'prix', 'category']
+        fields = ['id', 'name', 'price']  # Inclure les champs nécessaires
 
-# Serializer pour OrderProduct
-class OrderProductSerializer(serializers.ModelSerializer):
-    product = ProductSerializer()  # Sérialiser également le produit
-    prix = serializers.DecimalField(max_digits=10, decimal_places=2)  # Afficher le prix total calculé
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)  # Utilisez le sérialiseur Product
+    product_id = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.all(),
+        source='product',
+        write_only=True
+    )
 
     class Meta:
-        model = OrderProduct
-        fields = ['id', 'order', 'product', 'quantity', 'prix']
+        model = OrderItem
+        fields = ['id', 'product', 'product_id', 'quantity', 'price_at_purchase', 'subtotal']
+        read_only_fields = ['price_at_purchase', 'subtotal']
 
-# Serializer pour Order
 class OrderSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()  # Afficher le nom d'utilisateur (ou tu peux sérialiser un UserSerializer si tu veux plus de détails)
-    order_products = OrderProductSerializer(many=True)  # Sérialiser les produits associés à la commande
-
-    total_price = serializers.SerializerMethodField()  # Méthode pour calculer le prix total
+    items = OrderItemSerializer(many=True, required=False)
+    user = serializers.StringRelatedField(read_only=True)
+    status = serializers.CharField(read_only=True)  # Le statut n'est pas modifiable directement
 
     class Meta:
         model = Order
-        fields = ['id', 'user', 'date_commande', 'status', 'order_products', 'total_price']
+        fields = ['id', 'user', 'status', 'total', 'created_at', 'updated_at', 'items']
+        read_only_fields = ['total', 'created_at', 'updated_at']
 
-    def get_total_price(self, obj):
-        # Calculer le prix total de la commande en fonction des produits associés
-        return sum(order_product.prix for order_product in obj.order_products.all())
+    def create(self, validated_data):
+        items_data = validated_data.pop('items', [])
+        order = Order.objects.create(**validated_data)
+        
+        for item_data in items_data:
+            OrderItem.objects.create(order=order, **item_data)
+        
+        order.calculate_total()
+        return order

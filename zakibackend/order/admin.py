@@ -1,26 +1,17 @@
 from django.contrib import admin
-from .models import Category, Product, Order, OrderProduct
+from .models import Order, OrderItem, Product, Category
 
-# Enregistrer le modèle Category
-admin.site.register(Category)
 
-# Enregistrer le modèle Product
-admin.site.register(Product)
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 3  # 3 formulaires vides affichés par défaut
+    readonly_fields = ['subtotal']  # Affiche le sous-total
 
-# Enregistrer le modèle OrderProduct
-class OrderProductAdmin(admin.TabularInline):
-    model = OrderProduct
-    extra = 1
-    readonly_fields = ('prix',)  # Le prix est en lecture seule
-
+@admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    inlines = [OrderProductAdmin]
-    list_display = ('user', 'status', 'date_commande', 'total_price')  # Ajout du prix total
-    list_filter = ('status',)
-    
-    def total_price(self, obj):
-        return sum(order_product.prix for order_product in obj.order_products.all())
-    total_price.short_description = 'Prix total'
+    inlines = [OrderItemInline]
+    readonly_fields = ['total']  # Empêche la modification manuelle
 
-# Enregistrer le modèle Order avec la classe d'admin personnalisée
-admin.site.register(Order, OrderAdmin)
+admin.site.register(Product)
+admin.site.register(Category)
+admin.site.register(OrderItem)
