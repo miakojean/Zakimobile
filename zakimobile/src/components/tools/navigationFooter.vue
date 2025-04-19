@@ -15,18 +15,18 @@
 
       <ion-tab-button tab="cart" href="/cart">
         <ion-icon :icon="cartOutline" />
-        <ion-badge color="danger">{{ uniqueItemsCount }}</ion-badge>
+        <ion-badge color="danger">{{ cartItemCount }}</ion-badge>
         <ion-label>Panier</ion-label>
       </ion-tab-button>
 
-      <ion-tab-button tab="search" href="/settings">
+      <ion-tab-button tab="search" href="/search">
         <ion-icon :icon="search" />
         <ion-label>Search</ion-label>
       </ion-tab-button>
 
-      <ion-tab-button tab="library" href="/profile">
-        <ion-icon :icon="personCircleOutline" />
-        <ion-label>Profile</ion-label>
+      <ion-tab-button tab="settings" href="/settings">
+        <ion-icon :icon="cogOutline" />
+        <ion-label>Paramètres</ion-label>
       </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>
@@ -34,13 +34,10 @@
 
 <script>
 import { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon } from '@ionic/vue';
-import { homeOutline,cartOutline, personCircleOutline, readerOutline, search } from 'ionicons/icons';
+import { homeOutline,cartOutline, personCircleOutline, readerOutline, search, cogOutline } from 'ionicons/icons';
 import { defineComponent,} from 'vue';
-import { useCartStore } from '../../data/store/cart'; // Chemin à ajuster
-import { storeToRefs } from 'pinia';
-const cartStore = useCartStore();
-const { uniqueItemsCount } = storeToRefs(cartStore);
-
+import { useAboutCartStore } from '../../_services/aboutCart';
+import { computed } from 'vue';
 
 export default defineComponent({
   name: 'NavigationFooter',
@@ -48,8 +45,8 @@ export default defineComponent({
 
   setup() {
 
-    const cartStore = useCartStore();
-    const { count } = storeToRefs(cartStore); // Pour garder la réactivité
+    const store = useAboutCartStore();
+    const cartItemCount = computed(() => store.cartItemCount);
 
     return {
       homeOutline,
@@ -57,10 +54,8 @@ export default defineComponent({
       personCircleOutline,
       readerOutline,
       search,
-      count,
-      cartStore,
-      uniqueItemsCount,
-      itemNumber: count // Connecte le compteur du store à ton template
+      cogOutline,
+      store, cartItemCount
     };
   },
 });

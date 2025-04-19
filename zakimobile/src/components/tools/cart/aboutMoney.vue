@@ -9,34 +9,37 @@
       <ion-label slot="end"><p>{{ deliveryFee }} FCFA</p></ion-label>
     </ion-item>
     <ion-item>
-      <ion-toggle v-model="discountApplied" @ionChange="toggleDiscount">
+      <ion-toggle @ionChange="applyDiscount">
         <ion-label><p>Code de réduction</p></ion-label>
+        <ion-input 
+          label="Mon code ici" 
+          v-model="discountCodeInput"
+          :disabled="!discountApplied"
+        ></ion-input>
       </ion-toggle>
-      <ion-input 
-        v-if="discountApplied" 
-        v-model="discountCodeInput" 
-        placeholder="Mon code ici"
-        @ionChange="applyDiscount">
-      </ion-input>
+    </ion-item>
+    <ion-item v-if="discountApplied">
+      <ion-label><p>Réduction appliquée</p></ion-label>
+      <ion-label slot="end"><p>-{{ discountAmount }} FCFA</p></ion-label>
     </ion-item>
     <ion-item>
       <ion-label><p>Total</p></ion-label>
-      <ion-label slot="end"><p>{{ calculatedTotal }} FCFA</p></ion-label>
+      <ion-label slot="end"><p>{{ total }} FCFA</p></ion-label>
     </ion-item>
   </ion-list>
 </template>
 
 <script>
-import { IonItem, IonList, IonLabel, IonInput, IonToggle } from '@ionic/vue';
+import { IonItem, IonList, IonLabel, IonToggle, IonInput } from '@ionic/vue';
 import { defineComponent, computed, ref } from 'vue';
 
 export default defineComponent({
-  components: {
+  components: { 
     IonItem,
     IonList,
     IonLabel,
-    IonInput,
-    IonToggle
+    IonToggle,
+    IonInput
   },
   props: {
     subtotal: {
@@ -49,32 +52,42 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const discountApplied = ref(false);
     const discountCodeInput = ref('');
+    const discountApplied = ref(false);
     const discountAmount = ref(0);
 
-    const toggleDiscount = () => {
-      if (!discountApplied.value) {
+    // Codes de réduction valides (à adapter)
+    const validDiscountCodes = {
+      'SOLDES10': 0.1,  // 10% de réduction
+      'SOLDES20': 0.2   // 20% de réduction
+    };
+
+    const applyDiscount = (event) => {
+      discountApplied.value = event.detail.checked;
+      
+      if (discountApplied.value && validDiscountCodes[discountCodeInput.value]) {
+        const discountRate = validDiscountCodes[discountCodeInput.value];
+        discountAmount.value = Math.floor(props.subtotal * discountRate);
+      } else {
         discountAmount.value = 0;
       }
     };
 
-    const applyDiscount = () => {
-      // Ici vous pourriez ajouter une logique pour valider le code
-      // et calculer le montant de la réduction
-      // Pour l'exemple, on applique une réduction fixe de 10% si un code est saisi
-      discountAmount.value = discountCodeInput.value ? props.subtotal * 0.1 : 0;
-    };
-
-    const calculatedTotal = computed(() => {
-      return props.subtotal + props.deliveryFee - discountAmount.value;
+    const total = computed(() => {
+      let calculatedTotal = props.subtotal + props.deliveryFee;
+      
+      if (discountApplied.value) {
+        calculatedTotal -= discountAmount.value;
+      }
+      
+      return Math.max(0, calculatedTotal); // Empêche les totaux négatifs
     });
 
-    return {
-      discountApplied,
+    return { 
       discountCodeInput,
-      calculatedTotal,
-      toggleDiscount,
+      discountApplied,
+      discountAmount,
+      total,
       applyDiscount
     };
   }
@@ -84,5 +97,8 @@ export default defineComponent({
 <style scoped>
 p {
   color: #292929;
+}
+.discount-applied {
+  color: green;
 }
 </style>

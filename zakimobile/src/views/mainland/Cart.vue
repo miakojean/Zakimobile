@@ -2,22 +2,27 @@
   <ionPage>
     <headerLayout2/>
     <ionContent>
-      <div class="main__container profile__container">
+      <div class="main__container profile__container" v-if="cart.length > 0">
         <ion-list :inset="true" lines="full" class="list__info">
           <!-- Boucle sur les articles du panier -->
           <cartItem 
-            v-for="(item, index) in cart.cartItems" 
+            v-for="(item, index) in cart" 
             :key="index"
             :item="item"
-            @remove="cart.removeItem(index)"
+            @remove="remove(index)"
             @update:modelValue="(newQty) => cart.updateQuantity(index, newQty)"
+            @lookprice="voirPanier"
           />
         </ion-list>
         <aboutMoney
-          :subtotal="Number(total)" 
+          :subtotal= "store.cartTotalPrice"
           :delivery-fee="Number(1000)"
         />
-        <nextButton/>
+        <nextButton @click="voirPanier"/>
+      </div>
+      <div class="main__container profile__container" v-else>
+        <h3>Votre panier est vide</h3>
+        <p>Ajoutez des articles à votre panier pour commencer vos achats.</p>
       </div>
     </ionContent>
   </ionPage>
@@ -31,12 +36,9 @@ import aboutMoney from '../../components/tools/cart/aboutMoney.vue';
 import nextButton from '../../button/nextButton.vue';
 import itemLabel from '../../tools/itemLabel.vue';
 import itemList from '../../tools/itemLabel2.vue';
-
 import { useRouter } from 'vue-router';
-import { defineComponent, ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useCartStore } from '../../data/store/cart';
-import { computed } from 'vue';
+import { defineComponent, ref,} from 'vue';
+import { useAboutCartStore } from '../../_services/aboutCart';
 
 export default defineComponent({
   components: {
@@ -48,27 +50,13 @@ export default defineComponent({
   setup() {
     const router = useRouter();
 
-    const cart = useCartStore();
-    const total = computed(() => {
-      return cart.cartItems.reduce((sum, item) => sum + (item.quantity * item.prix), 0);
-    });
-
-    // Reactive user object
-    const user = ref({
-      username: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-    });
-
-    // Reactive profile object
-    const profile = ref ({
-      gender:'',
-      phone_number:'',
-      address: '',
-      birthday:'',
-      commune:'',
-    });
+    const store = useAboutCartStore();
+    const cart = store.cart;
+    const cartItemPrice = store.cartTotalPrice;
+    const voirPanier = () => {
+      console.log(cartItemPrice);
+    };
+    const remove = store.removeFromCart; 
 
     // Reactive error message
     const errorMessage = ref('');
@@ -76,56 +64,10 @@ export default defineComponent({
     // Reactive loading state
     const isLoading = ref(true);
 
-    // Function to fetch user data
-    const fetchUserData = async () => {
-      try {
-        isLoading.value = true; // Start loading
-        const accessToken = localStorage.getItem('access_token');
-        if (!accessToken) {
-          router.push('/signin'); // Redirect to login if no token
-          return;
-        }
-
-        // Fetch user data from the backend
-        const response = await axios.get('http://127.0.0.1:8000/account/profile/', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        // Log the entire API response to debug
-        console.log('API Response:', response.data);
-
-        // Update the reactive objects with the response data
-        user.value = response.data.user; // Assign user data directly
-        profile.value = response.data.profile; // Assign profile data (if it exists)
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          // Token is expired or invalid
-          localStorage.removeItem('access_token'); // Clear the expired token
-          router.push('/connexion'); // Redirect to login
-        } else {
-          console.error('Failed to fetch user data:', error);
-          errorMessage.value = 'Failed to fetch user data. Please try again.';
-        }
-      } finally {
-        isLoading.value = false; // Stop loading
-      }
-    };
-
-    // Call the function to fetch user data when the component is mounted
-    onMounted(() => {
-      fetchUserData();
-    });
-
     // Return the reactive objects and function (if needed in the template)
     return {
-      user,
-      profile,
-      errorMessage,
-      isLoading,
-      fetchUserData,
-      router, cart, total,
+      errorMessage, isLoading, router, voirPanier, cart, remove,
+      store, cartItemPrice
     };
   },
 });

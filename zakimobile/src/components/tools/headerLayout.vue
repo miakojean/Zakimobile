@@ -3,7 +3,7 @@
     <div class="header__container">
       <div class="name">
         <span>Hello</span>
-        <p>{{ userName }}</p>
+        <p>{{ user.username }}</p>
       </div>
       <div class="notifications" aria-label="Notifications">
         <IonIcon 
@@ -23,16 +23,11 @@
 <script>
 import { IonHeader, IonIcon } from '@ionic/vue';
 import { notificationsOutline } from 'ionicons/icons'; // Ou notifications
-import { defineComponent, ref } from 'vue';
+import { defineComponent, computed } from 'vue';
+import { useUserStore } from '../../_services/authStore.js';
+import { storeToRefs } from 'pinia';
 
 export default defineComponent ({
-
-  props: {
-    userName:{
-      type: String,
-      default:'Aucun Nom'
-    }
-  },
 
   components: {
     IonHeader,
@@ -40,7 +35,11 @@ export default defineComponent ({
   },
 
   setup(){
-    return { notificationsOutline }; // Renomme si nécessaire
+    const userStore = useUserStore()
+    const { state } = storeToRefs(userStore);
+    const user = computed(() => state.value.user);
+    
+    return { notificationsOutline, userStore, state, user }; // Renomme si nécessaire
   }
   
 });

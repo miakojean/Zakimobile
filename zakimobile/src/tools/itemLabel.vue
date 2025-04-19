@@ -2,8 +2,8 @@
   <ion-item>
     <ion-label>
       <template v-if="!isEditing">
-        <h3 :class="{ 'italicGray': valeur === 'Complétez vos informations' }">
-          <span v-if="type !== 'gender'">{{ valeur || 'Complétez vos informations' }}</span>
+        <h3 :class="{ 'italicGray': valeur === 'Completez vos informations' }">
+          <span v-if="type !== 'gender'">{{ valeur || 'Completez vos informations' }}</span>
           <span v-else class="gender-display">
             <span v-if="valeur === 'Homme'" class="gender-icon male">
               <ion-icon :icon="maleOutline"></ion-icon> M
