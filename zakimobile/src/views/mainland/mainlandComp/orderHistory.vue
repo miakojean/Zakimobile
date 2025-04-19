@@ -81,7 +81,7 @@
                     <p>Rue de l'aménagement</p>
                 </ion-label>
                 <ion-label slot="end">
-                    <h3>durée</h3>
+                    <h3>statuts</h3>
                     <p>59:00</p>
                 </ion-label>
             </ion-item>
@@ -107,7 +107,7 @@
                     <p>Rue de l'aménagement</p>
                 </ion-label>
                 <ion-label slot="end">
-                    <h3>durée</h3>
+                    <h3>statut</h3>
                     <p>59:00</p>
                 </ion-label>
             </ion-item>
@@ -133,7 +133,7 @@
                     <p>Rue de l'aménagement</p>
                 </ion-label>
                 <ion-label slot="end">
-                    <h3>durée</h3>
+                    <h3>statut</h3>
                     <p>59:00</p>
                 </ion-label>
             </ion-item>
@@ -159,7 +159,7 @@
                     <p>Rue de l'aménagement</p>
                 </ion-label>
                 <ion-label slot="end">
-                    <h3>durée</h3>
+                    <h3>statut</h3>
                     <p>59:00</p>
                 </ion-label>
             </ion-item>
