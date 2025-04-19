@@ -7,20 +7,24 @@
             :icon="arrowBackOutline"
             aria-hidden="true"
             ></IonIcon>
-          </div> 
+          </div>
+          <div class="layout__title">
+            <ion-label class="title"><h4 class="title">Historique de commandes</h4></ion-label>
+            <ion-label><p class="subtitle">Toutes mes commandes</p></ion-label> 
+          </div>
         </div>
     </ionHeader>
 </template>
 
 <script>
-import { IonHeader, IonIcon } from '@ionic/vue';
+import { IonHeader, IonIcon, IonLabel } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { arrowBackOutline } from 'ionicons/icons';
 export default defineComponent ({
 
     components: {
-      IonHeader, arrowBackOutline, IonIcon
+      IonHeader, arrowBackOutline, IonIcon, IonLabel
     },
     setup() {
       const router = useRouter()
@@ -32,41 +36,37 @@ export default defineComponent ({
 })
 </script>
 
-<style>
+<style scoped>
 
 .header__container{
-  padding: 0.5rem;
+  padding: 1rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
+  gap: 4rem;
   height: auto;
 }
 
-.item__notifs{
-  position: relative;
+.layout__title{
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
-  padding: 1rem;
+  
 }
 
-.item__notifs .cart{
-  position: absolute;
-  top: -10%;
-  left: 30%;
-  background: #ff5e5e;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.5rem;
-  height: 25px;
-  border-radius: 50%;
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000000;
+  width: 100%;
 }
 
-.cart p{
-  color: white;
+.subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #636363;
+  width: 100%;
 }
-
 .item__notifs i {
   font-size: 1.5rem;
   color: #058C42;

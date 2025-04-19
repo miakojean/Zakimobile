@@ -28,7 +28,7 @@ const routes = [
       },
       {
         path: 'orders',
-        component: () => import('../views/mainland/Home.vue')
+        component: () => import('../views/mainland/Order.vue')
       },
       {
         path: 'cart',

@@ -21,7 +21,7 @@
           <ion-label><h3 class="diviseur">Paramètres généraux</h3></ion-label>
         </ion-item-divider>
 
-        <ion-list :inset="true" class="list__container">
+        <ion-list :inset="true" class="list__container"> 
           <ion-item :button="true">
             <ion-icon color="danger" slot="start" :icon="notificationsCircle" size="medium"></ion-icon>
             <ion-label><p>Notifications et sons</p></ion-label>
