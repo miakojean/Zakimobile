@@ -29,6 +29,15 @@
                     <p>59:00</p>
                 </ion-label>
             </ion-item>
+
+            <ion-item :button="false">
+                
+                <ion-label>
+                    <p>Livré en moins d'une heure</p>
+                </ion-label>
+            </ion-item>
+
+            
         </ion-list>
 
         <ion-item-divider color="light">

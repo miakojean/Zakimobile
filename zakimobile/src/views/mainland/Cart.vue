@@ -17,6 +17,7 @@
             @lookprice="voirPanier"
           />
         </ion-list>
+
         <aboutMoney
           :subtotal= "store.cartTotalPrice"
           :delivery-fee="Number(1000)"
