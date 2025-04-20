@@ -8,17 +8,34 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)  # Utilisez le sérialiseur Product
+    # Lecture : affiche toutes les infos du produit
+    product = ProductSerializer(read_only=True)
+    
+    # Écriture : accepte soit l'ID soit le nom du produit
     product_id = serializers.PrimaryKeyRelatedField(
         queryset=Product.objects.all(),
         source='product',
+        required=False,
+        write_only=True
+    )
+    product_name = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=Product.objects.all(),
+        source='product',
+        required=False,
         write_only=True
     )
 
     class Meta:
         model = OrderItem
-        fields = ['id', 'product', 'product_id', 'quantity', 'price_at_purchase', 'subtotal']
-        read_only_fields = ['price_at_purchase', 'subtotal']
+        fields = ['id', 'product', 'product_id', 'product_name', 'quantity', 'price_at_purchase', 'subtotal']
+        read_only_fields = ['product', 'price_at_purchase', 'subtotal']
+
+    def validate(self, data):
+        # Vérifie qu'au moins un identifiant est fourni
+        if not any(field in data for field in ['product', 'product_id', 'product_name']):
+            raise serializers.ValidationError("Vous devez spécifier soit product_id, soit product_name")
+        return data
 
 class OrderSerializer(serializers.ModelSerializer):
     order_products = OrderItemSerializer(many=True, source='items')  # Utilisez 'source' pour mapper le champ

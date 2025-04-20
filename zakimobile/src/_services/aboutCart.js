@@ -66,6 +66,44 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
         localStorage.removeItem('cart')
     }
 
+    async function createOrder() {
+        const accessToken = localStorage.getItem('access_token');
+        
+        // Prépare les articles du panier au format attendu par l'API
+        const orderProducts = cart.value.map(item => ({
+            product_name: item.name,  // ou item.product_name selon votre structure
+            quantity: item.quantity
+        }));
+    
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/order/orders/', 
+                {
+                    order_products: orderProducts,
+                    // Optionnel : inclure les totaux si votre API les accepte
+                    total_price: cartTotalPrice.value,
+                    total_items: cartItemCount.value,
+                    total_discount: cartTotalDiscount.value
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+    
+            console.log('Commande créée avec succès:', response.data);
+            return response.data;
+    
+        } catch (error) {
+            console.error('Erreur lors de la création de la commande:', {
+                status: error.response?.status,
+                data: error.response?.data
+            });
+            throw error;  // À gérer dans le composant appelant
+        }
+    }
+
     // On garde cette version
 
     return { 
@@ -78,6 +116,6 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
         cartTotalPrice,
         addToCart,
         clearCart,
-        removeFromCart, lookAtPrice
+        removeFromCart, lookAtPrice, createOrder
     };
 });

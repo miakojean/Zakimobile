@@ -59,3 +59,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     }
   ]
 }
+
+POST http://127.0.0.1:8000/order/orders/ 
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1MTU5MzcyLCJpYXQiOjE3NDUxNTU3NzIsImp0aSI6ImE0ZjRhMGM0NjhhNjQ1ODA5MWUyYmEzZjdjMzUzYmUxIiwidXNlcl9pZCI6Mn0.juqu7i76jhIG6V56DBWeW2PPh7Jn_mAaDuc05Qa7RMs
+
+{
+  "order_products": [
+    {
+    "product_name": "banane",
+    "quantity": 2
+    }
+  ]
+}

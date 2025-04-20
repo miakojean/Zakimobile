@@ -22,7 +22,7 @@
           :subtotal= "store.cartTotalPrice"
           :delivery-fee="Number(1000)"
         />
-        <nextButton @click="voirPanier"/>
+        <nextButton @click="store.createOrder()"/>
       </div>
       <div class="main__container profile__container" v-else>
         <h3>Votre panier est vide</h3>
