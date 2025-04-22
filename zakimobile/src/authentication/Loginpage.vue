@@ -31,27 +31,27 @@
       <p @click = "router.push('/signup')">Pas de compte? Je crée mon compte <span>ici</span></p>
     </div>
     <ion-modal 
-          :is-open="newModal" 
-          @didDismiss="newModal = false"
-          :initial-breakpoint="0.50" 
-          :breakpoints="[0, 0.25, 0.5, 0.75]"
-        >
-          <ion-content class="ion-padding">
-            <div class="main__container modal">
-              <div class="label__contain">
-                <h4>Attention</h4>
-                <ion-icon :icon="alertCircleOutline" class="icone"></ion-icon>
-              </div>
-              <p style="text-align: center;">{{ errorMessage }}</p>
-              <ion-icon 
-                :icon="closeCircleOutline" 
-                class="icone"
-                @click="newModal = false"
-              >
-              </ion-icon>                                     
-            </div>
-          </ion-content>
-        </ion-modal>
+      :is-open="newModal" 
+      @didDismiss="newModal = false"
+      :initial-breakpoint="0.50" 
+      :breakpoints="[0, 0.25, 0.5, 0.75]"
+    >
+      <ion-content class="ion-padding">
+        <div class="main__container modal">
+          <div class="label__contain">
+            <h4>Attention</h4>
+            <ion-icon :icon="alertCircleOutline" class="icone"></ion-icon>
+          </div>
+          <p style="text-align: center;">{{ errorMessage }}</p>
+          <ion-icon 
+            :icon="closeCircleOutline" 
+            class="icone"
+            @click="newModal = false"
+          >
+          </ion-icon>                                     
+        </div>
+      </ion-content>
+    </ion-modal>
     <FooterLayout/>
   </ionPage>
 

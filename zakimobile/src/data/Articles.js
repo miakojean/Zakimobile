@@ -14,7 +14,7 @@ const Fruits = [
         image: bananeDouceImage
     },
     {
-        name: "Orange",
+        name: "orange",
         price: 300,
         quantity:1,
         description: "",
@@ -22,7 +22,7 @@ const Fruits = [
         image: orangeImage
     },
     {
-        name: "Ananas",
+        name: "ananas",
         price: 300,
         quantity:1,
         description: "",
@@ -30,7 +30,7 @@ const Fruits = [
         image: ananasImage
     },
     {
-        name: "Fraise",
+        name: "fraise",
         price: 300,
         quantity:1,
         description: "",
@@ -38,7 +38,7 @@ const Fruits = [
         image: fraiseImage
     },
     {
-        name: "Pomme",
+        name: "pomme",
         price: 300,
         quantity:1,
         description: "",
@@ -46,7 +46,7 @@ const Fruits = [
         image: pommeImage
     },
     {
-        name: "Mangue",
+        name: "mangue",
         price: 300,
         quantity:1,
         description: "",
@@ -54,7 +54,7 @@ const Fruits = [
         //image: mangueImage
     },
     {
-        name: "Raisin",
+        name: "raisin",
         price: 300,
         quantity:1,
         description: "",
@@ -62,133 +62,133 @@ const Fruits = [
         //image: raisinImage
     },
     {
-        name: "Citron",
+        name: "citron",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Papaye",
+        name: "papaye",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Goyave",
+        name: "goyave",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Avocat",
+        name: "avocat",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Kiwis",
+        name: "kiwis",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Pêche",
+        name: "pêche",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Cerise",
+        name: "cerise",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Prune",
+        name: "prune",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Figue",
+        name: "figue",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Litchi",
+        name: "litchi",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Grenade",
+        name: "grenade",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Myrtille",
+        name: "myrtille",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Framboise",
+        name: "framboise",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Mûre",
+        name: "mûre",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Cassis",
+        name: "cassis",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Noix de coco",
+        name: "noix de coco",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Durian",
+        name: "durian",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Fruit du dragon",
+        name: "fruit du dragon",
         price: 300,
         quantity:1,
         description: "",
         metrics: 'Kilogramme'
     },
     {
-        name: "Kumquat",
+        name: "kumquat",
         price: 300,
         quantity:1,
         description: "",

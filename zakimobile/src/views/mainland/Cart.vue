@@ -12,7 +12,7 @@
             v-for="(item, index) in cart" 
             :key="index"
             :item="item"
-            @remove="remove(index)"
+            @remove="store.removeFromCart(index)"
             @update:modelValue="(newQty) => cart.updateQuantity(index, newQty)"
             @lookprice="voirPanier"
           />
@@ -22,56 +22,89 @@
           :subtotal= "store.cartTotalPrice"
           :delivery-fee="Number(1000)"
         />
-        <nextButton @click="store.createOrder()"/>
+        <mainButton @click="createOrder()" :isloading="isLoading" label="Commander"/>
       </div>
       <div class="main__container profile__container" v-else>
         <h3>Votre panier est vide</h3>
         <p>Ajoutez des articles à votre panier pour commencer vos achats.</p>
       </div>
+
+      <ion-modal 
+        :is-open="isModalOpen" 
+        @didDismiss="closeModal"
+        :initial-breakpoint="0.50" 
+        :breakpoints="[0, 0.25, 0.5, 0.75]"
+      >
+        <ion-content class="ion-padding">
+          <div class="center__flex ">
+            <DoneTools
+              :price="store.responseData ? store.responseData.price : 0"
+            />                                   
+          </div>
+        </ion-content>
+      </ion-modal>
     </ionContent>
   </ionPage>
 </template>
   
 <script>
-import { IonPage, IonContent, IonHeader, IonList } from '@ionic/vue';
+import { IonPage, IonContent, IonHeader, IonList, IonModal } from '@ionic/vue';
 import headerLayout2 from '../../components/tools/headerLayout2.vue';
 import CartItem from '../../components/tools/cart/cartItem.vue';
 import aboutMoney from '../../components/tools/cart/aboutMoney.vue';
-import nextButton from '../../button/nextButton.vue';
 import itemLabel from '../../tools/itemLabel.vue';
 import itemList from '../../tools/itemLabel2.vue';
 import { useRouter } from 'vue-router';
 import { defineComponent, ref,} from 'vue';
 import { useAboutCartStore } from '../../_services/aboutCart';
+import DoneTools from '../../tools/doneTools.vue';
+import mainButton from '../../button/mainButton.vue';
 
 export default defineComponent({
   components: {
     IonPage, itemLabel, IonList,
     IonContent, itemList, headerLayout2,
-    IonHeader, CartItem, aboutMoney, nextButton
+    IonHeader, CartItem, aboutMoney, mainButton, IonModal, DoneTools
   },
 
   setup() {
     const router = useRouter();
-
     const store = useAboutCartStore();
+    // Reactive loading state
+    const isLoading = ref(false);
+    
+    // Gestion locale de la modale
+    const isModalOpen = ref(false);
+
     const cart = store.cart;
     const cartItemPrice = store.cartTotalPrice;
     const voirPanier = () => {
       console.log(cartItemPrice);
     };
-    const remove = store.removeFromCart; 
+    const createOrder = async () => {
+      isLoading.value = true;
+      try {
+        await store.createOrder();
+        isModalOpen.value = true; // Ouvrir la modale après succès
+        isLoading.value = false; // Arrêter le chargement
+      } catch (error) {
+        console.error("Erreur lors de la commande", error);
+        // Gérer l'erreur ici
+      }
+    };
+
+    const closeModal = () => {
+      isModalOpen.value = false;
+      // Ajoutez ici toute logique supplémentaire après fermeture
+    };
 
     // Reactive error message
     const errorMessage = ref('');
 
-    // Reactive loading state
-    const isLoading = ref(true);
-
     // Return the reactive objects and function (if needed in the template)
     return {
-      errorMessage, isLoading, router, voirPanier, cart, remove,
-      store, cartItemPrice
+      errorMessage, isLoading, router, voirPanier, cart,
+      store, cartItemPrice, createOrder, closeModal, isModalOpen
     };
   },
 });

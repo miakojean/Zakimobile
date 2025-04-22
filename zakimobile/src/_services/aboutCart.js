@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
 import axios from "axios";
+import { refreshToken } from "./authServices";
 
 export const useAboutCartStore = defineStore('aboutCart', () => {
     // State (données réactives)
@@ -8,7 +9,9 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
     const cartItem = ref(0);
     const cartTotalItems = ref(0);
     const cartTotalDiscount = ref(0);
-    const cartItemPrice = ref([])
+    const cartItemPrice = ref([]);
+    const cartModal = ref(false);
+    const responseData = ref({});
 
     // Charger le panier depuis localStorage au démarrage
     function loadCartFromLocalStorage() {
@@ -67,40 +70,64 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
     }
 
     async function createOrder() {
-        const accessToken = localStorage.getItem('access_token');
-        
-        // Prépare les articles du panier au format attendu par l'API
+        let accessToken = localStorage.getItem('access_token');
+        let retry = false; // Pour éviter les boucles infinies
+    
+        // Préparation des données de la commande
         const orderProducts = cart.value.map(item => ({
-            product_name: item.name,  // ou item.product_name selon votre structure
+            product_name: item.name,
             quantity: item.quantity
         }));
     
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/order/orders/', 
-                {
-                    order_products: orderProducts,
-                    // Optionnel : inclure les totaux si votre API les accepte
-                    total_price: cartTotalPrice.value,
-                    total_items: cartItemCount.value,
-                    total_discount: cartTotalDiscount.value
-                },
-                {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
+        const requestData = {
+            order_products: orderProducts,
+            total_price: cartTotalPrice.value,
+            total_items: cartItemCount.value,
+            total_discount: cartTotalDiscount.value
+        };
     
+        const requestConfig = {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        };
+    
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/order/orders/', requestData, requestConfig);
+            
             console.log('Commande créée avec succès:', response.data);
+            responseData.value = response.data;
+            clearCart();
+            cartModal.value = true;
             return response.data;
     
         } catch (error) {
-            console.error('Erreur lors de la création de la commande:', {
-                status: error.response?.status,
-                data: error.response?.data
-            });
-            throw error;  // À gérer dans le composant appelant
+            if (error.response?.status === 401 && !retry) {
+                // Token expiré → on tente de le rafraîchir
+                try {
+                    accessToken = await refreshToken();
+                    requestConfig.headers.Authorization = `Bearer ${accessToken}`;
+                    retry = true;
+                    
+                    // Relance la requête avec le nouveau token
+                    const retryResponse = await axios.post('http://127.0.0.1:8000/order/orders/', requestData, requestConfig);
+                    console.log('Commande créée après refresh token:', retryResponse.data);
+                    
+                    responseData.value = retryResponse.data;
+                    clearCart();
+                    cartModal.value = true;
+                    return retryResponse.data;
+    
+                } catch (refreshError) {
+                    console.error('Échec après refresh token:', refreshError);
+                    throw refreshError; // Redirige vers la page de login
+                }
+            } else {
+                // Autre erreur (500, 404...)
+                console.error('Erreur lors de la commande:', error.response?.data);
+                throw error;
+            }
         }
     }
 
@@ -114,6 +141,8 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
         cartTotalDiscount,
         cartItemCount,
         cartTotalPrice,
+        cartModal,
+        responseData,
         addToCart,
         clearCart,
         removeFromCart, lookAtPrice, createOrder

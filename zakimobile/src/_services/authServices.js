@@ -3,29 +3,40 @@ import axios from 'axios';
 // Configuration
 const API_BASE_URL = 'http://127.0.0.1:8000';
 const API_URL = `${API_BASE_URL}/account/login/`;
-const TOKEN_REFRESH_URL = `${API_BASE_URL}/account/token/refresh/`;
+const TOKEN_REFRESH_URL = `${API_BASE_URL}/api/token/refresh/`;
 
-// Instance Axios configurée
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 5000, // 5 secondes timeout
+  timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
   }
 });
 
+// Fonction pour vérifier si un token est expiré
+const isTokenExpired = (token) => {
+  if (!token) return true;
+
+  try {
+    const [, payloadBase64] = token.split('.');
+    const payload = JSON.parse(atob(payloadBase64));
+    const currentTime = Math.floor(Date.now() / 1000);
+    return payload.exp < currentTime;
+  } catch (error) {
+    console.error("Erreur lors du décodage du token :", error);
+    return true;
+  }
+};
+
 // Gestion des tokens
-// Modifier storeTokens
 const storeTokens = (access, refresh, username, profile = null) => {
   localStorage.setItem('access_token', access);
   localStorage.setItem('refresh_token', refresh);
   localStorage.setItem('username', username);
   if (profile) localStorage.setItem('profile', JSON.stringify(profile));
-  
   api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
 };
 
-// Modifier la fonction login
 export const login = async (emailOrUsername, password) => {
   try {
     const response = await api.post('/account/login/', {
@@ -40,13 +51,13 @@ export const login = async (emailOrUsername, password) => {
       success: true,
       user: user || { username: emailOrUsername },
       profile,
-      message: "Connexion réussie" // Ajouté pour cohérence
+      message: "Connexion réussie"
     };
   } catch (error) {
     const errorData = handleAuthError(error);
     return {
       success: false,
-      message: errorData.error, // Renommé pour cohérence
+      message: errorData.error,
       details: errorData.details
     };
   }
@@ -59,14 +70,16 @@ export const refreshToken = async () => {
 
     const response = await api.post(TOKEN_REFRESH_URL, { refresh });
     const newAccessToken = response.data.access;
-    
+
     localStorage.setItem('access_token', newAccessToken);
     api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
-    
+
     return { success: true, access: newAccessToken };
   } catch (error) {
-    clearAuthData();
-    return { success: false, error: 'Session expirée - Veuillez vous reconnecter' };
+    return {
+      success: false,
+      error: error.response?.data?.detail || 'Refresh token failed'
+    };
   }
 };
 
@@ -74,30 +87,72 @@ export const clearAuthData = () => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
   localStorage.removeItem('username');
+  localStorage.removeItem('profile');
   delete api.defaults.headers.common['Authorization'];
 };
 
-// Intercepteur pour les requêtes expirées
+export const logout = async () => {
+  try {
+    const refreshToken = localStorage.getItem('refresh_token');
+    const accessToken = localStorage.getItem('access_token');
+
+    if (!refreshToken) {
+      clearAuthData();
+      return { success: true };
+    }
+
+    await api.post('/account/logout/', { 
+      refresh: refreshToken 
+    }, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    clearAuthData();
+    return { success: true, message: 'Déconnexion réussie' };
+
+  } catch (error) {
+    clearAuthData();
+    const errorResult = handleAuthError(error);
+    return {
+      success: false,
+      error: errorResult.error,
+      details: errorResult.details
+    };
+  }
+};
+
+// Intercepteur pour gérer les expirations de token
 api.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
-    
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const accessToken = localStorage.getItem('access_token');
+
+    const isUnauthorized = error.response?.status === 401;
+    const isInvalidToken = error.response?.data?.code === 'token_not_valid';
+
+    if (!originalRequest._retry && isUnauthorized && isInvalidToken && isTokenExpired(accessToken)) {
       originalRequest._retry = true;
-      
+
       const refreshResult = await refreshToken();
       if (refreshResult.success) {
-        originalRequest.headers['Authorization'] = `Bearer ${refreshResult.access}`;
-        return api(originalRequest);
+        originalRequest.headers.Authorization = `Bearer ${refreshResult.access}`;
+        return api(originalRequest); // Refaire la requête avec le nouveau token
       }
     }
-    
+
+    if (isUnauthorized) {
+      await logout();
+      window.location.href = '/login';
+    }
+
     return Promise.reject(error);
   }
 );
 
-// Gestion centralisée des erreurs
+// Gestion des erreurs centralisée
 const handleAuthError = (error) => {
   if (!error.response) {
     return {
@@ -135,46 +190,5 @@ const handleAuthError = (error) => {
   }
 };
 
-export const logout = async () => {
-    try {
-      const refreshToken = localStorage.getItem('refresh_token');
-      const accessToken = localStorage.getItem('access_token');
-  
-      if (!refreshToken) {
-        console.warn('Aucun refresh token trouvé - nettoyage local');
-        clearAuthData();
-        return { success: true };
-      }
-  
-      // 1. Appel au endpoint de logout backend
-      await api.post('/account/logout/', { 
-        refresh: refreshToken 
-      }, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
-  
-      // 2. Nettoyage côté front (toujours exécuté même si le backend échoue)
-      clearAuthData();
-  
-      return { 
-        success: true,
-        message: 'Déconnexion réussie' 
-      };
-  
-    } catch (error) {
-      // Nettoyage quand même en cas d'erreur
-      clearAuthData();
-  
-      const errorResult = handleAuthError(error);
-      return {
-        success: false,
-        error: errorResult.error,
-        details: errorResult.details
-      };
-    }
-};
-
-// Exporte l'instance configurée
+// Exporter l’instance API
 export default api;
