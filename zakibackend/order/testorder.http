@@ -72,3 +72,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     }
   ]
 }
+
+### Historique de commandes
+
+
+POST http://127.0.0.1:8000/account/login/
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "Jeanyves123456@"
+}
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1MzMyMDk5LCJpYXQiOjE3NDUzMjg0OTksImp0aSI6ImQzZWY3ODJhMTQyYTQ3ZDg4MjgwMWY2MDJkNzNmMzI1IiwidXNlcl9pZCI6Mn0.YszZEr8cmeXRFNZ0VVKHkWJTw3d7MB_rw9XUO-fI7BE
+@refresh = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0NTkzMzI5OSwiaWF0IjoxNzQ1MzI4NDk5LCJqdGkiOiIwZTJhYzNhMTA0YTk0ZDE0OTJiMDg4ZTU1MThhYzM1MyIsInVzZXJfaWQiOjJ9.ZS3pNaYqPNQiaeRPsZEIYOX1IgdXPukjLeUoFSUmT-I
+
+
+GET http://127.0.0.1:8000/order/history/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1MzMyMDk5LCJpYXQiOjE3NDUzMjg0OTksImp0aSI6ImQzZWY3ODJhMTQyYTQ3ZDg4MjgwMWY2MDJkNzNmMzI1IiwidXNlcl9pZCI6Mn0.YszZEr8cmeXRFNZ0VVKHkWJTw3d7MB_rw9XUO-fI7BE

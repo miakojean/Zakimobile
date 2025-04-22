@@ -70,9 +70,6 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
     }
 
     async function createOrder() {
-        let accessToken = localStorage.getItem('access_token');
-        let retry = false; // Pour éviter les boucles infinies
-    
         // Préparation des données de la commande
         const orderProducts = cart.value.map(item => ({
             product_name: item.name,
@@ -86,16 +83,9 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
             total_discount: cartTotalDiscount.value
         };
     
-        const requestConfig = {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
-            }
-        };
-    
         try {
-            const response = await axios.post('http://127.0.0.1:8000/order/orders/', requestData, requestConfig);
-            
+            const response = await api.post('/order/orders/', requestData);
+    
             console.log('Commande créée avec succès:', response.data);
             responseData.value = response.data;
             clearCart();
@@ -103,31 +93,10 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
             return response.data;
     
         } catch (error) {
-            if (error.response?.status === 401 && !retry) {
-                // Token expiré → on tente de le rafraîchir
-                try {
-                    accessToken = await refreshToken();
-                    requestConfig.headers.Authorization = `Bearer ${accessToken}`;
-                    retry = true;
-                    
-                    // Relance la requête avec le nouveau token
-                    const retryResponse = await axios.post('http://127.0.0.1:8000/order/orders/', requestData, requestConfig);
-                    console.log('Commande créée après refresh token:', retryResponse.data);
-                    
-                    responseData.value = retryResponse.data;
-                    clearCart();
-                    cartModal.value = true;
-                    return retryResponse.data;
-    
-                } catch (refreshError) {
-                    console.error('Échec après refresh token:', refreshError);
-                    throw refreshError; // Redirige vers la page de login
-                }
-            } else {
-                // Autre erreur (500, 404...)
-                console.error('Erreur lors de la commande:', error.response?.data);
-                throw error;
-            }
+            // L'intercepteur aura déjà tenté de rafraîchir le token si l'erreur 401 était due à l'expiration.
+            // Ici, vous gérez les autres types d'erreurs (réseau, 400, 500, etc.)
+            console.error('Erreur lors de la commande:', error.response?.data);
+            throw error;
         }
     }
 

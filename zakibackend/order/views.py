@@ -22,6 +22,12 @@ class OrderListCreateView(generics.ListCreateAPIView):
 class OrderCreateAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    def get(self, request, format=None):
+        orders = Order.objects.filter(user=request.user).order_by('-created_at')
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
+
     def post(self, request):
         # Ajoute le contexte de la requête au serializer
         serializer = OrderSerializer(data=request.data, context={'request': request})

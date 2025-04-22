@@ -14,7 +14,7 @@ const api = axios.create({
 });
 
 // Fonction pour vérifier si un token est expiré
-const isTokenExpired = (token) => {
+export const isTokenExpired = (token) => {
   if (!token) return true;
 
   try {
