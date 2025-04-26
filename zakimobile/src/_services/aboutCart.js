@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
 import axios from "axios";
 import { refreshToken } from "./authServices";
+import api from "./authServices";
 
 export const useAboutCartStore = defineStore('aboutCart', () => {
     // State (données réactives)
@@ -70,33 +71,33 @@ export const useAboutCartStore = defineStore('aboutCart', () => {
     }
 
     async function createOrder() {
-        // Préparation des données de la commande
+        console.log('[DEBUG] Token avant requête:', localStorage.getItem('access_token')); // Log 1
         const orderProducts = cart.value.map(item => ({
-            product_name: item.name,
-            quantity: item.quantity
+          product_name: item.name,
+          quantity: item.quantity
         }));
-    
+      
         const requestData = {
-            order_products: orderProducts,
-            total_price: cartTotalPrice.value,
-            total_items: cartItemCount.value,
-            total_discount: cartTotalDiscount.value
+          order_products: orderProducts,
+          total_price: cartTotalPrice.value,
+          total_items: cartItemCount.value,
+          total_discount: cartTotalDiscount.value
         };
-    
+      
         try {
-            const response = await api.post('/order/orders/', requestData);
-    
-            console.log('Commande créée avec succès:', response.data);
-            responseData.value = response.data;
-            clearCart();
-            cartModal.value = true;
-            return response.data;
-    
+          const response = await api.post('/order/orders/', requestData);
+          console.log('[DEBUG] Réponse du serveur:', response.data); // Log 2
+          responseData.value = response.data;
+          clearCart();
+          cartModal.value = true;
+          return response.data;
         } catch (error) {
-            // L'intercepteur aura déjà tenté de rafraîchir le token si l'erreur 401 était due à l'expiration.
-            // Ici, vous gérez les autres types d'erreurs (réseau, 400, 500, etc.)
-            console.error('Erreur lors de la commande:', error.response?.data);
-            throw error;
+          console.error('[DEBUG] Erreur complète:', {
+            status: error.response?.status,
+            data: error.response?.data,
+            headers: error.response?.headers, // Vérifiez si un nouveau token est renvoyé
+          });
+          throw error;
         }
     }
 

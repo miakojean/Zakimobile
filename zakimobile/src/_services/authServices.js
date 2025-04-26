@@ -125,29 +125,25 @@ export const logout = async () => {
 
 // Intercepteur pour gérer les expirations de token
 api.interceptors.response.use(
-  response => response,
-  async error => {
+  (response) => response,
+  async (error) => {
     const originalRequest = error.config;
-    const accessToken = localStorage.getItem('access_token');
-
-    const isUnauthorized = error.response?.status === 401;
-    const isInvalidToken = error.response?.data?.code === 'token_not_valid';
-
-    if (!originalRequest._retry && isUnauthorized && isInvalidToken && isTokenExpired(accessToken)) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-
-      const refreshResult = await refreshToken();
-      if (refreshResult.success) {
-        originalRequest.headers.Authorization = `Bearer ${refreshResult.access}`;
-        return api(originalRequest); // Refaire la requête avec le nouveau token
+      try {
+        const refreshToken = localStorage.getItem('refresh_token');
+        const response = await axios.post('http://127.0.0.1:8000/account/token/refresh/', { refresh: refreshToken });
+        localStorage.setItem('access_token', response.data.access);
+        originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
+        return api(originalRequest); // Rejoue la requête
+      } catch (refreshError) {
+        console.error('Échec du rafraîchissement du token', refreshError);
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        window.location.href = '/signin'; // Redirection forcée
+        return Promise.reject(refreshError);
       }
     }
-
-    if (isUnauthorized) {
-      await logout();
-      window.location.href = '/login';
-    }
-
     return Promise.reject(error);
   }
 );
