@@ -1,0 +1,38 @@
+### Connexion et récupération du token
+POST http://127.0.0.1:8000/account/login/
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "Jeanyves123456@"
+}
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1MzI3NDQwLCJpYXQiOjE3NDUzMjM4NDAsImp0aSI6IjYzYjA0NjIxMGUzNTQyYWI5NDc0MDIxN2M3ZTE0ZDJkIiwidXNlcl9pZCI6Mn0.mjOg98jGzY7BqgW0AJxckULBFdugyf24IDt0SDTTzXE
+@refresh = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0NTkyODY0MCwiaWF0IjoxNzQ1MzIzODQwLCJqdGkiOiJiYTY5OGNjYjk5NDQ0MjVkOTdmOTY0M2JhYjQ5NTYzZSIsInVzZXJfaWQiOjJ9.s3H0LnxbIHkXYj8Dbap0dEpq4TqPhU4ZMm603WtB8W8
+
+### Vérification du token d'accès
+POST http://127.0.0.1:8000/api/token/verify/
+Content-Type: application/json
+
+{
+  "token": "{{token}}"
+}
+
+### Tentative de rafraîchissement du token (pour tester le refresh token)
+POST http://127.0.0.1:8000/api/token/refresh/
+Content-Type: application/json
+
+{
+  "refresh": "{{refresh}}"
+}
+
+@new_token = response.body.access
+@new_refresh = response.body.refresh
+
+### Vérification du nouveau token d'accès après rafraîchissement
+POST http://127.0.0.1:8000/api/token/verify/
+Content-Type: application/json
+
+{
+  "token": "{{new_token}}"
+}

@@ -1,15 +1,14 @@
 from django.shortcuts import HttpResponse, render
-from rest_framework import status
+from rest_framework import status, generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializer import UserCreateSerializer, UserSerializer, ProfileSerializer
+from .serializer import UserCreateSerializer, ProfileSerializer, UserSerializer
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from .models import Profile
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
-from django.urls import reverse
 from .models import PasswordResetToken
 from django.conf import settings
 from django.utils import timezone
@@ -117,6 +116,23 @@ class UserProfileView(APIView):
             "user": user_serializer.data,  # Correction : afficher les données de l'utilisateur
             "profile": profile_serializer.data if profile_serializer else None, # Correction : afficher les données du profil si elles existent
         }, status=status.HTTP_200_OK)
+
+class ProfileUpdateAPIView(generics.UpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        # Retourne toujours le profil de l'utilisateur connecté
+        return self.request.user.profile
+
+    def patch(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
 class UserLogoutView(APIView):
     permission_classes = [IsAuthenticated]  # Seuls les utilisateurs authentifiés peuvent se déconnecter

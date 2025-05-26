@@ -20,6 +20,15 @@ class Profile(models.Model):
     )
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
+    commune = models.CharField(max_length=30, blank=True)
+
+    # Ajout du champ pour la photo de profil
+    profile_picture = models.ImageField(
+        upload_to='profile_pics/',
+        blank=True,
+        null=True,
+        default='profile_pics/default.jpg'
+    )
 
     def __str__(self):
         return f"{self.user.username}'s Profile"

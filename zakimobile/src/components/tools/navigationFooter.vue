@@ -1,82 +1,79 @@
 <template>
-    <ion-footer>
-        <ion-toolbar>
-        <ion-tab-bar color="light">
-            <div class="footer__main">
-                <ion-tab-button tab="1">
-                    <div class="btn__class">
-                        <img class="home__icon" src="../../data/Icones/home-outline.svg" alt="My Icon" />
-                        <ion-label class="custom-label">Accueil</ion-label>
-                        <ion-badge color="danger"></ion-badge>
-                    </div>
-                </ion-tab-button>   
-                <ion-tab-button tab="2">
-                    <div class="btn__class">
-                        <img class="home__icon" src="../../data/Icones/time-outline.svg" alt="My Icon" />
-                        <ion-label class="custom-label">Historique</ion-label>
-                        <ion-badge color="danger"></ion-badge>
-                    </div>
-                </ion-tab-button>  
-                <ion-tab-button tab="3">
-                    <div class="btn__class">
-                        <img class="home__icon" src="../../data/Icones/settings-outline.svg" alt="My Icon" />
-                        <ion-label class="custom-label">Paramètres</ion-label>
-                        <ion-badge color="danger"></ion-badge>
-                    </div>
-                </ion-tab-button>  
-                <ion-tab-button tab="4">
-                    <div class="btn__class">
-                        <img class="home__icon" src="../../data/Icones/person-outline.svg" alt="My Icon" />
-                        <ion-label class="custom-label">Profile</ion-label>
-                        <ion-badge color="danger"></ion-badge>
-                    </div>
-                </ion-tab-button>
-            </div>
-        </ion-tab-bar>
-        </ion-toolbar>
-    </ion-footer>
+  <ion-tabs class="ion-no-border" style="--background: #fff; --color-selected: #000;">
+    <ion-router-outlet :animated="false"></ion-router-outlet>
+    <ion-tab-bar slot="bottom" class="ion-tab-button">
+      
+      <ion-tab-button tab="home" href="/home" >
+        <ion-icon :icon="homeOutline" />
+        <ion-label>Acceuil</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="orders" href="/orders">
+        <ion-icon :icon="readerOutline" />
+        <ion-label>Commande</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="cart" href="/cart">
+        <ion-icon :icon="cartOutline" />
+        <ion-badge color="danger">{{ cartItemCount }}</ion-badge>
+        <ion-label>Panier</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="search" href="/search">
+        <ion-icon :icon="search" />
+        <ion-label>Search</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="settings" href="/settings">
+        <ion-icon :icon="cogOutline" />
+        <ion-label>Paramètres</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </template>
-  
-<script >
-import { IonFooter, IonHeader, IonTitle, IonToolbar } from '@ionic/vue';
-import { defineComponent } from 'vue';
+
+<script>
+import { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon } from '@ionic/vue';
+import { homeOutline,cartOutline, personCircleOutline, readerOutline, search, cogOutline } from 'ionicons/icons';
+import { defineComponent,} from 'vue';
+import { useAboutCartStore } from '../../_services/aboutCart';
+import { computed } from 'vue';
 
 export default defineComponent({
-    components: { IonFooter, IonHeader, IonTitle, IonToolbar },
+  name: 'NavigationFooter',
+  components: { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon },
+
+  setup() {
+
+    const store = useAboutCartStore();
+    const cartItemCount = computed(() => store.cartItemCount);
+
+    return {
+      homeOutline,
+      cartOutline,
+      personCircleOutline,
+      readerOutline,
+      search,
+      cogOutline,
+      store, cartItemCount
+    };
+  },
 });
 </script>
 
 <style scoped>
-.footer__main{
-    display: flex;
-}
+  .ion-tab-bar {
+    --background: #80fab7;
+    --color: gray;
+    --color-selected: #3880ff;
+  }
 
-.custom-label{
-    font-size: 0.6rem;
-}
+  .ion-tab-button {
+    --color: #6b6b6b;
+    --color-selected: #058C42;
+  }
 
-.btn__class{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.home__icon {
-    height: 1.5rem;
-    height: 1.5rem;
-}
-
-ion-toolbar {
-    --background: white;
-    --color: #058C42;
-
-    --border-color: white;
-    --border-width: 0;
-    --border-style: double;
-
-    --min-height: 80px;
-    --padding-top: 20px;
-    --padding-bottom: 20px;
+  .ion-no-border{
+    --background: #80fab7;
   }
 </style>

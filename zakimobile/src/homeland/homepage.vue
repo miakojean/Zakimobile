@@ -1,6 +1,6 @@
 <template>
   <IonPage>
-    <headerLayout/>
+    <headerLayout :userName = "user.username"/>
     <resarchBox/>
     <IonContent>
       <suggestionLists/>
@@ -18,20 +18,19 @@
           <span>{{ fruit.prix }} FCFA</span>
           <div class="add__products">
             <div class="add__logo">
-              <ion-icon name="add-circle-outline"></ion-icon>
+              <IonIcon class="add__products" :icon="addCircleOutline"></IonIcon>
             </div>
           </div>
         </div>
       </div>
     </IonContent>
-    <navigationFooter/>
   </IonPage>
 </template>
 
 <script>
-import { defineComponent, ref} from 'vue'; // Import defineComponent
+import { defineComponent, ref, onMounted} from 'vue'; // Import defineComponent
 import { IonPage, IonContent, IonIcon, } from '@ionic/vue';
-import { addCircleOutline} from 'ionicons/icons';
+import {addCircleOutline} from 'ionicons/icons';
 import HeaderLayout from '../components/tools/headerLayout.vue';
 import Fruits from '../data/Articles';
 import MainButton from '../button/mainButton.vue';
@@ -39,6 +38,7 @@ import resarchBox from '../components/tools/resarchBox.vue';
 import suggestionLists from '../components/tools/suggestionLists.vue';
 import { useRouter } from 'vue-router';
 import NavigationFooter from '../components/tools/navigationFooter.vue';
+import axios from 'axios';
 
 export default defineComponent({
   components: {
@@ -49,24 +49,62 @@ export default defineComponent({
     MainButton,
     resarchBox,
     suggestionLists,
-    addCircleOutline,
     NavigationFooter
   },
   setup() {
+    const router = useRouter()
     const fruits = ref(Fruits); // Use ref to make it reactive
 
     const goToArticleDetails = (slug) => {
       router.push({ name: 'articleDetails', params: { slug: slug } });
     };
 
-    const router = useRouter()
+    const user = ref({
+      username: '',
+      first_name: '',
+      last_name: '',
+      email: '',
+    });
+
+    const fetchUserData = async () => {
+      try {
+        // Fetch user data from the backend
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+          router.push('/connexion'); // Redirect to login if no token
+          return;
+        }
+        const response = await axios.get('http://127.0.0.1:8000/account/profile/', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        // Update the reactive objects with the response data
+        console.log(response.data)
+        user.value = response.data.user; // Assign user data directly
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          // Token is expired or invalid
+          localStorage.removeItem('access_token'); // Clear the expired token
+          router.push('/signin'); // Redirect to login
+        } else {
+          console.error('Failed to fetch user data:', error);
+        }
+      }
+    };
+
+    onMounted(() => {
+      fetchUserData();
+    });
 
     // Use onMounted inside setup
 
     return {
       fruits,
       router,
-      goToArticleDetails,
+      goToArticleDetails, user, fetchUserData,
+      addCircleOutline,
+
     };
   },
 });
@@ -81,7 +119,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   gap: 0;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 8px 0 rgba(0, 0, 0, 0.19);
+  /*box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 8px 0 rgba(0, 0, 0, 0.19);*/
 }
 
 .about__articles span {

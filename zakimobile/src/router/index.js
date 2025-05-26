@@ -2,60 +2,51 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 
 const routes = [
   {
-    path: '/',
-    redirect: '/home'
-  },
-  {
-    path: '/home',
-    name: 'Home',
-    component: () => import('../startview/Startview.vue'),
-    meta: { noTransition: true }
-  },
-  {
-    path:'/aboutaccount', /* sign in or sign up */
-    name: "aboutaccount",
-    component: () => import('../startview/Aboutaccount.vue'),
-    meta: { noTransition: true }
-  },
-  {
     path: '/signin',
-    name: 'signin',
-    component: () => import('../authentication/Loginpage.vue')
+    name: 'connexion',
+    component: () => import('../authentication/Loginpage.vue'),
+    meta: { requiresAuth: false }
   },
   {
     path: '/signup',
-    name: 'signup',
-    component: ()=> import('../authentication/Registration.vue')
+    name: 'inscription',
+    component: () => import('../authentication/Registration.vue'),
+    meta: { requiresAuth: false }
   },
   {
-    path:'/sendmail',
-    name:'sendmail',
-    component: () => import('../authentication/sendEmail.vue')
+    path: '/',
+    component: () => import('../components/tools/navigationFooter.vue'),
+    meta: { requiresAuth: true }, // Toutes les routes enfants nécessitent une auth
+    children: [
+      {
+        path: '',
+        redirect: 'home'
+      },
+      {
+        path: 'home',
+        component: () => import('../views/mainland/Home.vue')
+      },
+      {
+        path: 'orders',
+        component: () => import('../views/mainland/Order.vue')
+      },
+      {
+        path: 'cart',
+        component: () => import('../views/mainland/Cart.vue')
+      },
+      {
+        path: 'settings',
+        component: () => import('../views/mainland/Settings.vue')
+      },
+      {
+        path: 'profile',
+        component: () => import('../views/mainland/Profile.vue')
+      }
+    ]
   },
   {
-    path:'/resetpassword',
-    name:'resetpassword',
-    component: () => import('../authentication/PasswordReset.vue')
-  },
-  {
-    path: '/profile',
-    name: 'profile',
-    component: () => import('../homeland/ProfileLand.vue')
-  },
-  {
-    path: '/HomePage',
-    name: 'homepage',
-    component: () => import('../homeland/homepage.vue')
-  },
-  {
-    path:'/article',
-    name:'article',
-    component: () => import('../homeland/articlesDetails.vue')
-  },
-  {
-    path: '/article/:slug', // Le `:slug` indique un paramètre dynamique
-    name: 'articleDetails', // Un nom de route plus générique
-    component: () => import('../homeland/articlesDetails.vue')
+    path: '/:pathMatch(.*)*',
+    redirect: '/home' // Fallback pour les routes inexistantes
   }
 ];
 
@@ -64,5 +55,20 @@ const router = createRouter({
   routes
 });
 
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('access_token');
+  
+  // Redirection si tentative d'accès à une route protégée sans auth
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    return next('/signin');
+  }
+  
+  // Redirection si déjà connecté mais sur signin/signup
+  if ((to.name === 'connexion' || to.name === 'inscription') && isAuthenticated) {
+    return next('/home');
+  }
+
+  next();
+});
 
 export default router;

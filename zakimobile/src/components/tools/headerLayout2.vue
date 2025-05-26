@@ -1,71 +1,84 @@
 <template>
     <ionHeader>
         <div class="header__container">
-            <div class="name">
-              <i class="fa-solid fa-arrow-left-long" @click="()=>{router.push('/HomePage')}"></i>
-            </div> 
-            <div class="item__notifs">
-                <i class="ri-shopping-cart-2-line"></i>
-                <div class="cart"><p>0</p></div>
-            </div>
+          <div class="name">
+            <IonIcon 
+            class="notification-icon" 
+            :icon="arrowBackOutline"
+            aria-hidden="true"
+            ></IonIcon>
+          </div>
+          <div class="layout__title">
+            <ion-label class="title"><h4 class="title">{{ title }}</h4></ion-label>
+            <ion-label><p class="subtitle">{{ subtitle }}</p></ion-label> 
+          </div>
         </div>
     </ionHeader>
 </template>
 
 <script>
-import { IonHeader } from '@ionic/vue';
+import { IonHeader, IonIcon, IonLabel } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
+import { arrowBackOutline } from 'ionicons/icons';
 export default defineComponent ({
 
-    components: {
-      IonHeader,
+  components: {
+    IonHeader, arrowBackOutline, IonIcon, IonLabel
+  },
+  
+  props: {
+    title: {
+      type: String,
+      default: 'Historique de commandes'
     },
-    setup() {
-      const router = useRouter()
-      return {
-        router
-      }
+    subtitle: {
+      type: String,
+      default: 'Toutes mes commandes'
     }
+  },
+
+  setup() {
+    const router = useRouter()
+    return {
+      router, arrowBackOutline
+    }
+  }
 
 })
 </script>
 
-<style>
+<style scoped>
 
 .header__container{
-  padding: 0.5rem;
+  padding: 1rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
+  gap: 4rem;
   height: auto;
 }
 
-.item__notifs{
-  position: relative;
+.layout__title{
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
-  padding: 1rem;
+  
 }
 
-.item__notifs .cart{
-  position: absolute;
-  top: -10%;
-  left: 30%;
-  background: #ff5e5e;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.5rem;
-  height: 25px;
-  border-radius: 50%;
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000000;
+  width: 100%;
 }
 
-.cart p{
-  color: white;
+.subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #636363;
+  width: 100%;
 }
-
 .item__notifs i {
   font-size: 1.5rem;
   color: #058C42;

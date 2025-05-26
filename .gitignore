@@ -79,3 +79,4 @@ coverage/
 # Ionic/Cordova (if applicable)
 platforms/
 plugins/
+node_modules
